@@ -37,7 +37,7 @@ namespace game {
 
     void setTxtOriginCenter(sf::Text&);
 
-    sf::Texture* mapTexture();
+    sf::Texture& mapTexture();
 
   }
 

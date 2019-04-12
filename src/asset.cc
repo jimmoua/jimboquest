@@ -50,6 +50,6 @@ void game::asset::setTxtOriginCenter(sf::Text& t) {
               t.getGlobalBounds().top + t.getGlobalBounds().height/2);
 }
 
-sf::Texture* game::asset::mapTexture() {
-  return &_mapTexture;
+sf::Texture& game::asset::mapTexture() {
+  return _mapTexture;
 }
