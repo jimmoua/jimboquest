@@ -45,6 +45,10 @@
  *   5 = Wood plank sprite
  *   and so on.
  *
+ * Our map will look something like this:
+ *
+ *
+ *  10 10                               Tells us that the map is a 10x10
  *
  *   0  1  2  3  4  5  6  7  8  9       LAYER 1 = Walkable layer
  *  10 11 12 13 14 15 16 17 18 19
