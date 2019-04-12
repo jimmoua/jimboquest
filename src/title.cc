@@ -105,10 +105,10 @@ namespace {
 void game::title::init() {
   const int mid_x = win::getRes_x()/2;
   const int mid_y = win::getRes_y()/2;
-  asset::setTxtOriginCenter(_start);
-  asset::setTxtOriginCenter(_load);
-  asset::setTxtOriginCenter(_exit);
-  asset::setTxtOriginCenter(_debug);
+  asset::setOriginCenter(_start);
+  asset::setOriginCenter(_load);
+  asset::setOriginCenter(_exit);
+  asset::setOriginCenter(_debug);
   _start.setPosition(mid_x, mid_y - 70);
   _load.setPosition(mid_x, mid_y);
   _exit.setPosition(mid_x, mid_y + 70);
