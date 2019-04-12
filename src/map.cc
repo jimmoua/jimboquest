@@ -31,7 +31,6 @@ void game::map::loadMap(const std::string& mapName) {
   unsigned short int row, col;
   /* The first two numbers in the map file are always row and col */
   infile >> row >> col;
-  std::cout << "Row and col are " << row << " " << col << std::endl;
 
   /* Read in the first layer */
   _map_lay01.resize(row);
@@ -43,13 +42,6 @@ void game::map::loadMap(const std::string& mapName) {
       infile >> _map_lay01[i][j];
     }
   }
-                              //for(size_t i = 0; i < row; i++) {
-                                //for(size_t j = 0; j < col; j++) {
-                                  //std::cout << "  " << _map_lay01[i][j];
-                                //}
-                                //std::cout << std::endl;
-                              //}
-                              //exit(0);
 
   /* Read in the second layer */
   _map_lay02.resize(row);
@@ -149,7 +141,6 @@ void game::map::loadMap(const std::string& mapName) {
       else if(_map_lay01[i][j] == 3) {
         _map_lay01_S[i][j].setTexture(game::asset::mapTexture());
         _map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*2,0,_SS,_SS));
-        std::cout << "3";
       }
       else if(_map_lay01[i][j] == 4) {
         _map_lay01_S[i][j].setTexture(game::asset::mapTexture());
@@ -164,7 +155,6 @@ void game::map::loadMap(const std::string& mapName) {
         _map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*5,0,_SS,_SS));
       }
       _map_lay01_S[i][j].setPosition(_SS*SPRITE_SCALE*i, _SS*SPRITE_SCALE*j);
-      std::cout << "  " << _map_lay01[i][j] << std::endl;
     }
   }
 
@@ -174,15 +164,6 @@ void game::map::displayMap() {
   while(win::getWin().pollEvent(win::getEv())) {
     if(win::getEv().type == sf::Event::Closed) {
       game::setGS(game::asset::GS::NONE);
-
-      // DEBUG
-      for(size_t i = 0; i < 5; i++) {
-        for(size_t j = 0; j < 5; j++) {
-      std::cout << _map_lay01_S[i][j].getPosition().x << " " <<
-        _map_lay01_S[i][j].getPosition().y << std::endl;
-        }
-      }
-
       return;
     }
   }
