@@ -2,12 +2,6 @@
 
 namespace {
 
-  /* Scaling the sprite by 6 because  16 pixels are very small on a 1600x900
-   * screen. */
-  constexpr static ushort SPRITE_SCALE = 6;         // Sprite scale
-  constexpr static ushort _SS = 16;                 // Sprite size 
-  constexpr static int    _SLOC = _SS*SPRITE_SCALE; // Useful for pos setting
-
   static std::vector< std::vector<size_t> >     _map_lay01;   // Layer 1
   static std::vector< std::vector<sf::Sprite> > _map_lay01_S; // L1 sprites
 
