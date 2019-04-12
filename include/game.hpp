@@ -4,6 +4,7 @@
 #include "window.hpp"
 #include "asset.hpp"
 #include "title.hpp"
+#include "map.hpp"
 
 namespace game {
   void init();

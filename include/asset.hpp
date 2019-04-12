@@ -12,8 +12,9 @@ namespace game {
   namespace asset {
     /* GS = Game states */
     enum class GS {
+      DEBUG,
+      NONE, // for when exit
       TITLE,
-      NONE // for when exit
     };
 
     enum class MAP {
