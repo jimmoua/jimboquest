@@ -36,7 +36,8 @@ namespace game {
                           const sf::Color,    // outline color
                           const float);       // outline thickness
 
-    void setTxtOriginCenter(sf::Text&);
+    template<typename SFML_T>
+      void setOriginCenter(SFML_T&);
 
     sf::Texture& mapTexture();
 
