@@ -1,11 +1,18 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "window.hpp"
 #include <iostream>
+#include "window.hpp"
+#include "asset.hpp"
+#include "title.hpp"
 
 namespace game {
   void init();
 
   // run the show
   void run();
+
+  // get current game state
+  const asset::GS& getGS();
+
+  void setGS(const asset::GS);
 }
