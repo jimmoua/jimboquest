@@ -1,15 +1,15 @@
 #include "title.hpp"
 
 namespace {
-  static sf::Text _start = game::asset::createString("Start", 20,
+  static sf::Text _start = game::asset::createString("Start", 36,
                                                      sf::Color::Yellow,
                                                      sf::Color::Black,
                                                      3.0f);
-  static sf::Text _load = game::asset::createString("Load", 20,
+  static sf::Text _load = game::asset::createString("Load", 36,
                                                      sf::Color::White,
                                                      sf::Color::Black,
                                                      3.0f);
-  static sf::Text _exit = game::asset::createString("Exit", 20,
+  static sf::Text _exit = game::asset::createString("Exit", 36,
                                                      sf::Color::White,
                                                      sf::Color::Black,
                                                      3.0f);
@@ -90,9 +90,9 @@ void game::title::init() {
   asset::setTxtOriginCenter(_start);
   asset::setTxtOriginCenter(_load);
   asset::setTxtOriginCenter(_exit);
-  _start.setPosition(mid_x, mid_y - 30);
+  _start.setPosition(mid_x, mid_y - 70);
   _load.setPosition(mid_x, mid_y);
-  _exit.setPosition(mid_x, mid_y + 30);
+  _exit.setPosition(mid_x, mid_y + 70);
   while(game::getGS() == asset::GS::TITLE) {
     _run();
   }
