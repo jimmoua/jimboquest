@@ -45,12 +45,6 @@ sf::Text game::asset::createString(const std::string s,
   return t;
 }
 
-template<typename SFML_T>
-void game::asset::setOriginCenter(SFML_T& t) {
-  t.setOrigin(t.getGlobalBounds().left + t.getGlobalBounds().width/2,
-              t.getGlobalBounds().top + t.getGlobalBounds().height/2);
-}
-
 sf::Texture& game::asset::mapTexture() {
   return _mapTexture;
 }

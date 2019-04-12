@@ -37,7 +37,10 @@ namespace game {
                           const float);       // outline thickness
 
     template<typename SFML_T>
-      void setOriginCenter(SFML_T&);
+      void setOriginCenter(SFML_T& t) {
+        t.setOrigin(t.getGlobalBounds().left + t.getGlobalBounds().width/2,
+                    t.getGlobalBounds().top + t.getGlobalBounds().height/2);
+      }
 
     sf::Texture& mapTexture();
 
