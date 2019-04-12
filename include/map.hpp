@@ -7,6 +7,8 @@
 #include <vector>
 #include <fstream>
 
+using ushort = unsigned short int;
+
 /* For maps, I will be using four layers. These layers will correspond to the
  * following:
  *
@@ -115,7 +117,43 @@
  * 
  * Once we have created a texture, we will assign a sprite to it. Textures are
  * very expensive, but sprites are not. For this reason, using multiple sprites
- * in a map seems OK to me.
+ * in a map seems OK to me. */
+
+/* When placing sprites and defining their locations, we can have the first
+ * layer look something like this.
+ *   Layer 1 = Walkable layer
+ *   where x represents a tile
+ *
+ *   We can read them in row-column order by using a for loop, given that we do
+ *   something like:
+ *
+ *     for(int i = 0; i < rol; i++) {
+ *       for(int j = 0; i < col; j++) {
+ *         sprite.setPosition(_SLOC*i, _SLOC*j);
+ *       }
+ *     }
+ *
+ * However, by doing this, we SFML will store them in not of the x,y convential
+ * Cartesian-like manner, but do a flip accross the x-y plane. The coordinates
+ * of sprite are then adjusted in such a manner where they are then represented
+ * as follows:
+ *  25 24 23 22 21
+ *  20 19 18 17 16
+ *  15 14 13 12 11
+ *  10  9  8  7  6
+ *   5  4  3  2  1
+ *
+ * To fix this, I am going to read them reverting the x-y flip by doing this:
+ *
+ *     for(int i = 0; i < rol; i++) {
+ *       for(int j = 0; i < col; j++) {
+ *         sprite.setPosition(_SLOC*(row-i-1), _SLOC*(col-j-1));
+ *       }
+ *     }
+ * The -1 is in the setPosition function because acts as an offset. If we do
+ * not have it there, when the sprites are position on the SFML window, they
+ * will have a  gap on the corner where they shouldn't.
+ *
  * */
 
 namespace game {

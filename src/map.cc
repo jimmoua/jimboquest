@@ -4,8 +4,9 @@ namespace {
 
   /* Scaling the sprite by 6 because  16 pixels are very small on a 1600x900
    * screen. */
-  constexpr static unsigned short int SPRITE_SCALE = 6;   // Sprite scale
-  constexpr static unsigned short int _SS = 16;           // Sprite size
+  constexpr static ushort SPRITE_SCALE = 6;         // Sprite scale
+  constexpr static ushort _SS = 16;                 // Sprite size 
+  constexpr static int    _SLOC = _SS*SPRITE_SCALE; // Useful for pos setting
 
   static std::vector< std::vector<size_t> > _map_lay01;   // Layer 1
   static std::vector< std::vector<sf::Sprite> > _map_lay01_S;
@@ -154,7 +155,7 @@ void game::map::loadMap(const std::string& mapName) {
         _map_lay01_S[i][j].setTexture(game::asset::mapTexture());
         _map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*5,0,_SS,_SS));
       }
-      _map_lay01_S[i][j].setPosition(_SS*SPRITE_SCALE*i, _SS*SPRITE_SCALE*j);
+      _map_lay01_S[i][j].setPosition(_SLOC*(row-i-1), _SLOC*(col-j-1));
     }
   }
 
