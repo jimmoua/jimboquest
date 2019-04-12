@@ -8,17 +8,17 @@ namespace {
   constexpr static ushort _SS = 16;                 // Sprite size 
   constexpr static int    _SLOC = _SS*SPRITE_SCALE; // Useful for pos setting
 
-  static std::vector< std::vector<size_t> > _map_lay01;   // Layer 1
-  static std::vector< std::vector<sf::Sprite> > _map_lay01_S;
+  static std::vector< std::vector<size_t> >     _map_lay01;   // Layer 1
+  static std::vector< std::vector<sf::Sprite> > _map_lay01_S; // L1 sprites
 
-  static std::vector< std::vector<size_t> > _map_lay02;   // Layer 2
-  static std::vector< sf::Sprite >          _map_lay02_S; // Layer 2 sprites
+  static std::vector< std::vector<size_t> >     _map_lay02;   // Layer 2
+  static std::vector< std::vector<sf::Sprite> > _map_lay02_S; // L2 sprites
 
-  static std::vector< std::vector<size_t> > _map_lay03;   // Layer 3
-  static std::vector< sf::Sprite >          _map_lay03_S; // Layer 3 sprites
+  static std::vector< std::vector<size_t> >     _map_lay03;   // Layer 3
+  static std::vector< std::vector<sf::Sprite> > _map_lay03_S; // L3 sprites
 
-  static std::vector< std::vector<size_t> > _map_EvLay;   // Event layer
-  static std::vector< sf::Sprite >          _map_EvLay_S; // Event sprites
+  static std::vector< std::vector<size_t> >     _map_EvLay;   // Event layer
+  static std::vector< std::vector<sf::Sprite> > _map_EvLay_S; // Event sprites
 }
 
 void game::map::loadMap(const std::string& mapName) {
@@ -32,6 +32,17 @@ void game::map::loadMap(const std::string& mapName) {
   unsigned short int row, col;
   /* The first two numbers in the map file are always row and col */
   infile >> row >> col;
+
+  /* Before reading into the vectors, clear them out */
+  if(!_map_lay01.empty()) {
+    _map_lay01.clear();
+  }
+  if(!_map_lay02.empty()) {
+    _map_lay02.clear();
+  }
+  if(!_map_lay03.empty()) {
+    _map_lay03.clear();
+  }
 
   /* Read in the first layer */
   _map_lay01.resize(row);
@@ -119,10 +130,14 @@ void game::map::loadMap(const std::string& mapName) {
     }
   }
   for(auto& i : _map_lay02_S) {
-    i.setScale(SPRITE_SCALE, SPRITE_SCALE);
+    for(auto& j : i) {
+      j.setScale(SPRITE_SCALE, SPRITE_SCALE);
+    }
   }
   for(auto& i : _map_lay03_S) {
-    i.setScale(SPRITE_SCALE, SPRITE_SCALE);
+    for(auto& j : i) {
+      j.setScale(SPRITE_SCALE, SPRITE_SCALE);
+    }
   }
 
   /* After allocating space and resizing the sprites, now we set the textures

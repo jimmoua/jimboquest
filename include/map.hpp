@@ -15,6 +15,9 @@ using ushort = unsigned short int;
  *   1 = Walkable layer (entities can walk on this layer)
  *
  *   2 = Collision layer (entities may not go through this layer)
+ *       When reading from the file, the file should only have binary options
+ *       0 =  no collision
+ *       1 = yes collision
  *
  *   3 = Passthrough layer (These are the parts of the sprite that belong to a
  *       collision layer, but entities can still pass through them. They are
@@ -150,6 +153,7 @@ using ushort = unsigned short int;
  *         sprite.setPosition(_SLOC*(row-i-1), _SLOC*(col-j-1));
  *       }
  *     }
+ *
  * The -1 is in the setPosition function because acts as an offset. If we do
  * not have it there, when the sprites are position on the SFML window, they
  * will have a  gap on the corner where they shouldn't.
@@ -158,6 +162,13 @@ using ushort = unsigned short int;
 
 namespace game {
   namespace map {
+
+    /* Define some enum for the tile event. */
+    enum TILE_EV {
+      NONE,
+      PORTAL,
+    };
+
     void init();
     void loadMap(const std::string&);
     void displayMap();
