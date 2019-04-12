@@ -3,8 +3,8 @@
 namespace {
   static sf::RenderWindow _win;
   static sf::Event _eve;
-  constexpr unsigned short int res_x = 640;
-  constexpr unsigned short int res_y = 480;
+  constexpr unsigned short int res_x = 1600;
+  constexpr unsigned short int res_y = 900;
 }
 
 const unsigned short int& game::win::getRes_x() {
