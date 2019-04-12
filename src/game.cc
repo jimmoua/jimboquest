@@ -30,7 +30,12 @@ void game::run() {
         if(game::win::getWin().isOpen()) {
           game::win::getWin().close();
         }
-      
+        break;
+      case game::asset::GS::DEBUG:
+        game::map::loadMap("data/map/testMap00.txt");
+        while(game::getGS() == asset::GS::DEBUG) {
+          map::displayMap();
+        }
     }
   }
 }
