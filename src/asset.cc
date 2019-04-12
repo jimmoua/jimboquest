@@ -7,6 +7,9 @@ namespace {
 
   // Map container for strings to path of maps
   static std::map<game::asset::MAP, std::string> _mapLoc;
+
+  /* Game texture for map */
+  static sf::Texture _mapTexture;
 }
 
 void game::asset::init() {
@@ -21,6 +24,9 @@ void game::asset::init() {
   _mapLoc[MAP::TEST_MAP00] = "data/map/testMap00.txt";
   _mapLoc[MAP::TEST_MAP01] = "data/map/testMap01.txt";
   _mapLoc[MAP::TEST_MAP02] = "data/map/testMap02.txt";
+
+  _mapTexture.loadFromFile("data/tileset/jimboTiles/jimboTiles.png");
+
 }
 
 sf::Text game::asset::createString(const std::string s,
@@ -42,4 +48,8 @@ sf::Text game::asset::createString(const std::string s,
 void game::asset::setTxtOriginCenter(sf::Text& t) {
   t.setOrigin(t.getGlobalBounds().left + t.getGlobalBounds().width/2,
               t.getGlobalBounds().top + t.getGlobalBounds().height/2);
+}
+
+sf::Texture* game::asset::mapTexture() {
+  return &_mapTexture;
 }

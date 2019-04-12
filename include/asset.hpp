@@ -8,6 +8,7 @@
 using ushort = unsigned short int;
 
 namespace game {
+
   namespace asset {
     /* GS = Game states */
     enum class GS {
@@ -35,5 +36,9 @@ namespace game {
                           const float);       // outline thickness
 
     void setTxtOriginCenter(sf::Text&);
+
+    sf::Texture* mapTexture();
+
   }
+
 }
