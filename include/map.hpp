@@ -120,6 +120,8 @@
 
 namespace game {
   namespace map {
+    void init();
     void loadMap(const std::string&);
+    void displayMap();
   }
 }
