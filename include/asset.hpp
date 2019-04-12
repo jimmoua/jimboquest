@@ -15,6 +15,12 @@ namespace game {
       NONE // for when exit
     };
 
+    enum class MAP {
+      TEST_MAP00,
+      TEST_MAP01,
+      TEST_MAP02,
+    };
+
     /* use these for std::map for img path */
     enum class img {
       TS_BG
