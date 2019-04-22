@@ -8,9 +8,20 @@ INCLUDE_DIR=include
 
 OBJ_DIR=obj
 
-CFLAGS=-lstdc++ -std=c++17 -lsfml-graphics -lsfml-system -lsfml-window -lsfml-audio
+BIN_DIR=bin
 
-WFLAGS=-Wall -Wextra -std=c++17 -lstdc++fs -lstdc++
+CFLAGS=-lstdc++ \
+			 -std=c++17 \
+			 -lsfml-graphics \
+			 -lsfml-system \
+			 -lsfml-window \
+			 -lsfml-audio
+
+WFLAGS=-Wall \
+			 -Wextra \
+			 -std=c++17 \
+			 -lstdc++fs \
+			 -lstdc++
 
 EXE=jimboQuest.out
 
@@ -18,14 +29,15 @@ SOURCES := $(wildcard $(SRC_DIR)/*.$(SRC_EXT))
 OBJECTS := $(SOURCES:$(SRC_DIR)/%.$(SRC_EXT)=$(OBJ_DIR)/%.o)
 
 all: $(OBJECTS)
-	$(CC) $(OBJECTS) $(CFLAGS) -o $(EXE)
+	@mkdir -p bin
+	$(CC) $(OBJECTS) $(CFLAGS) -o $(BIN_DIR)/$(EXE)
 
 $(OBJECTS): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.$(SRC_EXT)
 	@mkdir -p obj
 	$(CC) $(WFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
 
 clean:
-	rm $(OBJECTS) $(EXE) -v
+	rm $(OBJECTS) $(BIN_DIR)/$(EXE) -v
 
 run:
-	./$(EXE)
+	./$(BIN_DIR)/$(EXE)
