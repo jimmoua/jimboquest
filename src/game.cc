@@ -33,9 +33,23 @@ void game::run() {
         break;
       case game::asset::GS::DEBUG:
         game::map::loadMap("data/map/testMap00.txt");
+        game::entity::getPl() = new entity::Player("Jimbo",
+                                                   100,
+                                                   100,
+                                                   20,
+                                                   10,
+                                                   30);
+        game::entity::getPl()->m_enSprite.setPosition(_SLOC*2, _SLOC*2);
         while(game::getGS() == asset::GS::DEBUG) {
+          /* Draw map first layer -> draw character -> draw third layer
+           * The second layer will not matter because we can't see it anyways
+           * (collision layer) */
           map::displayMap();
+          win::getWin().draw(game::entity::getPl()->m_enSprite);
+          entity::getPl()->handleMove(map::getColSpr());
+          win::getWin().display();
         }
+        delete game::entity::getPl();
     }
   }
 }

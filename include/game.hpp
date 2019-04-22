@@ -5,6 +5,7 @@
 #include "asset.hpp"
 #include "title.hpp"
 #include "map.hpp"
+#include "entity.hpp"
 
 using ushort = unsigned short int;
 
