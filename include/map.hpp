@@ -172,5 +172,7 @@ namespace game {
     void init();
     void loadMap(const std::string&);
     void displayMap();
+
+    std::vector< std::vector<sf::Sprite> >& getColSpr();
   }
 }

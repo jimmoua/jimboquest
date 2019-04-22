@@ -23,9 +23,11 @@ void game::map::loadMap(const std::string& mapName) {
     std::cerr << "Verify the integrity of " << mapName << std::endl;
     exit(1);
   }
-  unsigned short int row, col;
+  unsigned short int _row, _col;
   /* The first two numbers in the map file are always row and col */
-  infile >> row >> col;
+  infile >> _row >> _col;
+  const ushort row = _row;
+  const ushort col = _col;
 
   /* Before reading into the vectors, clear them out */
   if(!_map_lay01.empty()) {
@@ -97,26 +99,18 @@ void game::map::loadMap(const std::string& mapName) {
   _map_lay02_S.clear();
   _map_lay03_S.clear();
 
-  _map_lay01.resize(row);   // Resize first layer
-  for(auto& i : _map_lay01) {
-    i.reserve(col);
-  }
-  _map_lay02.resize(row);   // Resize second layer
-  for(auto& i : _map_lay02) {
-    i.reserve(col);
-  }
-  _map_lay03.resize(row);   // Resize third layer
-  for(auto& i : _map_lay03) {
-    i.reserve(col);
-  }
   _map_lay01_S.resize(row);   // Resize first sprite layer
   for(auto& i : _map_lay01_S) {
     i.resize(col);
   }
-
-  //_map_lay01_S.resize(row*col);   // Resize first layer sprite
-  //_map_lay02_S.resize(row*col);   // Resize second layer sprite
-  //_map_lay03_S.resize(row*col);   // Resize third layer sprite
+  _map_lay02_S.resize(row);   // Resize collisions sprite layer
+  for(auto& i : _map_lay02_S) {
+    i.resize(col);
+  }
+  _map_lay03_S.resize(row);   // Resize passthrough sprite layer
+  for(auto& i : _map_lay03_S) {
+    i.resize(col);
+  }
 
   for(auto& i : _map_lay01_S) {
     for(auto& j : i) {
@@ -137,7 +131,6 @@ void game::map::loadMap(const std::string& mapName) {
   /* After allocating space and resizing the sprites, now we set the textures
    * for each of the sprite depending on what the data was for the first layer.
    * */
-  
   for(size_t i = 0; i < row; i++) {
     for(size_t j = 0; j < col; j++) {
       if(_map_lay01[i][j] == 1) {
@@ -167,7 +160,17 @@ void game::map::loadMap(const std::string& mapName) {
       _map_lay01_S[i][j].setPosition(_SLOC*(row-i-1), _SLOC*(col-j-1));
     }
   }
-
+  /* Now do the same thing for the collisions layer */
+  for(size_t i = 0; i < row; i++) {
+    for(size_t j = 0; j < col; j++) {
+      if(_map_lay02[i][j] == 1) {
+        std::cout << "I'm 1\n";
+        _map_lay02_S[i][j].setTextureRect(sf::IntRect(00,00,16,16));
+        _map_lay02_S[i][j].setPosition(_SLOC*(row-i-1), _SLOC*(col-j-1));
+      }
+    }
+    std::cout << std::endl;
+  }
 }
 
 void game::map::displayMap() {
@@ -183,5 +186,8 @@ void game::map::displayMap() {
       win::getWin().draw(j);
     }
   }
-  win::getWin().display();
+}
+
+std::vector< std::vector<sf::Sprite> >& game::map::getColSpr() {
+  return _map_lay02_S;
 }
