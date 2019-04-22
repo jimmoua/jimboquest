@@ -10,6 +10,9 @@ namespace {
 
   /* Game texture for map */
   static sf::Texture _mapTexture;
+
+  /* Actor sprite textures */
+  static sf::Texture _actorTexture;
 }
 
 void game::asset::init() {
@@ -19,13 +22,16 @@ void game::asset::init() {
   /* In this function, init the assets. This means get the string locs for
    * assets and other useful things... */
   _imgLoc[asset::img::TS_BG] = "data/bg/titlescreen.png";
+  _imgLoc[asset::img::ACTOR_PNG] = "data/entity/actor/actorSheet.png";
 
   /* Game map locations */
   _mapLoc[MAP::TEST_MAP00] = "data/map/testMap00.txt";
   _mapLoc[MAP::TEST_MAP01] = "data/map/testMap01.txt";
   _mapLoc[MAP::TEST_MAP02] = "data/map/testMap02.txt";
 
+  /* Game textures load from file */
   _mapTexture.loadFromFile("data/tileset/jimboTiles/jimboTiles.png");
+  _actorTexture.loadFromFile(_imgLoc[asset::img::ACTOR_PNG]);
 
 }
 
@@ -47,4 +53,8 @@ sf::Text game::asset::createString(const std::string s,
 
 sf::Texture& game::asset::mapTexture() {
   return _mapTexture;
+}
+
+sf::Texture& game::asset::actorTexture() {
+  return _actorTexture;
 }

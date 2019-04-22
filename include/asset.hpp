@@ -25,7 +25,8 @@ namespace game {
 
     /* use these for std::map for img path */
     enum class img {
-      TS_BG
+      TS_BG,
+      ACTOR_PNG,
     };
 
     void init();
@@ -43,6 +44,22 @@ namespace game {
       }
 
     sf::Texture& mapTexture();
+    sf::Texture& actorTexture();
+
+    namespace entity {
+      enum class RACE {
+        HUMAN,
+        ELF,
+        GIANT,
+        MONSTER,
+      };
+      enum class BASE_CLASS {
+        WARRIOR,
+        ROGUE,
+        ARCHER,
+        MAGE,
+      };
+    }
 
   }
 
