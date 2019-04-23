@@ -1,8 +1,8 @@
-#pragma once
+#ifndef MAP_HPP
+#define MAP_HPP
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "window.hpp"
-#include "game.hpp"
 #include <string>
 #include <vector>
 #include <fstream>
@@ -161,7 +161,8 @@ using ushort = unsigned short int;
  * */
 
 namespace game {
-  namespace map {
+
+  namespace map_ns {
 
     /* Define some enum for the tile event. */
     enum TILE_EV {
@@ -169,10 +170,30 @@ namespace game {
       PORTAL,
     };
 
+    /* Define some things for the event sprites */
+    struct mapEvStruct {
+      TILE_EV ev = TILE_EV::NONE; // Enum of the tile
+      sf::Sprite _mapEv_Sp;       // Sprite of the tile
+    };
+
     void init();
     void loadMap(const std::string&);
-    void displayMap();
+
+    /* Display the first layer */
+    void displayMap_L1();
+
+    /* We do not need to display the second layer because it's a collision
+     * layer. When handling character or NPC movement, we will pass its layers
+     * on to the functions that handle movement. */
+
+    /* Display the third layer */
+    void displayMap_L3();
 
     std::vector< std::vector<sf::Sprite> >& getColSpr();
+    std::vector< std::vector<mapEvStruct> >& getEvStructV();
+
   }
+
 }
+
+#endif

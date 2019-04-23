@@ -1,8 +1,9 @@
-#pragma once
+#ifndef GAME_HPP
+#define GAME_HPP
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "window.hpp"
-#include "asset.hpp"
 #include "title.hpp"
 #include "map.hpp"
 #include "entity.hpp"
@@ -26,3 +27,5 @@ namespace game {
 
   void setGS(const asset::GS);
 }
+
+#endif

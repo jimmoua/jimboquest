@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ASSET_HPP
+#define ASSET_HPP
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <vector>
@@ -64,3 +65,5 @@ namespace game {
   }
 
 }
+
+#endif

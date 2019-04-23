@@ -1,4 +1,5 @@
 #include "map.hpp"
+#include "game.hpp"
 
 namespace {
 
@@ -12,10 +13,12 @@ namespace {
   static std::vector< std::vector<sf::Sprite> > _map_lay03_S; // L3 sprites
 
   static std::vector< std::vector<size_t> >     _map_EvLay;   // Event layer
-  static std::vector< std::vector<sf::Sprite> > _map_EvLay_S; // Event sprites
+
+  /* Need to make some data structures to define some events */
+  static std::vector< std::vector<game::map_ns::mapEvStruct> > _mapEvV;
 }
 
-void game::map::loadMap(const std::string& mapName) {
+void game::map_ns::loadMap(const std::string& mapName) {
 
   std::ifstream infile(mapName);
   if(!infile) {
@@ -98,6 +101,8 @@ void game::map::loadMap(const std::string& mapName) {
   _map_lay01_S.clear();
   _map_lay02_S.clear();
   _map_lay03_S.clear();
+  _mapEvV.clear();
+  //_map_EvLay_S.clear();
 
   _map_lay01_S.resize(row);   // Resize first sprite layer
   for(auto& i : _map_lay01_S) {
@@ -111,6 +116,10 @@ void game::map::loadMap(const std::string& mapName) {
   for(auto& i : _map_lay03_S) {
     i.resize(col);
   }
+  _mapEvV.resize(row);        // Resize the event vector layer
+  for(auto& i : _mapEvV) {
+    i.resize(col);
+  }
 
   for(auto& i : _map_lay01_S) {
     for(auto& j : i) {
@@ -125,6 +134,11 @@ void game::map::loadMap(const std::string& mapName) {
   for(auto& i : _map_lay03_S) {
     for(auto& j : i) {
       j.setScale(SPRITE_SCALE, SPRITE_SCALE);
+    }
+  }
+  for(auto& i : _mapEvV) {
+    for(auto& j : i) {
+      j._mapEv_Sp.setScale(SPRITE_SCALE, SPRITE_SCALE);
     }
   }
 
@@ -164,30 +178,57 @@ void game::map::loadMap(const std::string& mapName) {
   for(size_t i = 0; i < row; i++) {
     for(size_t j = 0; j < col; j++) {
       if(_map_lay02[i][j] == 1) {
-        std::cout << "I'm 1\n";
-        _map_lay02_S[i][j].setTextureRect(sf::IntRect(00,00,16,16));
+        _map_lay02_S[i][j].setTextureRect(sf::IntRect(00,00,_SS,_SS));
         _map_lay02_S[i][j].setPosition(_SLOC*(row-i-1), _SLOC*(col-j-1));
       }
     }
-    std::cout << std::endl;
+  }
+  /* Now do the same thing for the events layer */
+  for(size_t i = 0; i < row; i++) {
+    for(size_t j = 0; j < col; j++) {
+      if(_map_EvLay[i][j] == 1) {
+        _mapEvV[i][j]._mapEv_Sp.setTextureRect(sf::IntRect(00,00,_SS,_SS));
+        _mapEvV[i][j]._mapEv_Sp.setPosition(_SLOC*(row-i-1), _SLOC*(col-j-1));
+        _mapEvV[i][j].ev = game::map_ns::TILE_EV::PORTAL;
+      }
+      else {
+        _mapEvV[i][j].ev = game::map_ns::TILE_EV::NONE;
+      }
+    }
   }
 }
 
-void game::map::displayMap() {
+void game::map_ns::displayMap_L1() {
+
   while(win::getWin().pollEvent(win::getEv())) {
+
     if(win::getEv().type == sf::Event::Closed) {
       game::setGS(game::asset::GS::NONE);
       return;
     }
+
   }
+
+  /* Clear the screen black */
   win::getWin().clear(sf::Color::Black);
   for(auto& i : _map_lay01_S) {
     for(auto& j : i) {
       win::getWin().draw(j);
     }
   }
+
 }
 
-std::vector< std::vector<sf::Sprite> >& game::map::getColSpr() {
+std::vector< std::vector<sf::Sprite> >& game::map_ns::getColSpr() {
   return _map_lay02_S;
+}
+
+std::vector< std::vector<game::map_ns::mapEvStruct> >& game::map_ns::getEvStructV() {
+
+  /* Returns the map event vector which contains
+   *   1. Enumerated data type that indicated the type of event
+   *   2. The sprite. */
+
+  return _mapEvV;
+
 }

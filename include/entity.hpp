@@ -1,8 +1,9 @@
-#pragma once
+#ifndef ENTITY_HPP
+#define ENTITY_HPP
 #include <SFML/Graphics.hpp>
 #include "asset.hpp"
-#include "window.hpp"
-#include "game.hpp"
+#include "map.hpp"
+#include <vector>
 
 namespace game {
 
@@ -60,7 +61,9 @@ namespace game {
                const int&,
                const int&,
                const int&);
-        void handleMove(std::vector< std::vector<sf::Sprite> >&);
+
+        void handleMove(std::vector< std::vector<sf::Sprite> >&,
+                        std::vector< std::vector<game::map_ns::mapEvStruct> >&);
       private:
     };
 
@@ -70,3 +73,5 @@ namespace game {
 
 
 }
+
+#endif

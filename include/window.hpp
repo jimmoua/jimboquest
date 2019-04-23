@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WINDOW_HPP
+#define WINDOW_HPP
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -11,3 +12,4 @@ namespace game {
     const unsigned short int& getRes_y();
   }
 }
+#endif

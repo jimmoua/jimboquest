@@ -1,4 +1,5 @@
 #include "entity.hpp"
+#include "game.hpp"
 
 namespace {
   static game::entity::Player* _Player = nullptr;
@@ -42,10 +43,14 @@ game::entity::Player::Player(const std::string& n,
   this->m_enSprite.scale(SPRITE_SCALE-2, SPRITE_SCALE-2);
 }
 
-void game::entity::Player::handleMove(std::vector<std::vector<sf::Sprite>>&v) {
-  /* Because I hit the character limit above, v stands for the collision
-   * sprites that are not seeable. I need this sprite so I can check if the
-   * character has hit a collision after the character has been moved. */
+void game::entity::Player::handleMove(std::vector< std::vector<sf::Sprite> >&v,
+                                      std::vector< std::vector<map_ns::mapEvStruct> >& d)
+{
+  /* v = collisions vector
+   * d = portals vector
+   *
+   * Because I shall not violate the 79/80 character limit */
+
   constexpr float ms = 3;
   const sf::Vector2f good = this->m_enSprite.getPosition();
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
@@ -60,11 +65,22 @@ void game::entity::Player::handleMove(std::vector<std::vector<sf::Sprite>>&v) {
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
     this->m_enSprite.move(ms, 0);
   }
+  auto pSpri = m_enSprite.getGlobalBounds();
+  sf::FloatRect p = pSpri;
+  p.height-=_SS*2;
+  p.top+=_SS*2;
   for(const auto& i : v) {
     for(const auto& j : i) {
-      if(m_enSprite.getGlobalBounds().intersects(j.getGlobalBounds())) {
+      if(p.intersects(j.getGlobalBounds())) {
         this->m_enSprite.setPosition(good.x, good.y);
-        std::cout << "Intersects!\n";
+      }
+    }
+  }
+  /* Now check for portal interaction */
+  for(const auto& i : d) {
+    for(const auto& j : i) {
+      if(p.intersects(j._mapEv_Sp.getGlobalBounds())) {
+        std::cout << "PORTAL INTERATION\n";
       }
     }
   }
