@@ -1,5 +1,7 @@
 #include "entity.hpp"
 #include "game.hpp"
+#include "map.hpp"
+#include <tuple>
 
 namespace {
   static game::entity::Player* _Player = nullptr;
@@ -43,13 +45,14 @@ game::entity::Player::Player(const std::string& n,
   this->m_enSprite.scale(SPRITE_SCALE-2, SPRITE_SCALE-2);
 }
 
-void game::entity::Player::handleMove(std::vector< std::vector<sf::Sprite> >&v,
-                                      std::vector< std::vector<map_ns::mapEvStruct> >& d)
-{
-  /* v = collisions vector
-   * d = portals vector
-   *
-   * Because I shall not violate the 79/80 character limit */
+void game::entity::Player::handleMove() {
+
+  static sf::Clock keyPressTimer;  // portal timer
+
+  static int x = 0; // counter delete later
+
+  /* cV = collisions vector */
+  auto cV = map_ns::getMapObjectByID(map_ns::getCurrentMapID())->_map_lay02_S;
 
   constexpr float ms = 3;
   const sf::Vector2f good = this->m_enSprite.getPosition();
@@ -65,23 +68,45 @@ void game::entity::Player::handleMove(std::vector< std::vector<sf::Sprite> >&v,
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
     this->m_enSprite.move(ms, 0);
   }
-  auto pSpri = m_enSprite.getGlobalBounds();
-  sf::FloatRect p = pSpri;
-  p.height-=_SS*2;
-  p.top+=_SS*2;
-  for(const auto& i : v) {
+
+  auto pSpriteGB = m_enSprite.getGlobalBounds(); // gb of sprite
+  pSpriteGB.height-=_SS*2;   // Acts as an offset (so sprite top looks pretty)
+  pSpriteGB.top+=_SS*2;      // Acts as an offset (so sprite top looks pretty)
+  /* Now check for intersection for collisions layer */
+
+  for(const auto& i : cV) {
     for(const auto& j : i) {
-      if(p.intersects(j.getGlobalBounds())) {
+      if(pSpriteGB.intersects(j.getGlobalBounds())) {
         this->m_enSprite.setPosition(good.x, good.y);
+        /* need this return statement here or we will go on to check for portal
+         * collisions as well, which we do want */
+        return;
       }
     }
   }
-  /* Now check for portal interaction */
-  for(const auto& i : d) {
-    for(const auto& j : i) {
-      if(p.intersects(j._mapEv_Sp.getGlobalBounds())) {
-        std::cout << "PORTAL INTERATION\n";
+
+  /* Check for portal collisiosn */
+  auto* mapObj = map_ns::getMapObjectByID(map_ns::getCurrentMapID());
+  auto evSp = mapObj->_mapEvV; // Sprites
+  auto evSpInfo = mapObj->evV; // Struct info on event sprite (parallel arrays)
+  for(int i = 0; i < mapObj->_mapSize.x; i++) {
+    for(int j = 0; j < mapObj->_mapSize.y; j++) {
+
+      if(pSpriteGB.intersects(evSp[i][j].getGlobalBounds())) {
+        if(evSpInfo[i][j].ev == map_ns::TILE_EV::PORTAL) {
+          if(sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
+            if(keyPressTimer.getElapsedTime().asMilliseconds() >= sf::milliseconds(100).asMilliseconds()) {
+              map_ns::loadMap(evSpInfo[i][j].portalTransportLoc.first, evSpInfo[i][j].portalTransportLoc.second);
+              std::cout << x++ << " port to: " << asset::getMapName(evSpInfo[i][j].portalTransportLoc.first) << std::endl;
+              std::cout << "Index: " << i << " " << j << std::endl;
+            }
+            keyPressTimer.restart();
+          }
+        }
       }
+
     }
   }
+
+
 }
