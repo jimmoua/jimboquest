@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "window.hpp"
+#include "asset.hpp"
 #include <string>
 #include <vector>
 #include <fstream>
@@ -109,9 +110,9 @@ using ushort = unsigned short int;
  *
  *
  * Since there can only be one map loaded at a time, I have decided to just go
- * with encapsulation again instead of classes. */
-
-/* In order to have our map display an image, we need to have two things:
+ * with encapsulation again instead of classes.
+ *
+ * In order to have our map display an image, we need to have two things:
  *   1. Texture -> Some piece in memory to hold the graphics
  *   2. Sprite  -> Some rectangle to hold the texture
  * 
@@ -120,9 +121,9 @@ using ushort = unsigned short int;
  * 
  * Once we have created a texture, we will assign a sprite to it. Textures are
  * very expensive, but sprites are not. For this reason, using multiple sprites
- * in a map seems OK to me. */
-
-/* When placing sprites and defining their locations, we can have the first
+ * in a map seems OK to me.
+ *
+ * When placing sprites and defining their locations, we can have the first
  * layer look something like this.
  *   Layer 1 = Walkable layer
  *   where x represents a tile
@@ -158,11 +159,22 @@ using ushort = unsigned short int;
  * not have it there, when the sprites are position on the SFML window, they
  * will have a  gap on the corner where they shouldn't.
  *
+ * Wed Apr 24 11:19:48 CDT 2019
+ * Since I have generated so much spaghetti, I will have to redesign parts of
+ * the map system...
+ *
+ * In the map header file, I have declared a class called MapInfo
+ * There will be multiple objects of said class, and each of these objects will
+ * now represent a map.
+ *
  * */
 
 namespace game {
 
   namespace map_ns {
+
+    /* Forward class here */
+    class MapInfo;
 
     /* Define some enum for the tile event. */
     enum TILE_EV {
@@ -172,12 +184,16 @@ namespace game {
 
     /* Define some things for the event sprites */
     struct mapEvStruct {
-      TILE_EV ev = TILE_EV::NONE; // Enum of the tile
-      sf::Sprite _mapEv_Sp;       // Sprite of the tile
+      TILE_EV ev = TILE_EV::NONE; // Enum of the event
+
+      /* Only use if it's a portal event
+       * first key  = Map ID that the portal leads to
+       * second key = x and y locations that portal transports player to */
+      std::pair<asset::MAP, sf::Vector2f> portalTransportLoc;
     };
 
     void init();
-    void loadMap(const std::string&);
+    void loadMap(const game::asset::MAP&, const sf::Vector2f);
 
     /* Display the first layer */
     void displayMap_L1();
@@ -186,13 +202,51 @@ namespace game {
      * layer. When handling character or NPC movement, we will pass its layers
      * on to the functions that handle movement. */
 
-    /* Display the third layer */
+    /* Display the third layer (passthrough layer) */
     void displayMap_L3();
 
-    std::vector< std::vector<sf::Sprite> >& getColSpr();
-    std::vector< std::vector<mapEvStruct> >& getEvStructV();
+    /* Return MapInfo class object function */
+    MapInfo* getMapObjectByID(const game::asset::MAP&);
 
-  }
+    /* Return current map id */
+    const game::asset::MAP& getCurrentMapID();
+
+    /* Set current map id */
+    void setMapID(const game::asset::MAP&);
+
+    /* Class definition of MapInfo here */
+    class MapInfo {
+      public:
+        MapInfo() { }
+        MapInfo(const game::asset::MAP& ID, const std::string& s) {
+          this->m_mapID = ID;
+          this->m_mapName = s;
+        }
+        game::asset::MAP m_getMapID() const { return this->m_mapID; }
+        std::string m_getName() const { return this->m_mapName; }
+
+
+
+        sf::Vector2i _mapSize;
+        std::vector< std::vector<size_t> >     _map_lay01;   // Layer 1
+        std::vector< std::vector<sf::Sprite> > _map_lay01_S; // L1 sprites
+
+        std::vector< std::vector<size_t> >     _map_lay02;   // Layer 2
+        std::vector< std::vector<sf::Sprite> > _map_lay02_S; // L2 sprites
+
+        std::vector< std::vector<size_t> >     _map_lay03;   // Layer 3
+        std::vector< std::vector<sf::Sprite> > _map_lay03_S; // L3 sprites
+
+        std::vector< std::vector<size_t> >     _map_EvLay;   // Event layer
+        std::vector< std::vector<sf::Sprite> > _mapEvV;      // Event sprites
+        /* This vector ↓ contains information about the event */
+        std::vector< std::vector<game::map_ns::mapEvStruct> > evV;
+
+      private:
+        game::asset::MAP m_mapID;
+        std::string m_mapName;
+    };
+  } // end of map_ns namespace
 
 }
 
