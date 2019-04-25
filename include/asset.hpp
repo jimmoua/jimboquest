@@ -38,6 +38,11 @@ namespace game {
       MENU_CANCEL,
     };
 
+    enum class MUSIC {
+      TITLESCREEN,
+      AMBI_WIND,
+    };
+
     void init();
 
     sf::Text createString(const std::string,  // string name
@@ -74,6 +79,10 @@ namespace game {
     const std::string getMapName(const game::asset::MAP&);
 
     sf::Sound& getSound(const snd&);
+
+    sf::Music& getMusic(const MUSIC&);
+
+    void MusicClean();
 
   } // end of asset namespace
 
