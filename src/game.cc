@@ -55,10 +55,16 @@ void game::run() {
            * (collision layer) */
           map_ns::displayMap_L1();
 
+          /* handle view */
+          static sf::View v;
+          v.setSize(1600,900);
+          v.setCenter(entity::getPl()->m_enSprite.getPosition());
+
           win::getWin().draw(game::entity::getPl()->m_enSprite);
           
           /* Handling movement will deal with collisions layer */
           entity::getPl()->handleMove();
+          win::getWin().setView(v);
           win::getWin().display();
         }
         delete game::entity::getPl();
