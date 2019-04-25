@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "title.hpp"
 
 namespace {
   // By default, state is in title screen
@@ -9,6 +10,7 @@ void game::init() {
   // Init everything that needs to be init here
   game::win::init();
   game::asset::init();
+  game::map_ns::init();
 }
 
 void game::run() {
@@ -37,17 +39,13 @@ void game::run() {
       }
       case game::asset::GS::DEBUG:
       {
-        game::map_ns::loadMap("data/map/testMap00.txt");
+        /* Create the player object */
+        game::entity::getPl() = new entity::Player("Jimbo",100,100,20,10,30);
 
-        game::entity::getPl() = new entity::Player("Jimbo",
-                                                   100,
-                                                   100,
-                                                   20,
-                                                   10,
-                                                   30);
-          //std::cout << "got here\n"; exit(0);
+        /* Load the default map */
+        game::map_ns::loadMap(game::asset::MAP::TEST_MAP00, sf::Vector2f(2, 2));
 
-        game::entity::getPl()->m_enSprite.setPosition(_SLOC*2, _SLOC*2);
+        //game::entity::getPl()->m_enSprite.setPosition(_SLOC*2, _SLOC*2);
 
         /* While the game setting is on DEBUG, run the game */
         while(game::getGS() == asset::GS::DEBUG) {
@@ -60,8 +58,7 @@ void game::run() {
           win::getWin().draw(game::entity::getPl()->m_enSprite);
           
           /* Handling movement will deal with collisions layer */
-          entity::getPl()->handleMove(map_ns::getColSpr(),
-                                      map_ns::getEvStructV());
+          entity::getPl()->handleMove();
           win::getWin().display();
         }
         delete game::entity::getPl();
