@@ -1,4 +1,5 @@
 #include "asset.hpp"
+#include <iostream>
 
 namespace {
   // Create a map container that contains string to path of images
@@ -14,11 +15,26 @@ namespace {
   /* Actor sprite textures */
   static sf::Texture _actorTexture;
 
+  /* musics */
+  static std::map<game::asset::MUSIC, sf::Music*> _gameMusic;
+
   /* Sounds */
   static std::map<game::asset::snd, sf::Sound> _gameSound;
+
 }
 
 void game::asset::init() {
+
+  auto lamda_CreateMus = [](const MUSIC& id, const std::string& s) {
+    sf::Music *t = new sf::Music;
+    if(!t->openFromFile(s)) {
+      delete t;
+      std::cerr << "Unable to create music from path: " << s << std::endl;
+      exit(1);
+    }
+    else
+      _gameMusic.insert(std::pair<MUSIC, sf::Music*>(id, t));
+  };
 
   /* Font location. I am only using 1 font for my game, so no need for maps */
   _font.loadFromFile("data/font/oldschooladventures.ttf");
@@ -35,6 +51,11 @@ void game::asset::init() {
   /* Game textures load from file */
   _mapTexture.loadFromFile("data/tileset/jimboTiles/jimboTiles.png");
   _actorTexture.loadFromFile(_imgLoc[asset::img::ACTOR_PNG]);
+
+  /* musics for the game */
+
+  lamda_CreateMus(MUSIC::AMBI_WIND, "data/music/AMB_wind.ogg");
+  lamda_CreateMus(MUSIC::TITLESCREEN, "data/music/BetweenWorlds.ogg");
 
   /* Sound buffers for the game */
   static sf::SoundBuffer SB_menuHover;
@@ -77,6 +98,17 @@ const std::string game::asset::getMapName(const game::asset::MAP& ID) {
   return _mapLoc[ID];
 }
 
-sf::Sound& game::asset::getSound(const game::asset::snd& se) {
-  return _gameSound[se];
+sf::Sound& game::asset::getSound(const game::asset::snd& id) {
+  return _gameSound[id];
+}
+
+sf::Music& game::asset::getMusic(const game::asset::MUSIC& id) {
+  return *_gameMusic[id];
+}
+
+void game::asset::MusicClean() {
+  for(auto iter = _gameMusic.begin(); iter!= _gameMusic.end();iter++)
+  {
+    delete iter->second;
+  }
 }
