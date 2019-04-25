@@ -1,201 +1,260 @@
 #include "map.hpp"
 #include "game.hpp"
+#include "asset.hpp"
+
 
 namespace {
 
-  static std::vector< std::vector<size_t> >     _map_lay01;   // Layer 1
-  static std::vector< std::vector<sf::Sprite> > _map_lay01_S; // L1 sprites
+  /* Current map enum */
+  static game::asset::MAP currentMap = game::asset::MAP::NONE;
 
-  static std::vector< std::vector<size_t> >     _map_lay02;   // Layer 2
-  static std::vector< std::vector<sf::Sprite> > _map_lay02_S; // L2 sprites
-
-  static std::vector< std::vector<size_t> >     _map_lay03;   // Layer 3
-  static std::vector< std::vector<sf::Sprite> > _map_lay03_S; // L3 sprites
-
-  static std::vector< std::vector<size_t> >     _map_EvLay;   // Event layer
-
-  /* Need to make some data structures to define some events */
-  static std::vector< std::vector<game::map_ns::mapEvStruct> > _mapEvV;
 }
 
-void game::map_ns::loadMap(const std::string& mapName) {
+namespace {
 
-  std::ifstream infile(mapName);
-  if(!infile) {
-    std::cerr << "Unable to open map: " << mapName << std::endl;
-    std::cerr << "Verify the integrity of " << mapName << std::endl;
-    exit(1);
-  }
-  unsigned short int _row, _col;
-  /* The first two numbers in the map file are always row and col */
-  infile >> _row >> _col;
-  const ushort row = _row;
-  const ushort col = _col;
+  static game::map_ns::MapInfo testMap00(game::asset::MAP::TEST_MAP00, "tstMap00");
+  static game::map_ns::MapInfo testMap01(game::asset::MAP::TEST_MAP01, "tstMap01");
+  static game::map_ns::MapInfo testMap02(game::asset::MAP::TEST_MAP02, "tstMap02");
 
-  /* Before reading into the vectors, clear them out */
-  if(!_map_lay01.empty()) {
-    _map_lay01.clear();
-  }
-  if(!_map_lay02.empty()) {
-    _map_lay02.clear();
-  }
-  if(!_map_lay03.empty()) {
-    _map_lay03.clear();
-  }
+  /* Making a std::map so we can map map enums to objects */
+  static std::map<game::asset::MAP, game::map_ns::MapInfo*> mapInfoContainerMap;
+}
 
-  /* Read in the first layer */
-  _map_lay01.resize(row);
-  for(auto& i : _map_lay01) {
-    i.resize(col);
-  }
-  for(size_t i = 0; i < row; i++) {
-    for(size_t j = 0; j < col; j++) {
-      infile >> _map_lay01[i][j];
+void game::map_ns::init() {
+
+  /* INIT FUNCTION */
+
+  /* A lambda function so we can read from the map files to create maps */
+  auto createMap = [](std::string mapName, MapInfo* mapObj) {
+    std::ifstream infile;
+    infile.open(mapName.c_str());
+    if(!infile) {
+      std::cerr << "Unable to open map: " << mapName << std::endl;
+      exit(1);
     }
-  }
-
-  /* Read in the second layer */
-  _map_lay02.resize(row);
-  for(auto& i : _map_lay02) {
-    i.resize(col);
-  }
-  for(size_t i = 0; i < row; i++) {
-    for(size_t j = 0; j < col; j++) {
-      infile >> _map_lay02[i][j];
+    size_t row, col;
+    infile >> row >> col;
+    /* Indicate the map size */
+    mapObj->_mapSize = sf::Vector2i(row, col);
+    /* Resize the layers before doing anything */
+    mapObj->_map_lay01.resize(row);
+    for(auto& i : mapObj->_map_lay01) {
+      /* layer 1 resize */
+      i.resize(col);
     }
-  }
-
-  /* Read in the third layer */
-  _map_lay03.resize(row);
-  for(auto& i : _map_lay03) {
-    i.resize(col);
-  }
-  for(size_t i = 0; i < row; i++) {
-    for(size_t j = 0; j < col; j++) {
-      infile >> _map_lay03[i][j];
+    mapObj->_map_lay02.resize(row);
+    for(auto& i : mapObj->_map_lay02) {
+      /* layer 2 resize */
+      i.resize(col);
     }
-  }
-
-  /* Read in the event layer */
-  _map_EvLay.resize(row);
-  for(auto& i : _map_EvLay) {
-    i.resize(col);
-  }
-  for(size_t i = 0; i < row; i++) {
-    for(size_t j = 0; j < col; j++) {
-      infile >> _map_EvLay[i][j];
+    mapObj->_map_lay03.resize(row);
+    for(auto& i : mapObj->_map_lay03) {
+      /* layer 3 resize */
+      i.resize(col);
     }
-  }
+    mapObj->_map_EvLay.resize(row);
+    for(auto& i : mapObj->_map_EvLay) {
+      /* event layer resize */
+      i.resize(col);
+    }
+    mapObj->evV.resize(row);
+    for(auto& i : mapObj->evV) {
+      /* Resize the vector containing information about event */
+      i.resize(col);
+    }
 
-  if(infile.peek() == '\0') {
-    std::cerr << "Error: detected extra bits at the end of the map\n";
+    /* READ IN THE LAYERS */
+    for(size_t i = 0; i < row; i++) {
+      /* Layer 1 read in */
+      for(size_t j = 0; j < col; j++) {
+        infile >> mapObj->_map_lay01[i][j];
+      }
+    }
+    for(size_t i = 0; i < row; i++) {
+      /* Layer 2 read in */
+      for(size_t j = 0; j < col; j++) {
+        infile >> mapObj->_map_lay02[i][j];
+      }
+    }
+    for(size_t i = 0; i < row; i++) {
+      /* Layer 3 read in */
+      for(size_t j = 0; j < col; j++) {
+        infile >> mapObj->_map_lay03[i][j];
+      }
+    }
+    for(size_t i = 0; i < row; i++) {
+      for(size_t j = 0; j < col; j++) {
+        infile >> mapObj->_map_EvLay[i][j];
+      }
+    }
+
+    /* If reading went well, we should be ok...
+     * TODO: Implement error checking later */
     infile.close();
-    exit(1);
-  }
-  infile.close();
 
-  /* Now that we have read in the numbers, we have to scale in the sprites.
-   * We do this first by clearing out the sprite vectors and then allocating
-   * space for them using the resize function. */
+    /* Clear the sprites */
+    mapObj->_map_lay01_S.clear();
+    mapObj->_map_lay02_S.clear();
+    mapObj->_map_lay03_S.clear();
 
-  _map_lay01_S.clear();
-  _map_lay02_S.clear();
-  _map_lay03_S.clear();
-  _mapEvV.clear();
-  //_map_EvLay_S.clear();
+    /* Resize sprites */
+    mapObj->_map_lay01_S.resize(row);
+    for(auto& i : mapObj->_map_lay01_S) {
+      i.resize(col);
+    }
+    mapObj->_map_lay02_S.resize(row);
+    for(auto& i : mapObj->_map_lay02_S) {
+      i.resize(col);
+    }
+    mapObj->_map_lay03_S.resize(row);
+    for(auto& i : mapObj->_map_lay03_S) {
+      i.resize(col);
+    }
+    mapObj->_mapEvV.resize(row);
+    for(auto& i : mapObj->_mapEvV) {
+      i.resize(col);
+    }
 
-  _map_lay01_S.resize(row);   // Resize first sprite layer
-  for(auto& i : _map_lay01_S) {
-    i.resize(col);
-  }
-  _map_lay02_S.resize(row);   // Resize collisions sprite layer
-  for(auto& i : _map_lay02_S) {
-    i.resize(col);
-  }
-  _map_lay03_S.resize(row);   // Resize passthrough sprite layer
-  for(auto& i : _map_lay03_S) {
-    i.resize(col);
-  }
-  _mapEvV.resize(row);        // Resize the event vector layer
-  for(auto& i : _mapEvV) {
-    i.resize(col);
-  }
+    /* Scale the sprites */
+    for(auto& i : mapObj->_map_lay01_S) {
+      for(auto& j : i) {
+        j.setScale(SPRITE_SCALE, SPRITE_SCALE);
+      }
+    }
+    for(auto& i : mapObj->_map_lay02_S) {
+      for(auto& j : i) {
+        j.setScale(SPRITE_SCALE, SPRITE_SCALE);
+      }
+    }
+    for(auto& i : mapObj->_map_lay03_S) {
+      for(auto& j : i) {
+        j.setScale(SPRITE_SCALE, SPRITE_SCALE);
+      }
+    }
+    for(auto& i : mapObj->_mapEvV) {
+      for(auto& j : i) {
+        j.setScale(SPRITE_SCALE, SPRITE_SCALE);
+      }
+    }
+    /* After allocating space and resizing the sprites, now we set the textures
+     * for each of the sprite depending on what the data was for the first
+     * layer. */
+    for(size_t i = 0; i < row; i++) {
+      for(size_t j = 0; j < col; j++) {
+        if(mapObj->_map_lay01[i][j] == 1) {
+          mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
+          mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(0,0,_SS,_SS));
+        }
+        else if(mapObj->_map_lay01[i][j] == 2) {
+          mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
+          mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS,0,_SS,_SS));
+        }
+        else if(mapObj->_map_lay01[i][j] == 3) {
+          mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
+          mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*2,0,_SS,_SS));
+        }
+        else if(mapObj->_map_lay01[i][j] == 4) {
+          mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
+          mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*3,0,_SS,_SS));
+        }
+        else if(mapObj->_map_lay01[i][j] == 5) {
+          mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
+          mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*4,0,_SS,_SS));
+        }
+        else if(mapObj->_map_lay01[i][j] == 6) {
+          mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
+          mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*5,0,_SS,_SS));
+        }
+        mapObj->_map_lay01_S[j][i].setPosition(_SLOC*(i), _SLOC*(j));
+      }
+    }
 
-  for(auto& i : _map_lay01_S) {
-    for(auto& j : i) {
-      j.setScale(SPRITE_SCALE, SPRITE_SCALE);
-    }
-  }
-  for(auto& i : _map_lay02_S) {
-    for(auto& j : i) {
-      j.setScale(SPRITE_SCALE, SPRITE_SCALE);
-    }
-  }
-  for(auto& i : _map_lay03_S) {
-    for(auto& j : i) {
-      j.setScale(SPRITE_SCALE, SPRITE_SCALE);
-    }
-  }
-  for(auto& i : _mapEvV) {
-    for(auto& j : i) {
-      j._mapEv_Sp.setScale(SPRITE_SCALE, SPRITE_SCALE);
-    }
-  }
+    /* Noticed above how I set the position using the [i][j] subscripting.
+     * In the below, I do [j][i] subscripting. This works perfectly. I do not
+     * know why, but do not try to apply anymore "fixes". I have come to terms
+     * that this is just the way it will be done. */
 
-  /* After allocating space and resizing the sprites, now we set the textures
-   * for each of the sprite depending on what the data was for the first layer.
-   * */
-  for(size_t i = 0; i < row; i++) {
-    for(size_t j = 0; j < col; j++) {
-      if(_map_lay01[i][j] == 1) {
-        _map_lay01_S[i][j].setTexture(game::asset::mapTexture());
-        _map_lay01_S[i][j].setTextureRect(sf::IntRect(0,0,_SS,_SS));
-      }
-      else if(_map_lay01[i][j] == 2) {
-        _map_lay01_S[i][j].setTexture(game::asset::mapTexture());
-        _map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS,0,_SS,_SS));
-      }
-      else if(_map_lay01[i][j] == 3) {
-        _map_lay01_S[i][j].setTexture(game::asset::mapTexture());
-        _map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*2,0,_SS,_SS));
-      }
-      else if(_map_lay01[i][j] == 4) {
-        _map_lay01_S[i][j].setTexture(game::asset::mapTexture());
-        _map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*3,0,_SS,_SS));
-      }
-      else if(_map_lay01[i][j] == 5) {
-        _map_lay01_S[i][j].setTexture(game::asset::mapTexture());
-        _map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*4,0,_SS,_SS));
-      }
-      else if(_map_lay01[i][j] == 6) {
-        _map_lay01_S[i][j].setTexture(game::asset::mapTexture());
-        _map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*5,0,_SS,_SS));
-      }
-      _map_lay01_S[i][j].setPosition(_SLOC*(row-i-1), _SLOC*(col-j-1));
-    }
-  }
-  /* Now do the same thing for the collisions layer */
-  for(size_t i = 0; i < row; i++) {
-    for(size_t j = 0; j < col; j++) {
-      if(_map_lay02[i][j] == 1) {
-        _map_lay02_S[i][j].setTextureRect(sf::IntRect(00,00,_SS,_SS));
-        _map_lay02_S[i][j].setPosition(_SLOC*(row-i-1), _SLOC*(col-j-1));
+    /* Define data for the collisions layer */
+    for(size_t i = 0; i < row; i++) {
+      for(size_t j = 0; j < col; j++) {
+        if(mapObj->_map_lay02[i][j] == 1) {
+          mapObj->_map_lay02_S[i][j].setTextureRect(sf::IntRect(00,00,_SS,_SS));
+          mapObj->_map_lay02_S[i][j].setPosition(_SLOC*(j), _SLOC*(i));
+        }
       }
     }
-  }
-  /* Now do the same thing for the events layer */
-  for(size_t i = 0; i < row; i++) {
-    for(size_t j = 0; j < col; j++) {
-      if(_map_EvLay[i][j] == 1) {
-        _mapEvV[i][j]._mapEv_Sp.setTextureRect(sf::IntRect(00,00,_SS,_SS));
-        _mapEvV[i][j]._mapEv_Sp.setPosition(_SLOC*(row-i-1), _SLOC*(col-j-1));
-        _mapEvV[i][j].ev = game::map_ns::TILE_EV::PORTAL;
-      }
-      else {
-        _mapEvV[i][j].ev = game::map_ns::TILE_EV::NONE;
+
+    /* Define data for the events layer */
+    for(size_t i = 0; i < row; i++) {
+      for(size_t j = 0; j < col; j++) {
+        if(mapObj->_map_EvLay[i][j] == 1) {
+          /* If it is a portal */
+          mapObj->_mapEvV[i][j].setTextureRect(sf::IntRect(00,00,_SS,_SS));
+          mapObj->_mapEvV[i][j].setPosition(_SLOC*(j), _SLOC*(i));
+          //mapObj->_mapEvV[i][j].setColor(sf::Color(153,51,255,100));
+          mapObj->_mapEvV[i][j].setColor(sf::Color::Magenta);
+          std::cout << "Index of portal is " << i << " " << j << std::endl;
+          mapObj->evV[i][j].ev = game::map_ns::TILE_EV::PORTAL;
+        }
+        else {
+          mapObj->evV[i][j].ev = game::map_ns::TILE_EV::NONE;
+        }
       }
     }
-  }
+
+    std::clog << "Successfully created map: " << mapName << "\n\n";
+
+  };
+  /* Map the object to a std::map */
+  mapInfoContainerMap[game::asset::MAP::TEST_MAP00] = &testMap00;
+  mapInfoContainerMap[game::asset::MAP::TEST_MAP01] = &testMap01;
+  mapInfoContainerMap[game::asset::MAP::TEST_MAP02] = &testMap02;
+
+  /* Create the map from the lambda */
+  createMap(asset::getMapName(asset::MAP::TEST_MAP00), &testMap00);
+  createMap(asset::getMapName(asset::MAP::TEST_MAP01), &testMap01);
+  createMap(asset::getMapName(asset::MAP::TEST_MAP02), &testMap02);
+
+
+  /* When placing portals, remember that the sprites are inverted accross the
+   * Cartesian-like x-y plane!!
+   *
+   * So if we have an index at i j, we need to define the second (of the pair)
+   * to be j i.
+   *
+   * Well, my math seems to suck, so that's probably a reason why it's like
+   * that. I'm too lazy to apply a fix, so I will just leave it as it is */
+
+  /* --------------------------------------------------------------------------
+   * TEST_MAP00 PORTALS
+   * ------------------------------------------------------------------------*/
+  /* Event at [1][3] is a portal that leads to TEST_MAP02 */
+  testMap00.evV[1][3].portalTransportLoc.first = game::asset::MAP::TEST_MAP02;
+  testMap00.evV[1][3].portalTransportLoc.second = sf::Vector2f(2, 5);
+  /* Event at [3][5] is a portal that leads to TEST_MAP01 */
+  testMap00.evV[3][5].portalTransportLoc.first = game::asset::MAP::TEST_MAP01;
+  testMap00.evV[3][5].portalTransportLoc.second = sf::Vector2f(1, 3);
+
+  /* --------------------------------------------------------------------------
+   * TEST_MAP01 PORTALS
+   * ------------------------------------------------------------------------*/
+  testMap01.evV[3][1].portalTransportLoc.first = game::asset::MAP::TEST_MAP00;
+  testMap01.evV[3][1].portalTransportLoc.second = sf::Vector2f(5, 3);
+
+
+  /* --------------------------------------------------------------------------
+   * TEST_MAP02
+   * ------------------------------------------------------------------------*/
+  testMap02.evV[5][2].portalTransportLoc.first = game::asset::MAP::TEST_MAP00;
+  testMap02.evV[5][2].portalTransportLoc.second = sf::Vector2f(3, 1);
+}
+
+
+void game::map_ns::loadMap(const game::asset::MAP& mapID, const sf::Vector2f playerPos) {
+  /* TODO: implement correct loading functions -> plan */
+  //std::cout << "At least it compiles.\n"; exit(1);
+  entity::getPl()->m_enSprite.setPosition(playerPos.x*_SLOC, playerPos.y*_SLOC);
+  setMapID(mapID);
 }
 
 void game::map_ns::displayMap_L1() {
@@ -211,24 +270,23 @@ void game::map_ns::displayMap_L1() {
 
   /* Clear the screen black */
   win::getWin().clear(sf::Color::Black);
-  for(auto& i : _map_lay01_S) {
+  for(auto& i : getMapObjectByID(currentMap)->_map_lay01_S) {
     for(auto& j : i) {
+      //j.setColor(sf::Color::Blue);
       win::getWin().draw(j);
     }
   }
 
 }
 
-std::vector< std::vector<sf::Sprite> >& game::map_ns::getColSpr() {
-  return _map_lay02_S;
+game::map_ns::MapInfo* game::map_ns::getMapObjectByID(const game::asset::MAP& mapID) {
+  return mapInfoContainerMap[mapID];
 }
 
-std::vector< std::vector<game::map_ns::mapEvStruct> >& game::map_ns::getEvStructV() {
+const game::asset::MAP& game::map_ns::getCurrentMapID() {
+  return currentMap;
+}
 
-  /* Returns the map event vector which contains
-   *   1. Enumerated data type that indicated the type of event
-   *   2. The sprite. */
-
-  return _mapEvV;
-
+void game::map_ns::setMapID(const game::asset::MAP& ID) {
+  currentMap = ID;
 }
