@@ -18,6 +18,10 @@ const unsigned short int& game::win::getRes_y() {
 void game::win::init() {
   _win.create(sf::VideoMode(res_x, res_y), "Jimbo Quest", sf::Style::Close);
   _win.setFramerateLimit(60u);
+  
+  /* Set window position to the top left of the screen */
+  _win.setPosition(sf::Vector2i(0,0));
+
 }
 
 sf::RenderWindow& game::win::getWin() {
