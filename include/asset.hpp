@@ -19,6 +19,7 @@ namespace game {
     };
 
     enum class MAP {
+      NONE,
       TEST_MAP00,
       TEST_MAP01,
       TEST_MAP02,
@@ -38,6 +39,7 @@ namespace game {
                           const sf::Color,    // outline color
                           const float);       // outline thickness
 
+    /* Sets the origin of the image to the center */
     template<typename SFML_T>
       void setOriginCenter(SFML_T& t) {
         t.setOrigin(t.getGlobalBounds().left + t.getGlobalBounds().width/2,
@@ -62,7 +64,9 @@ namespace game {
       };
     }
 
-  }
+    const std::string getMapName(const game::asset::MAP&);
+
+  } // end of asset namespace
 
 }
 

@@ -58,3 +58,7 @@ sf::Texture& game::asset::mapTexture() {
 sf::Texture& game::asset::actorTexture() {
   return _actorTexture;
 }
+
+const std::string game::asset::getMapName(const game::asset::MAP& ID) {
+  return _mapLoc[ID];
+}
