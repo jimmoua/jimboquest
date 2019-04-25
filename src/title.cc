@@ -57,6 +57,7 @@ namespace {
       if(game::win::getEv().type == sf::Event::KeyPressed) {
         switch(game::win::getEv().key.code) {
           case sf::Keyboard::S:
+            game::asset::getSound(game::asset::snd::MENU_HOVER).play();
             if(_counter == 3) {
               _counter = 0;
             }
@@ -65,6 +66,7 @@ namespace {
             }
             break;
           case sf::Keyboard::W:
+            game::asset::getSound(game::asset::snd::MENU_HOVER).play();
             if(_counter == 0) {
               _counter = 3;
             }
@@ -72,7 +74,8 @@ namespace {
               _counter--;
             }
             break;
-          case sf::Keyboard::Enter:
+          case sf::Keyboard::J:
+            game::asset::getSound(game::asset::snd::MENU_SUBMIT).play();
             if(_counter == 0) {
               // start game
               std::cout << "Not implemented yet...\n";
@@ -113,6 +116,11 @@ void game::title::init() {
   _load.setPosition(mid_x, mid_y);
   _exit.setPosition(mid_x, mid_y + 70);
   _debug.setPosition(mid_x, mid_y + 140);
+  asset::getMusic(asset::MUSIC::AMBI_WIND).setPlayingOffset(sf::seconds(5));
+  asset::getMusic(asset::MUSIC::AMBI_WIND).setLoop(true);
+  asset::getMusic(asset::MUSIC::TITLESCREEN).setLoop(true);
+  asset::getMusic(asset::MUSIC::AMBI_WIND).play();
+  asset::getMusic(asset::MUSIC::TITLESCREEN).play();
   while(game::getGS() == asset::GS::TITLE) {
     _run();
   }
