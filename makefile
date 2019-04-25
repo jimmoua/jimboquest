@@ -1,4 +1,4 @@
-CC=clang-8
+CC=gcc
 
 SRC_DIR=src
 
