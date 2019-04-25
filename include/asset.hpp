@@ -31,6 +31,13 @@ namespace game {
       ACTOR_PNG,
     };
 
+    /* use these for sound effects */
+    enum class snd {
+      MENU_HOVER,
+      MENU_SUBMIT,
+      MENU_CANCEL,
+    };
+
     void init();
 
     sf::Text createString(const std::string,  // string name
@@ -65,6 +72,8 @@ namespace game {
     }
 
     const std::string getMapName(const game::asset::MAP&);
+
+    sf::Sound& getSound(const snd&);
 
   } // end of asset namespace
 

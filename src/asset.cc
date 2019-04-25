@@ -13,6 +13,9 @@ namespace {
 
   /* Actor sprite textures */
   static sf::Texture _actorTexture;
+
+  /* Sounds */
+  static std::map<game::asset::snd, sf::Sound> _gameSound;
 }
 
 void game::asset::init() {
@@ -32,6 +35,17 @@ void game::asset::init() {
   /* Game textures load from file */
   _mapTexture.loadFromFile("data/tileset/jimboTiles/jimboTiles.png");
   _actorTexture.loadFromFile(_imgLoc[asset::img::ACTOR_PNG]);
+
+  /* Sound buffers for the game */
+  static sf::SoundBuffer SB_menuHover;
+  static sf::SoundBuffer SB_menuSubmit;
+
+
+  SB_menuHover.loadFromFile("data/sound/sound_menu_hover.ogg");
+  SB_menuSubmit.loadFromFile("data/sound/sound_menu_submit.ogg");
+
+  _gameSound[snd::MENU_HOVER].setBuffer(SB_menuHover);
+  _gameSound[snd::MENU_SUBMIT].setBuffer(SB_menuSubmit);
 
 }
 
@@ -61,4 +75,8 @@ sf::Texture& game::asset::actorTexture() {
 
 const std::string game::asset::getMapName(const game::asset::MAP& ID) {
   return _mapLoc[ID];
+}
+
+sf::Sound& game::asset::getSound(const game::asset::snd& se) {
+  return _gameSound[se];
 }
