@@ -62,8 +62,7 @@ namespace game {
                const int&,
                const int&);
 
-        void handleMove(std::vector< std::vector<sf::Sprite> >&,
-                        std::vector< std::vector<game::map_ns::mapEvStruct> >&);
+        void handleMove();
       private:
     };
 
