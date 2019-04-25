@@ -20,7 +20,8 @@ void game::win::init() {
   _win.setFramerateLimit(60u);
   
   /* Set window position to the top left of the screen */
-  _win.setPosition(sf::Vector2i(0,0));
+  _win.setPosition(sf::Vector2i(100,100));
+  //_win.setPosition(sf::Vector2i(0,0));
 
 }
 
