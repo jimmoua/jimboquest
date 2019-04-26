@@ -45,7 +45,9 @@ void game::debug::run() {
                                 first text */
           in_uiMenu = true;  /* In the game menu */
           //ui::getUI(ui::ENUM_UI::IN_GAME).set_menuTextsOrigin(); ← creates rendering issues
+
           // TODO: Need to fix, text positions are changing
+          /* Disabling the below seems to make the text positions static */
           ui::getUI(ui::ENUM_UI::IN_GAME).set_menuPositionToCen();
           ui::getUI(ui::ENUM_UI::IN_GAME).set_menuTextsCenterOfUI();
         }
