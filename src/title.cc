@@ -1,22 +1,7 @@
 #include "title.hpp"
+#include <ui.hpp>
 
 namespace {
-  static sf::Text _start = game::asset::createString("Start", 36,
-                                                     sf::Color::Yellow,
-                                                     sf::Color::Black,
-                                                     3.0f);
-  static sf::Text _load = game::asset::createString("Load", 36,
-                                                     sf::Color::White,
-                                                     sf::Color::Black,
-                                                     3.0f);
-  static sf::Text _exit = game::asset::createString("Exit", 36,
-                                                     sf::Color::White,
-                                                     sf::Color::Black,
-                                                     3.0f);
-  static sf::Text _debug = game::asset::createString("Debug", 36,
-                                                     sf::Color::White,
-                                                     sf::Color::Black,
-                                                     3.0f);
 
   static unsigned short int _counter = 0; /* 1 = start
                                              2 = load
@@ -25,29 +10,30 @@ namespace {
 
 
   static void _run() {
+    auto& UI = game::ui::getUI(game::ui::ENUM_UI::TITLESCREEN);
     if(_counter == 0) {
-      _start.setFillColor(sf::Color::Yellow);
-      _load.setFillColor(sf::Color::White);
-      _exit.setFillColor(sf::Color::White);
-      _debug.setFillColor(sf::Color::White);
+      UI.ui_texts[0].setFillColor(sf::Color::Yellow);
+      UI.ui_texts[1].setFillColor(sf::Color::White);
+      UI.ui_texts[2].setFillColor(sf::Color::White);
+      UI.ui_texts[3].setFillColor(sf::Color::White);
     }
     else if(_counter == 1) {
-      _start.setFillColor(sf::Color::White);
-      _load.setFillColor(sf::Color::Yellow);
-      _exit.setFillColor(sf::Color::White);
-      _debug.setFillColor(sf::Color::White);
+      UI.ui_texts[0].setFillColor(sf::Color::White);
+      UI.ui_texts[1].setFillColor(sf::Color::Yellow);
+      UI.ui_texts[2].setFillColor(sf::Color::White);
+      UI.ui_texts[3].setFillColor(sf::Color::White);
     }
     else if(_counter == 2) {
-      _start.setFillColor(sf::Color::White);
-      _load.setFillColor(sf::Color::White);
-      _exit.setFillColor(sf::Color::Yellow);
-      _debug.setFillColor(sf::Color::White);
+      UI.ui_texts[0].setFillColor(sf::Color::White);
+      UI.ui_texts[1].setFillColor(sf::Color::White);
+      UI.ui_texts[2].setFillColor(sf::Color::Yellow);
+      UI.ui_texts[3].setFillColor(sf::Color::White);
     }
     else if(_counter == 3) {
-      _start.setFillColor(sf::Color::White);
-      _load.setFillColor(sf::Color::White);
-      _exit.setFillColor(sf::Color::White);
-      _debug.setFillColor(sf::Color::Yellow);
+      UI.ui_texts[0].setFillColor(sf::Color::White);
+      UI.ui_texts[1].setFillColor(sf::Color::White);
+      UI.ui_texts[2].setFillColor(sf::Color::White);
+      UI.ui_texts[3].setFillColor(sf::Color::Yellow);
     }
 
     while(game::win::getWin().pollEvent(game::win::getEv())) {
@@ -96,26 +82,16 @@ namespace {
       }
     }
     game::win::getWin().clear(sf::Color::Black);
-    game::win::getWin().draw(_start);
-    game::win::getWin().draw(_load);
-    game::win::getWin().draw(_exit);
-    game::win::getWin().draw(_debug);
+    game::ui::getUI(game::ui::ENUM_UI::TITLESCREEN).drawUIsprites();
+    for(auto& iter : UI.ui_texts) {
+      game::win::getWin().draw(iter);
+    }
     game::win::getWin().display();
   }
 
 }
 
 void game::title::init() {
-  const int mid_x = win::getRes_x()/2;
-  const int mid_y = win::getRes_y()/2;
-  asset::setOriginCenter(_start);
-  asset::setOriginCenter(_load);
-  asset::setOriginCenter(_exit);
-  asset::setOriginCenter(_debug);
-  _start.setPosition(mid_x, mid_y - 70);
-  _load.setPosition(mid_x, mid_y);
-  _exit.setPosition(mid_x, mid_y + 70);
-  _debug.setPosition(mid_x, mid_y + 140);
   asset::getMusic(asset::MUSIC::AMBI_WIND).setPlayingOffset(sf::seconds(5));
   asset::getMusic(asset::MUSIC::AMBI_WIND).setLoop(true);
   asset::getMusic(asset::MUSIC::TITLESCREEN).setLoop(true);
