@@ -87,7 +87,7 @@ void game::ui::UI::set_menuTextsCenterOfUI() {
   float offset = 70;
   for(auto& i : this->ui_texts) {
     /* Window top is being defined as the origin of the window */
-    i.setPosition(this->menu_sprite[1].getPosition().x, c.top+offset);
+    i.setPosition(this->menu_sprite[1].getPosition().x, c.top-v.getCenter().y+offset);
     offset+=70;
   }
 }
