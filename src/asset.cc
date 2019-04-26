@@ -60,13 +60,22 @@ void game::asset::init() {
   /* Sound buffers for the game */
   static sf::SoundBuffer SB_menuHover;
   static sf::SoundBuffer SB_menuSubmit;
+  static sf::SoundBuffer SB_menuCancel;
+  static sf::SoundBuffer SB_menuAppear;
+  static sf::SoundBuffer SB_menuDisappear;
 
 
   SB_menuHover.loadFromFile("data/sound/sound_menu_hover.ogg");
   SB_menuSubmit.loadFromFile("data/sound/sound_menu_submit.ogg");
+  SB_menuCancel.loadFromFile("data/sound/sound_menu_cancle.ogg");
+  SB_menuAppear.loadFromFile("data/sound/sound_menu_appear.ogg");
+  SB_menuDisappear.loadFromFile("data/sound/sound_menu_blocked.ogg");
 
   _gameSound[snd::MENU_HOVER].setBuffer(SB_menuHover);
   _gameSound[snd::MENU_SUBMIT].setBuffer(SB_menuSubmit);
+  _gameSound[snd::MENU_CANCEL].setBuffer(SB_menuCancel);
+  _gameSound[snd::MENU_APPEAR].setBuffer(SB_menuAppear);
+  _gameSound[snd::MENU_DISAPPEAR].setBuffer(SB_menuDisappear);
 
 }
 
@@ -83,6 +92,18 @@ sf::Text game::asset::createString(const std::string s,
   t.setFillColor(fc);
   t.setOutlineColor(oc);
   t.setOutlineThickness(ot);
+  return t;
+}
+
+sf::Text game::asset::createString(const std::string s)
+{
+  sf::Text t;
+  t.setFont(_font);
+  t.setString(s);
+  t.setCharacterSize(36);
+  t.setFillColor(sf::Color::White);
+  t.setOutlineColor(sf::Color::Black);
+  t.setOutlineThickness(3.f);
   return t;
 }
 
