@@ -36,6 +36,7 @@ void game::debug::run() {
 
     while(game::win::getWin().pollEvent(game::win::getEv())) {
       if(game::win::getEv().type == sf::Event::KeyPressed) {
+
         if(win::getEv().key.code == sf::Keyboard::Escape) {
           asset::getSound(asset::snd::MENU_APPEAR).play();
 
@@ -44,13 +45,31 @@ void game::debug::run() {
           menuCounter = 0;   /* Reset the menu counter so it goes back to the
                                 first text */
           in_uiMenu = true;  /* In the game menu */
-          //ui::getUI(ui::ENUM_UI::IN_GAME).set_menuTextsOrigin(); ← creates rendering issues
+          //ui::getUI(ui::ENUM_UI::IN_GAME).set_menuTextsOrigin(); // ← creates rendering issues
 
-          // TODO: Need to fix, text positions are changing
-          /* Disabling the below seems to make the text positions static */
+
+
+
+
+          /* Disabling this below makes the both text and window change */
           ui::getUI(ui::ENUM_UI::IN_GAME).set_menuPositionToCen();
+
+
+
+
+
+          /* Disableing this below makes the window stay in the middle of the
+           * screen, but the text changes positions...
+           *
+           * Fri Apr 26 11:32:55 CDT 2019
+           * UPDATE: Leaving it here doesn't mess up the window anymore... What
+           * keeps changing is the text. */
           ui::getUI(ui::ENUM_UI::IN_GAME).set_menuTextsCenterOfUI();
-        }
+
+
+
+        } // end of escape key press
+
       }
       if(game::win::getEv().type == sf::Event::Closed) {
         game::setGS(asset::GS::NONE);
@@ -228,7 +247,7 @@ namespace {
     exitUI.ui_texts[1] = game::asset::createString("EXIT TO MENU");
     exitUI.ui_texts[2] = game::asset::createString("EXIT TO DESKTOP");
     exitUI.set_menuTextsOrigin();
-    //exitUI.set_menuTextsCenterOfUI();
+    exitUI.set_menuTextsCenterOfUI();
     exitUI.menu_sprite[0].setSize(sf::Vector2f(600,500));
     exitUI.menu_sprite[1].setSize(sf::Vector2f(580,480));
     exitUI.set_menuSpritesOrigin();

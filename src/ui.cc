@@ -83,16 +83,21 @@ void game::ui::UI::set_menuTextsOrigin() {
 
 void game::ui::UI::set_menuTextsCenterOfUI() {
   auto v = win::getWin().getView();
-  static const auto c = this->menu_sprite[1].getGlobalBounds();
+  static const auto c = this->menu_sprite[1];
   float offset = 70;
   for(auto& i : this->ui_texts) {
     /* Window top is being defined as the origin of the window */
-    i.setPosition(this->menu_sprite[1].getPosition().x, c.top-v.getCenter().y+offset);
+    //i.setPosition(this->menu_sprite[1].getPosition().x, c.top-v.getCenter().y+offset);
+    i.setPosition(this->menu_sprite[1].getPosition().x, (v.getCenter().y-200)+offset);
     offset+=70;
   }
 }
 
 void game::ui::UI::set_menuPositionToCen() {
-  this->menu_sprite[0].setPosition(win::getWin().getView().getCenter());
-  this->menu_sprite[1].setPosition(win::getWin().getView().getCenter());
+  sf::View v = win::getWin().getView();
+  //this->menu_sprite[0].setPosition(win::getWin().getView().getCenter());
+  //this->menu_sprite[1].setPosition(win::getWin().getView().getCenter());
+  for(auto& i : this->menu_sprite) {
+    i.setPosition(v.getCenter());
+  }
 }
