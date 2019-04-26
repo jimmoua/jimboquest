@@ -142,22 +142,27 @@ void game::map_ns::init() {
     for(size_t i = 0; i < row; i++) {
       for(size_t j = 0; j < col; j++) {
         if(mapObj->_map_lay01[i][j] == 1) {
+          /* Black (nothing tile) */
           mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
           mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(0,0,_SS,_SS));
         }
         else if(mapObj->_map_lay01[i][j] == 2) {
+          /* Grass tile */
           mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
           mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS,0,_SS,_SS));
         }
         else if(mapObj->_map_lay01[i][j] == 3) {
+          /* Water tile */
           mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
           mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*2,0,_SS,_SS));
         }
         else if(mapObj->_map_lay01[i][j] == 4) {
+          /* Stone tile */
           mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
           mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*3,0,_SS,_SS));
         }
         else if(mapObj->_map_lay01[i][j] == 5) {
+          /* Dirt tile */
           mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
           mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*4,0,_SS,_SS));
         }
@@ -189,10 +194,9 @@ void game::map_ns::init() {
       for(size_t j = 0; j < col; j++) {
         if(mapObj->_map_EvLay[i][j] == 1) {
           /* If it is a portal */
-          mapObj->_mapEvV[i][j].setTextureRect(sf::IntRect(00,00,_SS,_SS));
+          mapObj->_mapEvV[i][j].setTexture(asset::mapTexture());
+          mapObj->_mapEvV[i][j].setTextureRect(sf::IntRect(_SS*0,_SS,_SS,_SS));
           mapObj->_mapEvV[i][j].setPosition(_SLOC*(j), _SLOC*(i));
-          //mapObj->_mapEvV[i][j].setColor(sf::Color(153,51,255,100));
-          mapObj->_mapEvV[i][j].setColor(sf::Color::Magenta);
           std::cout << "Index of portal is " << i << " " << j << std::endl;
           mapObj->evV[i][j].ev = game::map_ns::TILE_EV::PORTAL;
         }
@@ -272,7 +276,11 @@ void game::map_ns::displayMap_L1() {
   win::getWin().clear(sf::Color::Black);
   for(auto& i : getMapObjectByID(currentMap)->_map_lay01_S) {
     for(auto& j : i) {
-      //j.setColor(sf::Color::Blue);
+      win::getWin().draw(j);
+    }
+  }
+  for(auto& i : getMapObjectByID(currentMap)->_mapEvV) {
+    for(auto& j : i) {
       win::getWin().draw(j);
     }
   }
