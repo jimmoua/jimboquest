@@ -36,6 +36,8 @@ namespace game {
       MENU_HOVER,
       MENU_SUBMIT,
       MENU_CANCEL,
+      MENU_APPEAR,
+      MENU_DISAPPEAR,
     };
 
     enum class MUSIC {
@@ -44,6 +46,8 @@ namespace game {
     };
 
     void init();
+
+    sf::Text createString(const std::string); // string name
 
     sf::Text createString(const std::string,  // string name
                           const ushort,       // text size
