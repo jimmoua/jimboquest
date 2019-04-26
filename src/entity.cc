@@ -109,4 +109,4 @@ void game::entity::Player::handleMove() {
   }
 
 
-}
+} // end of handleMove function
