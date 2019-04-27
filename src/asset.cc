@@ -41,7 +41,7 @@ void game::asset::init() {
   /* In this function, init the assets. This means get the string locs for
    * assets and other useful things... */
   _imgLoc[asset::img::TS_BG] = "data/bg/titlescreen.png";
-  _imgLoc[asset::img::ACTOR_PNG] = "data/entity/actor/actorSheet.png";
+  _imgLoc[asset::img::ACTOR_PNG] = "data/entity/actor/DQ_CharacterSet.png";
 
   /* Game map locations */
   _mapLoc[MAP::TEST_MAP00] = "data/map/testMap00.txt";
