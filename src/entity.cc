@@ -15,7 +15,7 @@ namespace {
     UP, DOWN, RIGHT, LEFT
   };
 
-  std::map<_faceDirection, sf::IntRect*> _face_map_;
+  static std::map<_faceDirection_, const sf::IntRect*> _face_map_;
 
   const static sf::IntRect __PLAYER_UP__ [] = {
     sf::IntRect(X*0+O,Y*1,X-O,Y),
@@ -140,3 +140,10 @@ void game::entity::Player::handleMove() {
 
 
 } // end of handleMove function
+
+void game::entity::init() {
+  _face_map_[_faceDirection_::UP]    = __PLAYER_UP__;
+  _face_map_[_faceDirection_::DOWN]  = __PLAYER_DOWN__;
+  _face_map_[_faceDirection_::LEFT]  = __PLAYER_LEFT__;
+  _face_map_[_faceDirection_::RIGHT] = __PLAYER_RIGHT__;
+}
