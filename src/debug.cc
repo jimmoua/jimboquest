@@ -242,6 +242,8 @@ namespace {
 namespace {
 
   static void init() {
+    in_uiMenu = false;
+    menuCounter = 0;
     /* For exitUI */
     if(exitUI.ui_texts.size() != 3) {
       exitUI.ui_texts.resize(3);
