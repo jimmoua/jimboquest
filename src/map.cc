@@ -234,23 +234,23 @@ void game::map_ns::init() {
    * ------------------------------------------------------------------------*/
   /* Event at [1][3] is a portal that leads to TEST_MAP02 */
   testMap00.evV[1][3].portalTransportLoc.first = game::asset::MAP::TEST_MAP02;
-  testMap00.evV[1][3].portalTransportLoc.second = sf::Vector2f(2, 5);
+  testMap00.evV[1][3].portalTransportLoc.second = sf::Vector2f(2, 4);
   /* Event at [3][5] is a portal that leads to TEST_MAP01 */
   testMap00.evV[3][5].portalTransportLoc.first = game::asset::MAP::TEST_MAP01;
-  testMap00.evV[3][5].portalTransportLoc.second = sf::Vector2f(1, 3);
+  testMap00.evV[3][5].portalTransportLoc.second = sf::Vector2f(2, 3);
 
   /* --------------------------------------------------------------------------
    * TEST_MAP01 PORTALS
    * ------------------------------------------------------------------------*/
   testMap01.evV[3][1].portalTransportLoc.first = game::asset::MAP::TEST_MAP00;
-  testMap01.evV[3][1].portalTransportLoc.second = sf::Vector2f(5, 3);
+  testMap01.evV[3][1].portalTransportLoc.second = sf::Vector2f(4, 3);
 
 
   /* --------------------------------------------------------------------------
    * TEST_MAP02
    * ------------------------------------------------------------------------*/
   testMap02.evV[5][2].portalTransportLoc.first = game::asset::MAP::TEST_MAP00;
-  testMap02.evV[5][2].portalTransportLoc.second = sf::Vector2f(3, 1);
+  testMap02.evV[5][2].portalTransportLoc.second = sf::Vector2f(3, 2);
 }
 
 
