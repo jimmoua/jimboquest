@@ -23,7 +23,7 @@ namespace {
   /* Define where each tile is */
   const static sf::IntRect  __TILE__[] = {
     #define O 4
-    #define O2 15
+    #define O2 10  // portal offset
     sf::IntRect(O,O,_SS-O2,_SS-O2),       // For portal use only!
     sf::IntRect(_SS*0,0,_SS,_SS),         // Black tile
     sf::IntRect(_SS*1,0,_SS,_SS),         // Grass
@@ -162,10 +162,12 @@ void game::map_ns::init() {
           /* If it is a portal */
           mapObj->_mapEvV[i][j].setTexture(asset::mapTexture());
           mapObj->_mapEvV[i][j].setTextureRect(__TILE__[0]);
-          /* If change the 15 here, make sure to change it in the */
-          mapObj->_mapEvV[i][j].setPosition(_SLOC*(j)+15*3, _SLOC*(i)+15*3);
+          mapObj->_mapEvV[i][j].setColor(sf::Color(0,0,0,0));
+          #define O 10   // portal offset (change above if change here)
+          mapObj->_mapEvV[i][j].setPosition(_SLOC*(j)+O*3, _SLOC*(i)+O*3);
           std::cout << "Index of portal is " << i << " " << j << std::endl;
           mapObj->evV[i][j].ev = game::map_ns::TILE_EV::PORTAL;
+          #undef O
         }
         else {
           mapObj->evV[i][j].ev = game::map_ns::TILE_EV::NONE;
