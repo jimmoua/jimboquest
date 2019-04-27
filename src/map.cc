@@ -24,10 +24,10 @@ namespace {
   const static sf::IntRect  __TILE__[] = {
     #define O 4
     #define O2 15
-    sf::IntRect(O,O,_SS-O2,_SS-O2),  // For portal use only!
-    sf::IntRect(_SS*0,0,_SS,_SS),
-    sf::IntRect(_SS*1,0,_SS,_SS),
-    sf::IntRect(_SS*2,0,_SS,_SS),
+    sf::IntRect(O,O,_SS-O2,_SS-O2),       // For portal use only!
+    sf::IntRect(_SS*0,0,_SS,_SS),         // Black tile
+    sf::IntRect(_SS*1,0,_SS,_SS),         // Grass
+    sf::IntRect(_SS*16,_SS*3,_SS,_SS),    // Water
     sf::IntRect(_SS*3,0,_SS,_SS),
     sf::IntRect(_SS*4,0,_SS,_SS),
     sf::IntRect(_SS*5,0,_SS,_SS)
