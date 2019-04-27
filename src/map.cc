@@ -37,56 +37,39 @@ void game::map_ns::init() {
     /* Indicate the map size */
     mapObj->_mapSize = sf::Vector2i(row, col);
     /* Resize the layers before doing anything */
-    mapObj->_map_lay01.resize(row);
-    for(auto& i : mapObj->_map_lay01) {
-      /* layer 1 resize */
-      i.resize(col);
-    }
-    mapObj->_map_lay02.resize(row);
-    for(auto& i : mapObj->_map_lay02) {
-      /* layer 2 resize */
-      i.resize(col);
-    }
-    mapObj->_map_lay03.resize(row);
-    for(auto& i : mapObj->_map_lay03) {
-      /* layer 3 resize */
-      i.resize(col);
-    }
-    mapObj->_map_EvLay.resize(row);
-    for(auto& i : mapObj->_map_EvLay) {
-      /* event layer resize */
-      i.resize(col);
-    }
+
+    /* For numbered layer */
+    auto resizeLayer = [row,col,&infile](std::vector<std::vector<size_t>>& sl) {
+      sl.resize(row);
+      for(auto& i : sl) {
+        i.resize(col);
+      }
+      for(size_t i = 0; i < row; i++) {
+        /* Layer 1 read in */
+        for(size_t j = 0; j < col; j++) {
+          infile >> sl[i][j];
+        }
+      }
+    };
+
+    /* For sprites layer */
+    auto resizeSpriteLayer = [row, col](std::vector<std::vector<sf::Sprite>>& s) {
+      s.resize(row);
+      for(auto& i : s) {
+        i.resize(col);
+      }
+    };
+    resizeLayer(mapObj->_map_lay01);
+    resizeLayer(mapObj->_map_lay02);
+    resizeLayer(mapObj->_map_lay03);
+    resizeLayer(mapObj->_map_EvLay);
+
     mapObj->evV.resize(row);
     for(auto& i : mapObj->evV) {
       /* Resize the vector containing information about event */
       i.resize(col);
     }
 
-    /* READ IN THE LAYERS */
-    for(size_t i = 0; i < row; i++) {
-      /* Layer 1 read in */
-      for(size_t j = 0; j < col; j++) {
-        infile >> mapObj->_map_lay01[i][j];
-      }
-    }
-    for(size_t i = 0; i < row; i++) {
-      /* Layer 2 read in */
-      for(size_t j = 0; j < col; j++) {
-        infile >> mapObj->_map_lay02[i][j];
-      }
-    }
-    for(size_t i = 0; i < row; i++) {
-      /* Layer 3 read in */
-      for(size_t j = 0; j < col; j++) {
-        infile >> mapObj->_map_lay03[i][j];
-      }
-    }
-    for(size_t i = 0; i < row; i++) {
-      for(size_t j = 0; j < col; j++) {
-        infile >> mapObj->_map_EvLay[i][j];
-      }
-    }
 
     /* If reading went well, we should be ok...
      * TODO: Implement error checking later */
