@@ -68,8 +68,6 @@ void game::entity::Player::handleMove() {
   }
 
   auto pSpriteGB = m_enSprite.getGlobalBounds(); // gb of sprite
-  pSpriteGB.height-=_SS*2;   // Acts as an offset (so sprite top looks pretty)
-  pSpriteGB.top+=_SS*2;      // Acts as an offset (so sprite top looks pretty)
   /* Now check for intersection for collisions layer */
 
   for(const auto& i : cV) {
