@@ -5,6 +5,7 @@ namespace game {
   namespace debug {
     /* mimics in_game */
     void run();
+    void init();
   }
 }
 
