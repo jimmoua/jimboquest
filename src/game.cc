@@ -16,6 +16,7 @@ void game::init() {
   game::asset::init();
   game::ui::init();
   game::map_ns::init();
+  game::entity::init();
 }
 
 void game::run() {
