@@ -117,10 +117,10 @@ void game::entity::Player::handleMove() {
   const sf::Vector2f good = this->m_enSprite.getPosition();
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
     ms+=2; // speed boost
-    asset::getSound(asset::snd::FOOTSTEPS_GRASS).setPitch(1.3);
+    asset::getSound(asset::snd::FOOTSTEPS_GRASS).setPitch(1.6);
   }
   else {
-    asset::getSound(asset::snd::FOOTSTEPS_GRASS).setPitch(1);
+    asset::getSound(asset::snd::FOOTSTEPS_GRASS).setPitch(1.3);
   }
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
     if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
