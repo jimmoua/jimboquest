@@ -18,6 +18,21 @@ namespace {
 
   /* Making a std::map so we can map map enums to objects */
   static std::map<game::asset::MAP, game::map_ns::MapInfo*> mapInfoContainerMap;
+
+  /* Define where each tile is */
+  const static sf::IntRect  __TILE__[] = {
+    #define O 4
+    #define O2 15
+    sf::IntRect(O,O,_SS-O2,_SS-O2),  // For portal use only!
+    sf::IntRect(_SS*0,0,_SS,_SS),
+    sf::IntRect(_SS*1,0,_SS,_SS),
+    sf::IntRect(_SS*2,0,_SS,_SS),
+    sf::IntRect(_SS*3,0,_SS,_SS),
+    sf::IntRect(_SS*4,0,_SS,_SS),
+    sf::IntRect(_SS*5,0,_SS,_SS)
+    #undef O
+    #undef O2
+  };
 }
 
 void game::map_ns::init() {
@@ -58,67 +73,34 @@ void game::map_ns::init() {
       for(auto& i : s) {
         i.resize(col);
       }
+      for(auto& i : s) {
+        for(auto& j : i) {
+          j.setScale(SPRITE_SCALE, SPRITE_SCALE);
+        }
+      }
     };
     resizeLayer(mapObj->_map_lay01);
     resizeLayer(mapObj->_map_lay02);
     resizeLayer(mapObj->_map_lay03);
     resizeLayer(mapObj->_map_EvLay);
 
+    /* No need for lambda on this one because only 1 exists */
     mapObj->evV.resize(row);
     for(auto& i : mapObj->evV) {
       /* Resize the vector containing information about event */
       i.resize(col);
     }
 
-
     /* If reading went well, we should be ok...
      * TODO: Implement error checking later */
     infile.close();
 
-    /* Clear the sprites */
-    mapObj->_map_lay01_S.clear();
-    mapObj->_map_lay02_S.clear();
-    mapObj->_map_lay03_S.clear();
-
     /* Resize sprites */
-    mapObj->_map_lay01_S.resize(row);
-    for(auto& i : mapObj->_map_lay01_S) {
-      i.resize(col);
-    }
-    mapObj->_map_lay02_S.resize(row);
-    for(auto& i : mapObj->_map_lay02_S) {
-      i.resize(col);
-    }
-    mapObj->_map_lay03_S.resize(row);
-    for(auto& i : mapObj->_map_lay03_S) {
-      i.resize(col);
-    }
-    mapObj->_mapEvV.resize(row);
-    for(auto& i : mapObj->_mapEvV) {
-      i.resize(col);
-    }
+    resizeSpriteLayer(mapObj->_map_lay01_S);
+    resizeSpriteLayer(mapObj->_map_lay02_S);
+    resizeSpriteLayer(mapObj->_map_lay03_S);
+    resizeSpriteLayer(mapObj->_mapEvV);
 
-    /* Scale the sprites */
-    for(auto& i : mapObj->_map_lay01_S) {
-      for(auto& j : i) {
-        j.setScale(SPRITE_SCALE, SPRITE_SCALE);
-      }
-    }
-    for(auto& i : mapObj->_map_lay02_S) {
-      for(auto& j : i) {
-        j.setScale(SPRITE_SCALE, SPRITE_SCALE);
-      }
-    }
-    for(auto& i : mapObj->_map_lay03_S) {
-      for(auto& j : i) {
-        j.setScale(SPRITE_SCALE, SPRITE_SCALE);
-      }
-    }
-    for(auto& i : mapObj->_mapEvV) {
-      for(auto& j : i) {
-        j.setScale(SPRITE_SCALE, SPRITE_SCALE);
-      }
-    }
     /* After allocating space and resizing the sprites, now we set the textures
      * for each of the sprite depending on what the data was for the first
      * layer. */
@@ -127,31 +109,31 @@ void game::map_ns::init() {
         if(mapObj->_map_lay01[i][j] == 1) {
           /* Black (nothing tile) */
           mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
-          mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(0,0,_SS,_SS));
+          mapObj->_map_lay01_S[i][j].setTextureRect(__TILE__[1]);
         }
         else if(mapObj->_map_lay01[i][j] == 2) {
           /* Grass tile */
           mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
-          mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS,0,_SS,_SS));
+          mapObj->_map_lay01_S[i][j].setTextureRect(__TILE__[2]);
         }
         else if(mapObj->_map_lay01[i][j] == 3) {
           /* Water tile */
           mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
-          mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*2,0,_SS,_SS));
+          mapObj->_map_lay01_S[i][j].setTextureRect(__TILE__[3]);
         }
         else if(mapObj->_map_lay01[i][j] == 4) {
           /* Stone tile */
           mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
-          mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*3,0,_SS,_SS));
+          mapObj->_map_lay01_S[i][j].setTextureRect(__TILE__[4]);
         }
         else if(mapObj->_map_lay01[i][j] == 5) {
           /* Dirt tile */
           mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
-          mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*4,0,_SS,_SS));
+          mapObj->_map_lay01_S[i][j].setTextureRect(__TILE__[5]);
         }
         else if(mapObj->_map_lay01[i][j] == 6) {
           mapObj->_map_lay01_S[i][j].setTexture(game::asset::mapTexture());
-          mapObj->_map_lay01_S[i][j].setTextureRect(sf::IntRect(_SS*5,0,_SS,_SS));
+          mapObj->_map_lay01_S[i][j].setTextureRect(__TILE__[6]);
         }
         mapObj->_map_lay01_S[j][i].setPosition(_SLOC*(i), _SLOC*(j));
       }
@@ -166,7 +148,7 @@ void game::map_ns::init() {
     for(size_t i = 0; i < row; i++) {
       for(size_t j = 0; j < col; j++) {
         if(mapObj->_map_lay02[i][j] == 1) {
-          mapObj->_map_lay02_S[i][j].setTextureRect(sf::IntRect(00,00,_SS,_SS));
+          mapObj->_map_lay02_S[i][j].setTextureRect(__TILE__[1]);
           mapObj->_map_lay02_S[i][j].setPosition(_SLOC*(j), _SLOC*(i));
         }
       }
@@ -178,8 +160,9 @@ void game::map_ns::init() {
         if(mapObj->_map_EvLay[i][j] == 1) {
           /* If it is a portal */
           mapObj->_mapEvV[i][j].setTexture(asset::mapTexture());
-          mapObj->_mapEvV[i][j].setTextureRect(sf::IntRect(_SS*0,_SS,_SS,_SS));
-          mapObj->_mapEvV[i][j].setPosition(_SLOC*(j), _SLOC*(i));
+          mapObj->_mapEvV[i][j].setTextureRect(__TILE__[0]);
+          /* If change the 15 here, make sure to change it in the */
+          mapObj->_mapEvV[i][j].setPosition(_SLOC*(j)+15*3, _SLOC*(i)+15*3);
           std::cout << "Index of portal is " << i << " " << j << std::endl;
           mapObj->evV[i][j].ev = game::map_ns::TILE_EV::PORTAL;
         }
@@ -242,6 +225,7 @@ void game::map_ns::loadMap(const game::asset::MAP& mapID, const sf::Vector2f pla
   //std::cout << "At least it compiles.\n"; exit(1);
   entity::getPl()->m_enSprite.setPosition(playerPos.x*_SLOC, playerPos.y*_SLOC);
   setMapID(mapID);
+  win::fadeOut();
 }
 
 void game::map_ns::displayMap_L1() {
