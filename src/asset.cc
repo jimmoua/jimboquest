@@ -68,6 +68,9 @@ void game::asset::init() {
   static sf::SoundBuffer SB_menuAppear;
   static sf::SoundBuffer SB_menuDisappear;
 
+  /* Sounds for environment */
+  static sf::SoundBuffer SB_env_ft_grass;
+
 
   SB_menuHover.loadFromFile("data/sound/sound_menu_hover.ogg");
   SB_menuSubmit.loadFromFile("data/sound/sound_menu_submit.ogg");
@@ -75,11 +78,14 @@ void game::asset::init() {
   SB_menuAppear.loadFromFile("data/sound/sound_menu_appear.ogg");
   SB_menuDisappear.loadFromFile("data/sound/sound_menu_blocked.ogg");
 
+  SB_env_ft_grass.loadFromFile("data/sound/env/ft_grass.ogg");
+
   _gameSound[snd::MENU_HOVER].setBuffer(SB_menuHover);
   _gameSound[snd::MENU_SUBMIT].setBuffer(SB_menuSubmit);
   _gameSound[snd::MENU_CANCEL].setBuffer(SB_menuCancel);
   _gameSound[snd::MENU_APPEAR].setBuffer(SB_menuAppear);
   _gameSound[snd::MENU_DISAPPEAR].setBuffer(SB_menuDisappear);
+  _gameSound[snd::FOOTSTEPS_GRASS].setBuffer(SB_env_ft_grass);
 
 }
 

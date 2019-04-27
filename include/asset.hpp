@@ -38,6 +38,7 @@ namespace game {
       MENU_CANCEL,
       MENU_APPEAR,
       MENU_DISAPPEAR,
+      FOOTSTEPS_GRASS,
     };
 
     enum class MUSIC {
