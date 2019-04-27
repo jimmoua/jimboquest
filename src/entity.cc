@@ -15,6 +15,9 @@ namespace {
     UP, DOWN, RIGHT, LEFT
   };
 
+  /* By default, the player faces down */
+  static _faceDirection_ __CURRENT_FACE__ = _faceDirection_::DOWN;
+
   static std::map<_faceDirection_, const sf::IntRect*> _face_map_;
 
   const static sf::IntRect __PLAYER_UP__ [] = {
@@ -28,14 +31,14 @@ namespace {
     sf::IntRect(X*2+O,Y*5,X-O,Y),
   };
   const static sf::IntRect __PLAYER_RIGHT__ [] = {
+    sf::IntRect(X*0+O,Y*3,X-O,Y),
+    sf::IntRect(X*1+O,Y*3,X-O,Y),
+    sf::IntRect(X*2+O,Y*3,X-O,Y),
+  };
+  const static sf::IntRect __PLAYER_LEFT__ [] = {
     sf::IntRect(X*0+O,Y*7,X-O,Y),
     sf::IntRect(X*1+O,Y*7,X-O,Y),
     sf::IntRect(X*2+O,Y*7,X-O,Y),
-  };
-  const static sf::IntRect __PLAYER_LEFT__ [] = {
-    sf::IntRect(),
-    sf::IntRect(),
-    sf::IntRect(),
   };
   #undef O
   #undef O2
@@ -87,6 +90,24 @@ game::entity::Player::Player(const std::string& n,
 
 void game::entity::Player::handleMove() {
 
+  static sf::Clock animationClock;
+
+  auto animatePlayer = [this]() -> void {
+    if(animationClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(300).asMilliseconds()) {
+      this->m_enSprite.setTextureRect(_face_map_[__CURRENT_FACE__][0]);
+      if(animationClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(600).asMilliseconds()) {
+        this->m_enSprite.setTextureRect(_face_map_[__CURRENT_FACE__][1]);
+        if(animationClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(900).asMilliseconds()) {
+          this->m_enSprite.setTextureRect(_face_map_[__CURRENT_FACE__][2]);
+            if(animationClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(1200).asMilliseconds()) {
+              this->m_enSprite.setTextureRect(_face_map_[__CURRENT_FACE__][1]);
+              animationClock.restart();
+            }
+        }
+      }
+    }
+  };
+
   static sf::Clock keyPressTimer;  // portal timer
 
   /* cV = collisions vector */
@@ -95,21 +116,39 @@ void game::entity::Player::handleMove() {
   constexpr float ms = 3;
   const sf::Vector2f good = this->m_enSprite.getPosition();
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+    if(__CURRENT_FACE__ != _faceDirection_::UP) {
+      __CURRENT_FACE__ = _faceDirection_::UP;
+      this->m_enSprite.setTextureRect(__PLAYER_UP__[0]);
+    }
     this->m_enSprite.move(0, -ms);
   }
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+    if(__CURRENT_FACE__ != _faceDirection_::DOWN) {
+      this->m_enSprite.setTextureRect(__PLAYER_DOWN__[0]);
+      __CURRENT_FACE__ = _faceDirection_::DOWN;
+    }
     this->m_enSprite.move(0, ms);
   }
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+    if(__CURRENT_FACE__ != _faceDirection_::LEFT) {
+      this->m_enSprite.setTextureRect(__PLAYER_LEFT__[0]);
+      __CURRENT_FACE__ = _faceDirection_::LEFT;
+    }
     this->m_enSprite.move(-ms, 0);
   }
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+    if(__CURRENT_FACE__ != _faceDirection_::RIGHT) {
+      this->m_enSprite.setTextureRect(__PLAYER_RIGHT__[0]);
+      __CURRENT_FACE__ = _faceDirection_::RIGHT;
+    }
     this->m_enSprite.move(ms, 0);
   }
 
-  auto pSpriteGB = m_enSprite.getGlobalBounds(); // gb of sprite
-  /* Now check for intersection for collisions layer */
+  animatePlayer();
 
+  auto pSpriteGB = m_enSprite.getGlobalBounds(); // gb of sprite
+
+  /* Now check for intersection for collisions layer */
   for(const auto& i : cV) {
     for(const auto& j : i) {
       if(pSpriteGB.intersects(j.getGlobalBounds())) {
