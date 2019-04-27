@@ -10,20 +10,27 @@ namespace {
   #define O2 8
   #define X 24       // The character sprite is 24 px wide
   #define Y 16       // the character sprite is 16 px tall
+
+  enum class _faceDirection_ {
+    UP, DOWN, RIGHT, LEFT
+  };
+
+  std::map<_faceDirection, sf::IntRect*> _face_map_;
+
   const static sf::IntRect __PLAYER_UP__ [] = {
-    sf::IntRect(),
-    sf::IntRect(),
-    sf::IntRect(),
+    sf::IntRect(X*0+O,Y*1,X-O,Y),
+    sf::IntRect(X*1+O,Y*1,X-O,Y),
+    sf::IntRect(X*2+O,Y*1,X-O,Y),
   };
   const static sf::IntRect __PLAYER_DOWN__[] = {
-    sf::IntRect(),
-    sf::IntRect(),
-    sf::IntRect(),
+    sf::IntRect(X*0+O,Y*5,X-O,Y),
+    sf::IntRect(X*1+O,Y*5,X-O,Y),
+    sf::IntRect(X*2+O,Y*5,X-O,Y),
   };
   const static sf::IntRect __PLAYER_RIGHT__ [] = {
-    sf::IntRect(),
-    sf::IntRect(),
-    sf::IntRect(),
+    sf::IntRect(X*0+O,Y*7,X-O,Y),
+    sf::IntRect(X*1+O,Y*7,X-O,Y),
+    sf::IntRect(X*2+O,Y*7,X-O,Y),
   };
   const static sf::IntRect __PLAYER_LEFT__ [] = {
     sf::IntRect(),
@@ -70,8 +77,12 @@ game::entity::Player::Player(const std::string& n,
 {
   Entity(n, h, m, str, dex, _int);
   this->m_enSprite.setTexture(game::asset::actorTexture());
-  this->m_enSprite.setTextureRect(sf::IntRect(00,00,16,16));
-  this->m_enSprite.scale(SPRITE_SCALE-2, SPRITE_SCALE-2);
+  this->m_enSprite.setTextureRect(__PLAYER_DOWN__[0]);
+#define SCALE_OFFSET 2
+  this->m_enSprite.scale(SPRITE_SCALE-SCALE_OFFSET, SPRITE_SCALE-SCALE_OFFSET);
+  this->m_enSprite.setOrigin(this->m_enSprite.getOrigin().x-SCALE_OFFSET,
+                             this->m_enSprite.getOrigin().y-SCALE_OFFSET);
+#undef SCALE_OFFSET
 }
 
 void game::entity::Player::handleMove() {
