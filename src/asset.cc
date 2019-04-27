@@ -49,7 +49,9 @@ void game::asset::init() {
   _mapLoc[MAP::TEST_MAP02] = "data/map/testMap02.txt";
 
   /* Game textures load from file */
-  _mapTexture.loadFromFile("data/tileset/jimboTiles/jimboTiles.png");
+  _mapTexture.loadFromFile("data/tileset/DQ_Tileset.png");
+
+  /* TODO: Change later to DQ character set */
   _actorTexture.loadFromFile(_imgLoc[asset::img::ACTOR_PNG]);
 
   /* musics for the game */
