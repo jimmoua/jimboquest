@@ -95,6 +95,7 @@ void game::title::init() {
   _counter = 0;
   asset::getMusic(asset::MUSIC::AMBI_WIND).setPlayingOffset(sf::seconds(5));
   asset::getMusic(asset::MUSIC::AMBI_WIND).setLoop(true);
+  asset::getMusic(asset::MUSIC::AMBI_WIND).setVolume(50);
   asset::getMusic(asset::MUSIC::TITLESCREEN).setLoop(true);
   asset::getMusic(asset::MUSIC::AMBI_WIND).play();
   asset::getMusic(asset::MUSIC::TITLESCREEN).play();
