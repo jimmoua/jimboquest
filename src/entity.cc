@@ -21,24 +21,24 @@ namespace {
   static std::map<_faceDirection_, const sf::IntRect*> _face_map_;
 
   const static sf::IntRect __PLAYER_UP__ [] = {
-    sf::IntRect(X*0+O,Y*1,X-O,Y),
-    sf::IntRect(X*1+O,Y*1,X-O,Y),
-    sf::IntRect(X*2+O,Y*1,X-O,Y),
+    sf::IntRect(X*0+O,Y*1,X-O2,Y),
+    sf::IntRect(X*1+O,Y*1,X-O2,Y),
+    sf::IntRect(X*2+O,Y*1,X-O2,Y),
   };
   const static sf::IntRect __PLAYER_DOWN__[] = {
-    sf::IntRect(X*0+O,Y*5,X-O,Y),
-    sf::IntRect(X*1+O,Y*5,X-O,Y),
-    sf::IntRect(X*2+O,Y*5,X-O,Y),
+    sf::IntRect(X*0+O,Y*5,X-O2,Y),
+    sf::IntRect(X*1+O,Y*5,X-O2,Y),
+    sf::IntRect(X*2+O,Y*5,X-O2,Y),
   };
   const static sf::IntRect __PLAYER_RIGHT__ [] = {
-    sf::IntRect(X*0+O,Y*3,X-O,Y),
-    sf::IntRect(X*1+O,Y*3,X-O,Y),
-    sf::IntRect(X*2+O,Y*3,X-O,Y),
+    sf::IntRect(X*0+O,Y*3,X-O2,Y),
+    sf::IntRect(X*1+O,Y*3,X-O2,Y),
+    sf::IntRect(X*2+O,Y*3,X-O2,Y),
   };
   const static sf::IntRect __PLAYER_LEFT__ [] = {
-    sf::IntRect(X*0+O,Y*7,X-O,Y),
-    sf::IntRect(X*1+O,Y*7,X-O,Y),
-    sf::IntRect(X*2+O,Y*7,X-O,Y),
+    sf::IntRect(X*0+O,Y*7,X-O2,Y),
+    sf::IntRect(X*1+O,Y*7,X-O2,Y),
+    sf::IntRect(X*2+O,Y*7,X-O2,Y),
   };
   #undef O
   #undef O2
