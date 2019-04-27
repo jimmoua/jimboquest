@@ -51,8 +51,10 @@ void game::asset::init() {
   /* Game textures load from file */
   _mapTexture.loadFromFile("data/tileset/DQ_Tileset.png");
 
-  /* TODO: Change later to DQ character set */
-  _actorTexture.loadFromFile(_imgLoc[asset::img::ACTOR_PNG]);
+  static sf::Image actorImage;
+  actorImage.loadFromFile(_imgLoc[asset::img::ACTOR_PNG]);
+  actorImage.createMaskFromColor(sf::Color::Magenta);
+  _actorTexture.loadFromImage(actorImage);
 
   /* musics for the game */
 
