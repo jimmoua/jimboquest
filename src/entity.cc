@@ -117,8 +117,15 @@ void game::entity::Player::handleMove() {
   const sf::Vector2f good = this->m_enSprite.getPosition();
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
     ms+=2; // speed boost
+    asset::getSound(asset::snd::FOOTSTEPS_GRASS).setPitch(1.3);
+  }
+  else {
+    asset::getSound(asset::snd::FOOTSTEPS_GRASS).setPitch(1);
   }
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+    if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
+      asset::getSound(asset::snd::FOOTSTEPS_GRASS).play();
+    }
     if(__CURRENT_FACE__ != _faceDirection_::UP) {
       __CURRENT_FACE__ = _faceDirection_::UP;
       this->m_enSprite.setTextureRect(__PLAYER_UP__[0]);
@@ -126,6 +133,9 @@ void game::entity::Player::handleMove() {
     this->m_enSprite.move(0, -ms);
   }
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+    if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
+      asset::getSound(asset::snd::FOOTSTEPS_GRASS).play();
+    }
     if(__CURRENT_FACE__ != _faceDirection_::DOWN) {
       this->m_enSprite.setTextureRect(__PLAYER_DOWN__[0]);
       __CURRENT_FACE__ = _faceDirection_::DOWN;
@@ -133,6 +143,9 @@ void game::entity::Player::handleMove() {
     this->m_enSprite.move(0, ms);
   }
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+    if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
+      asset::getSound(asset::snd::FOOTSTEPS_GRASS).play();
+    }
     if(__CURRENT_FACE__ != _faceDirection_::LEFT) {
       this->m_enSprite.setTextureRect(__PLAYER_LEFT__[0]);
       __CURRENT_FACE__ = _faceDirection_::LEFT;
@@ -140,6 +153,9 @@ void game::entity::Player::handleMove() {
     this->m_enSprite.move(-ms, 0);
   }
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+    if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
+      asset::getSound(asset::snd::FOOTSTEPS_GRASS).play();
+    }
     if(__CURRENT_FACE__ != _faceDirection_::RIGHT) {
       this->m_enSprite.setTextureRect(__PLAYER_RIGHT__[0]);
       __CURRENT_FACE__ = _faceDirection_::RIGHT;
@@ -150,6 +166,8 @@ void game::entity::Player::handleMove() {
   animatePlayer();
 
   auto pSpriteGB = m_enSprite.getGlobalBounds(); // gb of sprite
+  pSpriteGB.height-=_SS*2;
+  pSpriteGB.top+=_SS*2;
 
   /* Now check for intersection for collisions layer */
   for(const auto& i : cV) {

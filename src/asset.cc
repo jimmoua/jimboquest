@@ -78,7 +78,7 @@ void game::asset::init() {
   SB_menuAppear.loadFromFile("data/sound/sound_menu_appear.ogg");
   SB_menuDisappear.loadFromFile("data/sound/sound_menu_blocked.ogg");
 
-  SB_env_ft_grass.loadFromFile("data/sound/env/ft_grass.ogg");
+  SB_env_ft_grass.loadFromFile("data/sound/env/ft_grass2.ogg");
 
   _gameSound[snd::MENU_HOVER].setBuffer(SB_menuHover);
   _gameSound[snd::MENU_SUBMIT].setBuffer(SB_menuSubmit);
@@ -86,6 +86,8 @@ void game::asset::init() {
   _gameSound[snd::MENU_APPEAR].setBuffer(SB_menuAppear);
   _gameSound[snd::MENU_DISAPPEAR].setBuffer(SB_menuDisappear);
   _gameSound[snd::FOOTSTEPS_GRASS].setBuffer(SB_env_ft_grass);
+  _gameSound[snd::FOOTSTEPS_GRASS].setPitch(1);
+  _gameSound[snd::FOOTSTEPS_GRASS].setVolume(50);
 
 }
 
