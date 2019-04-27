@@ -113,8 +113,11 @@ void game::entity::Player::handleMove() {
   /* cV = collisions vector */
   auto cV = map_ns::getMapObjectByID(map_ns::getCurrentMapID())->_map_lay02_S;
 
-  constexpr float ms = 3;
+  float ms = 3;
   const sf::Vector2f good = this->m_enSprite.getPosition();
+  if(sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
+    ms+=2; // speed boost
+  }
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
     if(__CURRENT_FACE__ != _faceDirection_::UP) {
       __CURRENT_FACE__ = _faceDirection_::UP;
