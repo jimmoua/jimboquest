@@ -1,6 +1,9 @@
 #include "game.hpp"
 #include "title.hpp"
 #include "debug.hpp"
+#include "map.hpp"
+#include "entity.hpp"
+#include "ui.hpp"
 
 namespace {
   // By default, state is in title screen

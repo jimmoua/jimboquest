@@ -68,6 +68,8 @@ namespace game {
 
     Player*& getPl();
 
+    void init();
+
   }
 
 

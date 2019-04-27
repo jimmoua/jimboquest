@@ -4,10 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "window.hpp"
-#include "map.hpp"
-#include "entity.hpp"
 #include "asset.hpp"
-#include "ui.hpp"
 
 using ushort = unsigned short int;
 

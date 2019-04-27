@@ -3,6 +3,7 @@
 #include "asset.hpp"
 #include "entity.hpp"
 #include "game.hpp"
+#include "ui.hpp"
 
 namespace {
   static bool in_uiMenu = false;

@@ -1,6 +1,7 @@
 #include "map.hpp"
 #include "game.hpp"
 #include "asset.hpp"
+#include "entity.hpp"
 
 
 namespace {
