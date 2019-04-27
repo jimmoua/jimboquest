@@ -49,8 +49,6 @@ void game::entity::Player::handleMove() {
 
   static sf::Clock keyPressTimer;  // portal timer
 
-  static int x = 0; // counter delete later
-
   /* cV = collisions vector */
   auto cV = map_ns::getMapObjectByID(map_ns::getCurrentMapID())->_map_lay02_S;
 
@@ -62,7 +60,7 @@ void game::entity::Player::handleMove() {
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
     this->m_enSprite.move(0, ms);
   }
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+  else if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
     this->m_enSprite.move(-ms, 0);
   }
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
@@ -97,7 +95,6 @@ void game::entity::Player::handleMove() {
           if(sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
             if(keyPressTimer.getElapsedTime().asMilliseconds() >= sf::milliseconds(100).asMilliseconds()) {
               map_ns::loadMap(evSpInfo[i][j].portalTransportLoc.first, evSpInfo[i][j].portalTransportLoc.second);
-              std::cout << x++ << " port to: " << asset::getMapName(evSpInfo[i][j].portalTransportLoc.first) << std::endl;
               std::cout << "Index: " << i << " " << j << std::endl;
             }
             keyPressTimer.restart();
