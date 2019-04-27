@@ -92,13 +92,8 @@ void game::entity::Player::handleMove() {
 
       if(pSpriteGB.intersects(evSp[i][j].getGlobalBounds())) {
         if(evSpInfo[i][j].ev == map_ns::TILE_EV::PORTAL) {
-          if(sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
-            if(keyPressTimer.getElapsedTime().asMilliseconds() >= sf::milliseconds(100).asMilliseconds()) {
-              map_ns::loadMap(evSpInfo[i][j].portalTransportLoc.first, evSpInfo[i][j].portalTransportLoc.second);
-              std::cout << "Index: " << i << " " << j << std::endl;
-            }
-            keyPressTimer.restart();
-          }
+          map_ns::loadMap(evSpInfo[i][j].portalTransportLoc.first, evSpInfo[i][j].portalTransportLoc.second);
+          std::cout << "Index: " << i << " " << j << std::endl;
         }
       }
 
