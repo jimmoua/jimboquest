@@ -15,7 +15,8 @@ using ushort = unsigned short int;
  * screen. */
 constexpr static ushort SPRITE_SCALE = 6;         // Sprite scale
 constexpr static ushort _SS = 16;                 // Sprite size 
-constexpr static int    _SLOC = _SS*SPRITE_SCALE; // Useful for pos setting
+constexpr static int _SLOC = _SS*SPRITE_SCALE;    // Useful for pos setting
+constexpr static int __PORTAL_OFFSET__ = 15;      // For portal offset
 
 namespace game {
   void init();
