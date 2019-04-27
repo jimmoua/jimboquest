@@ -18,15 +18,6 @@ void game::init() {
 void game::run() {
   while(win::getWin().isOpen()) {
 
-    /* See if user wants to close game */
-    /*
-    while(win::getWin().pollEvent(win::getEv())) {
-      if(win::getEv().type == sf::Event::Closed) {
-        win::getWin().close();
-      }
-    }
-    */
-
     /* Handle some game states here */
     switch(_currentGS) {
       case game::asset::GS::TITLE:
