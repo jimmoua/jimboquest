@@ -5,7 +5,36 @@
 
 namespace {
   static game::entity::Player* _Player = nullptr;
-}
+
+  #define O  4       // The character sprites that I am using have an offset
+  #define O2 8
+  #define X 24       // The character sprite is 24 px wide
+  #define Y 16       // the character sprite is 16 px tall
+  const static sf::IntRect __PLAYER_UP__ [] = {
+    sf::IntRect(),
+    sf::IntRect(),
+    sf::IntRect(),
+  };
+  const static sf::IntRect __PLAYER_DOWN__[] = {
+    sf::IntRect(),
+    sf::IntRect(),
+    sf::IntRect(),
+  };
+  const static sf::IntRect __PLAYER_RIGHT__ [] = {
+    sf::IntRect(),
+    sf::IntRect(),
+    sf::IntRect(),
+  };
+  const static sf::IntRect __PLAYER_LEFT__ [] = {
+    sf::IntRect(),
+    sf::IntRect(),
+    sf::IntRect(),
+  };
+  #undef O
+  #undef O2
+  #undef X
+  #undef Y
+} // end of anon namespace
 
 game::entity::Player*& game::entity::getPl() {
   return _Player;
