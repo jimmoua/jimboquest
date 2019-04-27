@@ -30,6 +30,7 @@ void game::debug::run() {
 
   /* Init the UIs for this game state */
   ::init();
+
   /* While the game setting is on DEBUG, run the game */
   /* handle view */
   while(game::getGS() == asset::GS::DEBUG) {
@@ -242,16 +243,18 @@ namespace {
 
   static void init() {
     /* For exitUI */
-    exitUI.ui_texts.resize(3);
-    exitUI.ui_texts[0] = game::asset::createString("CANCEL");
-    exitUI.ui_texts[1] = game::asset::createString("EXIT TO MENU");
-    exitUI.ui_texts[2] = game::asset::createString("EXIT TO DESKTOP");
-    exitUI.set_menuTextsOrigin();
-    exitUI.set_menuTextsCenterOfUI();
-    exitUI.menu_sprite[0].setSize(sf::Vector2f(600,500));
-    exitUI.menu_sprite[1].setSize(sf::Vector2f(580,480));
-    exitUI.set_menuSpritesOrigin();
-    exitUI.set_menuTextsCenterOfUI();
+    if(exitUI.ui_texts.size() != 3) {
+      exitUI.ui_texts.resize(3);
+      exitUI.ui_texts[0] = game::asset::createString("CANCEL");
+      exitUI.ui_texts[1] = game::asset::createString("EXIT TO MENU");
+      exitUI.ui_texts[2] = game::asset::createString("EXIT TO DESKTOP");
+      exitUI.set_menuTextsOrigin();
+      exitUI.set_menuTextsCenterOfUI();
+      exitUI.menu_sprite[0].setSize(sf::Vector2f(600,500));
+      exitUI.menu_sprite[1].setSize(sf::Vector2f(580,480));
+      exitUI.set_menuSpritesOrigin();
+      exitUI.set_menuTextsCenterOfUI();
+    }
   }
 
 }
