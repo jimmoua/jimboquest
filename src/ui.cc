@@ -64,30 +64,43 @@ void game::ui::init() {
 
   /* In game player status UI */
   /* --------------------------------------------------------------------------
-   *                    0        PLAYER NAME            
-   *                    1           LEVEL
-   *                    2        health/healh
-   *                    3          mana/mana
-   *                    4            GOLD
+   * PLAYER NAME
+   * LEVEL
+   * health/healh
+   * mana/mana
+   * GOLD
+   *
+   *
+   *
+   *
    * ------------------------------------------------------------------------*/
-  inGame_PlayerStatus.ui_texts.resize(5);
-  inGame_PlayerStatus.ui_texts[0] = asset::createString("Jim");
-  inGame_PlayerStatus.ui_texts[1] = asset::createString("000");
-  inGame_PlayerStatus.ui_texts[2] = asset::createString("000");
-  inGame_PlayerStatus.ui_texts[3] = asset::createString("000");
-  inGame_PlayerStatus.ui_texts[4] = asset::createString("000");
-  inGame_PlayerStatus.set_menuTextsOrigin();
-  inGame_PlayerStatus.set_menuTextsCenterOfUI();
+  #define p inGame_PlayerStatus
+  p.ui_texts.resize(14);
+  p.ui_texts[0] = asset::createString("Jimbo");  // Name
+  p.ui_texts[1] = asset::createString("lvl");    // Level
+  p.ui_texts[2] = asset::createString("hp");     // Health
+  p.ui_texts[3] = asset::createString("mp");     // Mana
+  p.ui_texts[4] = asset::createString("gp");     // Gold
 
-  inGame_PlayerStatus.menu_sprite[0].setSize(sf::Vector2f(500,460));
-  inGame_PlayerStatus.menu_sprite[1].setSize(sf::Vector2f(480,440));
+  p.ui_texts[5] = asset::createString("str");    // str
+  p.ui_texts[6] = asset::createString("dex");    // dex
+  p.ui_texts[7] = asset::createString("int");    // int
+  p.ui_texts[8] = asset::createString("def");    // def
+  p.ui_texts[9] = asset::createString("luk");    // luk
+  p.ui_texts[10] = asset::createString("agi");   // agi
+
+  p.ui_texts[11] = asset::createString("ttl battle");// ttl battles fought
+  p.ui_texts[12] = asset::createString("ttl mon");   // ttl monsters slain
+  p.ui_texts[13] = asset::createString("ttl exp");   // ttl exp earned
+
+  p.anotherOne();  // Player picture
+  p.anotherOne();  // stat UI
+  inGame_PlayerStatus.menu_sprite[0].setSize(sf::Vector2f(800,580));
+  inGame_PlayerStatus.menu_sprite[1].setSize(sf::Vector2f(780,560));
+  inGame_PlayerStatus.menu_sprite[2].setSize(sf::Vector2f(390,280));
+  inGame_PlayerStatus.menu_sprite[3].setSize(sf::Vector2f(780,280));
   inGame_PlayerStatus.set_menuSpritesOrigin();
-
-  inGame_PlayerStatus.ui_texts[0].setPosition(mid_x,(inGame_PlayerStatus.menu_sprite[1].getGlobalBounds().top)+70);
-  inGame_PlayerStatus.ui_texts[1].setPosition(mid_x,(inGame_PlayerStatus.menu_sprite[1].getGlobalBounds().top)+70*2);
-  inGame_PlayerStatus.ui_texts[2].setPosition(mid_x,(inGame_PlayerStatus.menu_sprite[1].getGlobalBounds().top)+70*3);
-  inGame_PlayerStatus.ui_texts[3].setPosition(mid_x,(inGame_PlayerStatus.menu_sprite[1].getGlobalBounds().top)+70*4);
-  inGame_PlayerStatus.ui_texts[4].setPosition(mid_x,(inGame_PlayerStatus.menu_sprite[1].getGlobalBounds().top)+70*5);
+  #undef p
 }
 
 game::ui::UI& game::ui::getUI(const game::ui::ENUM_UI& id) {
@@ -95,8 +108,9 @@ game::ui::UI& game::ui::getUI(const game::ui::ENUM_UI& id) {
 }
 
 void game::ui::UI::drawUIsprites() {
-  win::getWin().draw(menu_sprite[0]);
-  win::getWin().draw(menu_sprite[1]);
+  for(auto& i : this->menu_sprite) {
+    win::getWin().draw(i);
+  }
 }
 
 void game::ui::UI::drawUItexts() {
@@ -128,5 +142,29 @@ void game::ui::UI::set_menuPositionToCen() {
   //this->menu_sprite[1].setPosition(win::getWin().getView().getCenter());
   for(auto& i : this->menu_sprite) {
     i.setPosition(v.getCenter());
+  }
+}
+
+void game::entity::updatePlayerStatusUI() {
+  auto statUI = &game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS);
+  auto p = game::entity::getPl();
+  std::string s[statUI->ui_texts.size()];
+  s[0] = "NAME:  " + p.f_getName();
+  s[1] = "LVL:  " + std::to_string(p.f_getLevel());
+  s[2] = "HP:  " + std::to_string(p.f_getHealth()) + "/" + std::to_string(p.f_getMaxHealth());
+  s[3] = "MP:  " + std::to_string(p.f_getMana()) + "/" + std::to_string(p.f_getMaxMana());
+  s[4] = "GOLD:  " + std::to_string(p.f_getGold()) + "  G";
+  s[5] = "STR:  " + std::to_string(p.f_getStr());
+  s[6] = "DEX:  " + std::to_string(p.f_getDex());
+  s[7] = "INT:  " + std::to_string(p.f_getInt());
+  s[8] = "DEF:  " + std::to_string(p.f_getDef());
+  s[9] = "LUK:  " + std::to_string(p.f_getLuck());
+  s[10]= "AGI:  " + std::to_string(p.f_getAgil());
+  s[11]= "BATTLES  FOUGHT:  " + std::to_string(p.f_get_ttlBattles());
+  s[12]= "MONSTERS  SLAIN:  " + std::to_string(p.f_get_ttlMonKill());
+  s[13]= "TTL  EXP  EARNED:  " + std::to_string(p.f_get_ttlBattles());
+
+  for(size_t i = 0; i < statUI->ui_texts.size(); i++) {
+    statUI->ui_texts[i] = asset::createString(s[i], 24);
   }
 }

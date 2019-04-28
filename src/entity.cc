@@ -5,7 +5,7 @@
 #include <tuple>
 
 namespace {
-  static game::entity::Player* _Player = nullptr;
+  static game::entity::Player _Player;
 
   #define O  4       // The character sprites that I am using have an offset
   #define O2 8
@@ -47,9 +47,10 @@ namespace {
   #undef Y
 } // end of anon namespace
 
-game::entity::Player*& game::entity::getPl() {
+game::entity::Player& game::entity::getPl() {
   return _Player;
 }
+
 
 game::entity::Entity::Entity() { }
 
@@ -77,9 +78,10 @@ game::entity::Player::Player(const std::string& n,
                              const int& m,
                              const int& str,
                              const int& dex,
-                             const int& _int)
+                             const int& _int) :
+
+                            Entity(n, h, m, str, dex, _int)
 {
-  Entity(n, h, m, str, dex, _int);
   this->m_enSprite.setTexture(game::asset::actorTexture());
   this->m_enSprite.setTextureRect(__PLAYER_DOWN__[0]);
 #define SCALE_OFFSET 2
