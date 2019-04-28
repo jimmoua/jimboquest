@@ -52,9 +52,9 @@ void game::ani::fadeInMAP() {
     drawLayers(map_ns::getMapObjectByID(map_ns::getCurrentMapID())->_mapEvV);
     sf::View v;
     v.setSize(win::getRes_x(), win::getRes_y());
-    v.setCenter(entity::getPl()->m_enSprite.getPosition());
+    v.setCenter(entity::getPl().m_enSprite.getPosition());
     win::getWin().setView(v);
-    win::getWin().draw(entity::getPl()->m_enSprite);
+    win::getWin().draw(entity::getPl().m_enSprite);
     /**/
     if(fadeClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(10).asMilliseconds())
     {

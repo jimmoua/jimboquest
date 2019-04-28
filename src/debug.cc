@@ -25,7 +25,9 @@ void game::debug::run() {
   //static int counter = 0;
 
   /* Create the player object */
-  game::entity::getPl() = new entity::Player("Jimbo",100,100,20,10,30);
+  game::entity::getPl() = game::entity::Player("Jimbo",100,100,20,10,30);
+  game::entity::updatePlayerStatusUI();
+  std::cout << "Created player: " << game::entity::getPl().f_getName() << std::endl;
 
   /* Load the default map */
   game::map_ns::loadMap(game::asset::MAP::TEST_MAP00, sf::Vector2f(2, 2));
@@ -36,6 +38,8 @@ void game::debug::run() {
   /* While the game setting is on DEBUG, run the game */
   /* handle view */
   while(game::getGS() == asset::GS::DEBUG) {
+
+    game::entity::updatePlayerStatusUI();
 
     while(game::win::getWin().pollEvent(game::win::getEv())) {
       if(game::win::getEv().type == sf::Event::KeyPressed) {
@@ -80,7 +84,7 @@ void game::debug::run() {
     }
     static sf::View v;
     v.setSize(win::getRes_x(), win::getRes_y());
-    v.setCenter(entity::getPl()->m_enSprite.getPosition());
+    v.setCenter(entity::getPl().m_enSprite.getPosition());
     win::getWin().setView(v);
 
     /* Draw map first layer -> draw character -> draw third layer The
@@ -88,17 +92,16 @@ void game::debug::run() {
      * (collision layer) */
     map_ns::displayMap_L1();
     /* Drawing */
-    win::getWin().draw(game::entity::getPl()->m_enSprite);
+    win::getWin().draw(game::entity::getPl().m_enSprite);
     
     /* Handling movement will deal with collisions layer */
-    entity::getPl()->handleMove();
+    entity::getPl().handleMove();
     while(in_uiMenu && game::getGS() == game::asset::GS::DEBUG) {
       handleUI_Menu();
     }
 
     win::getWin().display();
   }
-  delete game::entity::getPl();
 }
 
 namespace {
@@ -108,7 +111,7 @@ namespace {
     static auto renderThings = [](game::ui::UI& UI_MENU, int& counter) {
       game::win::getWin().clear(sf::Color::Black);
       game::map_ns::displayMap_L1();
-      game::win::getWin().draw(game::entity::getPl()->m_enSprite);
+      game::win::getWin().draw(game::entity::getPl().m_enSprite);
       UI_MENU.game::ui::UI::drawUIsprites();
       /* COLOR TEXT */
       for(auto& i : UI_MENU.ui_texts) {
@@ -150,38 +153,55 @@ namespace {
         if(game::win::getEv().key.code == sf::Keyboard::J) {
           game::asset::getSound(game::asset::snd::MENU_SUBMIT).play();
           if(menuCounter == 0) {
+            #define p game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS)
             /* Status */
-            game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS).set_menuPositionToCen();
-            game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS).set_menuTextsCenterOfUI();
+            p.set_menuPositionToCen();
+            auto positionPlayerStatusTexts = []() -> void {
+              auto v = game::win::getWin().getView();
+              auto c = game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS).menu_sprite[1];
+              p.ui_texts[0].setPosition(c.getPosition().x-360,(v.getCenter().y-300)+50);
+              p.ui_texts[1].setPosition(c.getPosition().x-360,(v.getCenter().y-300)+50*2);
+              p.ui_texts[2].setPosition(c.getPosition().x-360,(v.getCenter().y-300)+50*3);
+              p.ui_texts[3].setPosition(c.getPosition().x-360,(v.getCenter().y-300)+50*4);
+              p.ui_texts[4].setPosition(c.getPosition().x-360,(v.getCenter().y-300)+50*5);
+              
+              p.ui_texts[5].setPosition(c.getPosition().x-360,(v.getCenter().y-270)+50*6);
+              p.ui_texts[6].setPosition(c.getPosition().x-360,(v.getCenter().y-270)+50*7);
+              p.ui_texts[7].setPosition(c.getPosition().x-360,(v.getCenter().y-270)+50*8);
+              p.ui_texts[8].setPosition(c.getPosition().x-360,(v.getCenter().y-270)+50*9);
+              p.ui_texts[9].setPosition(c.getPosition().x-360,(v.getCenter().y-270)+50*10);
+              p.ui_texts[10].setPosition(c.getPosition().x-140,(v.getCenter().y-270)+50*6);
+
+              p.ui_texts[11].setPosition(c.getPosition().x-140,(v.getCenter().y-270)+50*7);
+              p.ui_texts[12].setPosition(c.getPosition().x-140,(v.getCenter().y-270)+50*8);
+              p.ui_texts[13].setPosition(c.getPosition().x-140,(v.getCenter().y-270)+50*9);
+
+              p.menu_sprite[2].move(195,-140);
+              p.menu_sprite[3].move(0,140);
+            };
+            #undef p
+            positionPlayerStatusTexts();
+            //game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS).set_menuTextsCenterOfUI();
             bool loop = true;
-            while(game::win::getWin().pollEvent(game::win::getEv())) {
-              if(game::win::getEv().type == sf::Event::Closed) {
-                game::win::getWin().close();
-                game::setGS(game::asset::GS::NONE);
-              }
-            }
             /* While we are in the status menu */
             while(loop) {
-              std::thread t( [&loop]() {
-                  while(game::win::getWin().pollEvent(game::win::getEv())) {
-                  
-                    if(game::win::getEv().type == sf::Event::Closed) {
-                      game::win::getWin().close();
-                      game::setGS(game::asset::GS::NONE);
-                    }
+              while(game::win::getWin().pollEvent(game::win::getEv())) {
+              
+                if(game::win::getEv().type == sf::Event::Closed) {
+                  game::setGS(game::asset::GS::NONE);
+                  return;
+                }
 
-                    if(game::win::getEv().type == sf::Event::KeyPressed) {
-                      switch(game::win::getEv().key.code) {
-                        case (sf::Keyboard::Escape):
-                          loop = false;
-                          break;
-                        default: ;
-                      }
-                    }
-
+                if(game::win::getEv().type == sf::Event::KeyPressed) {
+                  switch(game::win::getEv().key.code) {
+                    case (sf::Keyboard::Escape):
+                      loop = false;
+                      break;
+                    default: ;
                   }
-              });
-              t.join();
+                }
+
+              }
               static int statusCounter = -1;
               renderThings(game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS), statusCounter);
               game::win::getWin().display();
