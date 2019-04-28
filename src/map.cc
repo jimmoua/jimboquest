@@ -233,15 +233,6 @@ void game::map_ns::loadMap(const game::asset::MAP& mapID, const sf::Vector2f pla
 
 void game::map_ns::displayMap_L1() {
 
-  while(win::getWin().pollEvent(win::getEv())) {
-
-    if(win::getEv().type == sf::Event::Closed) {
-      game::setGS(game::asset::GS::NONE);
-      return;
-    }
-
-  }
-
   /* Clear the screen black */
   win::getWin().clear(sf::Color::Black);
   for(auto& i : getMapObjectByID(currentMap)->_map_lay01_S) {
