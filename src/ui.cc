@@ -7,8 +7,13 @@ namespace {
   static std::map<game::ui::ENUM_UI, game::ui::UI*> _ui;
 
   /* Define objects for UI here */
+
+  /*  For title screen */
   static game::ui::UI titleScreen;
+
+  /* UIs for in game */
   static game::ui::UI inGame;
+  static game::ui::UI inGame_PlayerStatus;
 }
 
 void game::ui::init() {
@@ -21,6 +26,7 @@ void game::ui::init() {
   /* TITLE SCREEN UI */
   _ui[ENUM_UI::TITLESCREEN] = &titleScreen;
   _ui[ENUM_UI::IN_GAME] = &inGame;
+  _ui[ENUM_UI::IN_GAME_PLAYER_STATUS] = &inGame_PlayerStatus;
 
   // BG where texts rests
   titleScreen.menu_sprite[0].setSize(sf::Vector2f(300, 380));
@@ -54,11 +60,34 @@ void game::ui::init() {
   /* IN GAME UI menu */
   inGame.menu_sprite[0].setSize(sf::Vector2f(500,460));
   inGame.menu_sprite[1].setSize(sf::Vector2f(480,440));
-  //inGame.et_menuTextsOrigin();
   inGame.set_menuSpritesOrigin();
-  //inGame.set_menuPositionToCen();
-  //inGame.set_menuTextsCenterOfUI();
 
+  /* In game player status UI */
+  /* --------------------------------------------------------------------------
+   *                    0        PLAYER NAME            
+   *                    1           LEVEL
+   *                    2        health/healh
+   *                    3          mana/mana
+   *                    4            GOLD
+   * ------------------------------------------------------------------------*/
+  inGame_PlayerStatus.ui_texts.resize(5);
+  inGame_PlayerStatus.ui_texts[0] = asset::createString("Jim");
+  inGame_PlayerStatus.ui_texts[1] = asset::createString("000");
+  inGame_PlayerStatus.ui_texts[2] = asset::createString("000");
+  inGame_PlayerStatus.ui_texts[3] = asset::createString("000");
+  inGame_PlayerStatus.ui_texts[4] = asset::createString("000");
+  inGame_PlayerStatus.set_menuTextsOrigin();
+  inGame_PlayerStatus.set_menuTextsCenterOfUI();
+
+  inGame_PlayerStatus.menu_sprite[0].setSize(sf::Vector2f(500,460));
+  inGame_PlayerStatus.menu_sprite[1].setSize(sf::Vector2f(480,440));
+  inGame_PlayerStatus.set_menuSpritesOrigin();
+
+  inGame_PlayerStatus.ui_texts[0].setPosition(mid_x,(inGame_PlayerStatus.menu_sprite[1].getGlobalBounds().top)+70);
+  inGame_PlayerStatus.ui_texts[1].setPosition(mid_x,(inGame_PlayerStatus.menu_sprite[1].getGlobalBounds().top)+70*2);
+  inGame_PlayerStatus.ui_texts[2].setPosition(mid_x,(inGame_PlayerStatus.menu_sprite[1].getGlobalBounds().top)+70*3);
+  inGame_PlayerStatus.ui_texts[3].setPosition(mid_x,(inGame_PlayerStatus.menu_sprite[1].getGlobalBounds().top)+70*4);
+  inGame_PlayerStatus.ui_texts[4].setPosition(mid_x,(inGame_PlayerStatus.menu_sprite[1].getGlobalBounds().top)+70*5);
 }
 
 game::ui::UI& game::ui::getUI(const game::ui::ENUM_UI& id) {
