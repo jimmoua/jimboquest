@@ -4,6 +4,7 @@
 #include "entity.hpp"
 #include "game.hpp"
 #include "ui.hpp"
+#include <thread>
 
 namespace {
   static bool in_uiMenu = false;
@@ -112,13 +113,14 @@ namespace {
       /* COLOR TEXT */
       for(auto& i : UI_MENU.ui_texts) {
         i.setFillColor(sf::Color::White);
-        UI_MENU.ui_texts[counter].setFillColor(sf::Color::Yellow);
+        if (counter != -1) {
+          UI_MENU.ui_texts[counter].setFillColor(sf::Color::Yellow);
+        }
       }
       UI_MENU.drawUItexts();
     };
 
     while(game::win::getWin().pollEvent(game::win::getEv())) {
-
       if(game::win::getEv().type == sf::Event::KeyPressed) {
 
         if(game::win::getEv().key.code == sf::Keyboard::Escape) {
@@ -149,6 +151,41 @@ namespace {
           game::asset::getSound(game::asset::snd::MENU_SUBMIT).play();
           if(menuCounter == 0) {
             /* Status */
+            game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS).set_menuPositionToCen();
+            game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS).set_menuTextsCenterOfUI();
+            bool loop = true;
+            while(game::win::getWin().pollEvent(game::win::getEv())) {
+              if(game::win::getEv().type == sf::Event::Closed) {
+                game::win::getWin().close();
+                game::setGS(game::asset::GS::NONE);
+              }
+            }
+            /* While we are in the status menu */
+            while(loop) {
+              std::thread t( [&loop]() {
+                  while(game::win::getWin().pollEvent(game::win::getEv())) {
+                  
+                    if(game::win::getEv().type == sf::Event::Closed) {
+                      game::win::getWin().close();
+                      game::setGS(game::asset::GS::NONE);
+                    }
+
+                    if(game::win::getEv().type == sf::Event::KeyPressed) {
+                      switch(game::win::getEv().key.code) {
+                        case (sf::Keyboard::Escape):
+                          loop = false;
+                          break;
+                        default: ;
+                      }
+                    }
+
+                  }
+              });
+              t.join();
+              static int statusCounter = -1;
+              renderThings(game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS), statusCounter);
+              game::win::getWin().display();
+            }
           }
           else if(menuCounter == 1) {
             /* Inventory */
