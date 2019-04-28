@@ -4,6 +4,7 @@
 #include "map.hpp"
 #include "entity.hpp"
 #include "ui.hpp"
+#include "animations.hpp"
 
 namespace {
   // By default, state is in title screen
@@ -31,6 +32,7 @@ void game::run() {
       }
       case game::asset::GS::NONE:
       {
+        ani::fadeOut();
         if(game::win::getWin().isOpen()) {
           game::win::getWin().close();
         }
