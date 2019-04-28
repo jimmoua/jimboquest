@@ -38,6 +38,14 @@ namespace game {
           i.setOutlineThickness(3.f);
         }
       }
+      
+      void anotherOne() {
+        sf::RectangleShape t;
+        t.setFillColor(sf::Color::Blue);
+        t.setOutlineColor(sf::Color::White);
+        t.setOutlineThickness(3.f);
+        this->menu_sprite.push_back(t);
+      }
 
       void set_menuSpritesOrigin() {
         for(auto& i : this->menu_sprite) {
@@ -56,5 +64,13 @@ namespace game {
 
   } // end of namespace ui
 }
+
+
+namespace game {
+  namespace entity {
+    void updatePlayerStatusUI();
+  }
+}
+
 
 #endif /* UI_HPP */
