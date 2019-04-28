@@ -1,6 +1,7 @@
 #include "entity.hpp"
 #include "game.hpp"
 #include "map.hpp"
+#include "animations.hpp"
 #include <tuple>
 
 namespace {
@@ -190,7 +191,9 @@ void game::entity::Player::handleMove() {
 
       if(pSpriteGB.intersects(evSp[i][j].getGlobalBounds())) {
         if(evSpInfo[i][j].ev == map_ns::TILE_EV::PORTAL) {
+          //ani::fadeOut();
           map_ns::loadMap(evSpInfo[i][j].portalTransportLoc.first, evSpInfo[i][j].portalTransportLoc.second);
+          //ani::fadeIn();
           std::cout << "Index: " << i << " " << j << std::endl;
         }
       }

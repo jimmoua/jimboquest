@@ -225,11 +225,10 @@ void game::map_ns::init() {
 
 
 void game::map_ns::loadMap(const game::asset::MAP& mapID, const sf::Vector2f playerPos) {
-  /* TODO: implement correct loading functions -> plan */
-  //std::cout << "At least it compiles.\n"; exit(1);
+  ani::fadeOut();
   entity::getPl()->m_enSprite.setPosition(playerPos.x*_SLOC, playerPos.y*_SLOC);
   setMapID(mapID);
-  game::ani::fadeOut();
+  ani::fadeIn();
 }
 
 void game::map_ns::displayMap_L1() {
