@@ -48,6 +48,8 @@ namespace game {
 
     void init();
 
+    sf::Text createString(const std::string, const float); // string name
+
     sf::Text createString(const std::string); // string name
 
     sf::Text createString(const std::string,  // string name
