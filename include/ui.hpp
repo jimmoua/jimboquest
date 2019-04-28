@@ -13,6 +13,7 @@ namespace game {
     enum class ENUM_UI {
       TITLESCREEN,
       IN_GAME,
+      IN_GAME_PLAYER_STATUS,
     };
 
     void init();
