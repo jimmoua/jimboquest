@@ -2,6 +2,7 @@
 #include "game.hpp"
 #include "asset.hpp"
 #include "entity.hpp"
+#include "animations.hpp"
 
 
 namespace {
@@ -228,7 +229,7 @@ void game::map_ns::loadMap(const game::asset::MAP& mapID, const sf::Vector2f pla
   //std::cout << "At least it compiles.\n"; exit(1);
   entity::getPl()->m_enSprite.setPosition(playerPos.x*_SLOC, playerPos.y*_SLOC);
   setMapID(mapID);
-  win::fadeOut();
+  game::ani::fadeOut();
 }
 
 void game::map_ns::displayMap_L1() {

@@ -10,8 +10,6 @@ namespace game {
     sf::Event& getEv();
     const unsigned short int& getRes_x();
     const unsigned short int& getRes_y();
-    void fadeOut();
-    void fadeIn();
   }
 }
 #endif

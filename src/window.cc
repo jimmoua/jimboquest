@@ -5,8 +5,6 @@ namespace {
   static sf::Event _eve;
   constexpr unsigned short int res_x = 1600;
   constexpr unsigned short int res_y = 900;
-  static sf::RectangleShape r;
-  static sf::Clock fadeClock;
 }
 
 const unsigned short int& game::win::getRes_x() {
@@ -32,39 +30,3 @@ sf::RenderWindow& game::win::getWin() {
 }
 
 sf::Event& game::win::getEv() { return _eve; }
-
-void game::win::fadeOut() {
-  r.setPosition(_win.getView().getCenter().x-res_x/2, _win.getView().getCenter().y-res_y/2);
-  r.setSize(sf::Vector2f(res_x, res_y));
-  sf::Clock c;
-  fadeClock.restart();
-  for(float alpha = 0.f; alpha <= 100;)
-  {
-    if(fadeClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(30).asMilliseconds())
-    {
-      fadeClock.restart();
-      alpha+=3.f;
-      r.setFillColor(sf::Color(0, 0, 0, alpha));
-      _win.draw(r);
-      _win.display();
-    }
-  }
-}
-
-void game::win::fadeIn() {
-  r.setPosition(_win.getView().getCenter().x-res_x/2, _win.getView().getCenter().y-res_y/2);
-  r.setSize(sf::Vector2f(res_x, res_y));
-  sf::Clock c;
-  fadeClock.restart();
-  for(float alpha = 0.f; alpha <= 100;)
-  {
-    if(fadeClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(30).asMilliseconds())
-    {
-      fadeClock.restart();
-      alpha+=3.f;
-      r.setFillColor(sf::Color(0, 0, 0, alpha));
-      _win.draw(r);
-      _win.display();
-    }
-  }
-}
