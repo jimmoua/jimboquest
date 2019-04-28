@@ -106,6 +106,19 @@ sf::Text game::asset::createString(const std::string s,
   return t;
 }
 
+
+sf::Text game::asset::createString(const std::string s, const float ts)
+{
+  sf::Text t;
+  t.setFont(_font);
+  t.setString(s);
+  t.setCharacterSize(ts);
+  t.setFillColor(sf::Color::White);
+  t.setOutlineColor(sf::Color::Black);
+  t.setOutlineThickness(3.f);
+  return t;
+}
+
 sf::Text game::asset::createString(const std::string s)
 {
   sf::Text t;
