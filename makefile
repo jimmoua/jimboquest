@@ -15,7 +15,9 @@ CFLAGS=-lstdc++ \
 			 -lsfml-graphics \
 			 -lsfml-system \
 			 -lsfml-window \
-			 -lsfml-audio
+			 -lsfml-audio \
+			 -lpthread \
+			 -lX11
 
 WFLAGS=-Wall \
 			 -Wextra \
