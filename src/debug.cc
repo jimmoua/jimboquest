@@ -103,7 +103,7 @@ void game::debug::run() {
       handleUI_Menu();
     }
 
-    win::getWin().display();
+    win::display();
   }
 }
 
@@ -211,7 +211,7 @@ namespace {
               static int statusCounter = -1;
               renderThings(game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS), statusCounter);
               game::win::getWin().draw(game::asset::getFaceSprite(game::asset::ENTITY_FACE::PLAYER));
-              game::win::getWin().display();
+              game::win::display();
             }
           }
           else if(menuCounter == 1) {
@@ -295,7 +295,7 @@ namespace {
               }
               if(!loop) break;
               renderThings(exitUI, menuCounter_exit);
-              game::win::getWin().display();
+              game::win::display();
             }
           }
         }
@@ -307,8 +307,7 @@ namespace {
     }
     
     renderThings(game::ui::getUI(game::ui::ENUM_UI::IN_GAME) , menuCounter);
-    game::win::getWin().display();
-
+    game::win::display();
   } // end of handleUI_Menu function
 
 }
