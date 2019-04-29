@@ -25,7 +25,7 @@ void game::debug::run() {
   //static int counter = 0;
 
   /* Create the player object */
-  game::entity::getPl() = game::entity::Player("Jimbo",100,100,20,10,30);
+  game::entity::getPl() = game::entity::Player("Erdrick",100,100,20,10,30);
   game::entity::updatePlayerStatusUI();
   std::cout << "Created player: " << game::entity::getPl().f_getName() << std::endl;
 
@@ -39,6 +39,7 @@ void game::debug::run() {
   /* handle view */
   while(game::getGS() == asset::GS::DEBUG) {
 
+    win::getWin().clear(sf::Color::Black);
     game::entity::updatePlayerStatusUI();
 
     while(game::win::getWin().pollEvent(game::win::getEv())) {
@@ -82,6 +83,7 @@ void game::debug::run() {
         game::setGS(asset::GS::NONE);
       }
     }
+
     static sf::View v;
     v.setSize(win::getRes_x(), win::getRes_y());
     v.setCenter(entity::getPl().m_enSprite.getPosition());
@@ -159,11 +161,12 @@ namespace {
             auto positionPlayerStatusTexts = []() -> void {
               auto v = game::win::getWin().getView();
               auto c = game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS).menu_sprite[1];
-              p.ui_texts[0].setPosition(c.getPosition().x-360,(v.getCenter().y-300)+50);
-              p.ui_texts[1].setPosition(c.getPosition().x-360,(v.getCenter().y-300)+50*2);
-              p.ui_texts[2].setPosition(c.getPosition().x-360,(v.getCenter().y-300)+50*3);
-              p.ui_texts[3].setPosition(c.getPosition().x-360,(v.getCenter().y-300)+50*4);
-              p.ui_texts[4].setPosition(c.getPosition().x-360,(v.getCenter().y-300)+50*5);
+
+              p.ui_texts[0].setPosition(c.getPosition().x+30,(v.getCenter().y-310)+50);
+              p.ui_texts[1].setPosition(c.getPosition().x+30,(v.getCenter().y-310)+50*2);
+              p.ui_texts[2].setPosition(c.getPosition().x+30,(v.getCenter().y-310)+50*3);
+              p.ui_texts[3].setPosition(c.getPosition().x+30,(v.getCenter().y-310)+50*4);
+              p.ui_texts[4].setPosition(c.getPosition().x+30,(v.getCenter().y-310)+50*5);
               
               p.ui_texts[5].setPosition(c.getPosition().x-360,(v.getCenter().y-270)+50*6);
               p.ui_texts[6].setPosition(c.getPosition().x-360,(v.getCenter().y-270)+50*7);
@@ -178,10 +181,12 @@ namespace {
 
               p.menu_sprite[2].move(195,-140);
               p.menu_sprite[3].move(0,140);
+
+              game::asset::getFaceSprite(game::asset::ENTITY_FACE::PLAYER).setPosition(c.getPosition().x-350, v.getCenter().y-250);
+
             };
             #undef p
             positionPlayerStatusTexts();
-            //game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS).set_menuTextsCenterOfUI();
             bool loop = true;
             /* While we are in the status menu */
             while(loop) {
@@ -204,6 +209,7 @@ namespace {
               }
               static int statusCounter = -1;
               renderThings(game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS), statusCounter);
+              game::win::getWin().draw(game::asset::getFaceSprite(game::asset::ENTITY_FACE::PLAYER));
               game::win::getWin().display();
             }
           }
@@ -218,11 +224,19 @@ namespace {
           }
           else if(menuCounter == 4) {
             /* Exit */
-            std::cout << "exit\n";
-            bool loop = true;
             int menuCounter_exit = 0;
+            bool loop = true;
+            auto positionExitTexts = []() -> void {
+              auto v = game::win::getWin().getView();
+              auto c = exitUI.menu_sprite[1];
+
+              exitUI.ui_texts[0].setPosition(c.getPosition().x,(v.getCenter().y-150)+70);
+              exitUI.ui_texts[1].setPosition(c.getPosition().x,(v.getCenter().y-150)+70*2);
+              exitUI.ui_texts[2].setPosition(c.getPosition().x,(v.getCenter().y-150)+70*3);
+
+            };
             exitUI.set_menuPositionToCen();
-            exitUI.set_menuTextsCenterOfUI();
+            positionExitTexts();
             exitUI.ui_texts[0].setFillColor(sf::Color::Yellow);
             while(loop) {
 
@@ -310,8 +324,8 @@ namespace {
       exitUI.ui_texts[2] = game::asset::createString("EXIT TO DESKTOP");
       exitUI.set_menuTextsOrigin();
       exitUI.set_menuTextsCenterOfUI();
-      exitUI.menu_sprite[0].setSize(sf::Vector2f(600,500));
-      exitUI.menu_sprite[1].setSize(sf::Vector2f(580,480));
+      exitUI.menu_sprite[0].setSize(sf::Vector2f(600,300));
+      exitUI.menu_sprite[1].setSize(sf::Vector2f(580,280));
       exitUI.set_menuSpritesOrigin();
       exitUI.set_menuTextsCenterOfUI();
     }
