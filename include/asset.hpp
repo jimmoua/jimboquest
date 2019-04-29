@@ -46,6 +46,10 @@ namespace game {
       AMBI_WIND,
     };
 
+    enum class ENTITY_FACE {
+      PLAYER,
+    };
+
     void init();
 
     sf::Text createString(const std::string, const float); // string name
@@ -90,6 +94,8 @@ namespace game {
     sf::Music& getMusic(const MUSIC&);
 
     void MusicClean();
+
+    sf::Sprite& getFaceSprite(const ENTITY_FACE&);
 
   } // end of asset namespace
 
