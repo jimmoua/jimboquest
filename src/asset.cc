@@ -21,6 +21,9 @@ namespace {
   /* Sounds */
   static std::map<game::asset::snd, sf::Sound> _gameSound;
 
+  /* Face data */
+  static std::map<game::asset::ENTITY_FACE, sf::Sprite> _entityFaceSprite;
+
 }
 
 void game::asset::init() {
@@ -91,6 +94,15 @@ void game::asset::init() {
   _gameSound[snd::FOOTSTEPS_GRASS].setBuffer(SB_env_ft_grass);
   _gameSound[snd::FOOTSTEPS_GRASS].setVolume(50);
 
+  /* Declare face data here */
+  static sf::Image __playerfaceImage__;
+  __playerfaceImage__.loadFromFile("data/entity/actor/face/roto.png");
+  __playerfaceImage__.createMaskFromColor(sf::Color::Magenta);
+  static sf::Texture __playerfaceTexture__;
+  __playerfaceTexture__.loadFromImage(__playerfaceImage__);
+  _entityFaceSprite[game::asset::ENTITY_FACE::PLAYER].setTexture(__playerfaceTexture__);
+  _entityFaceSprite[game::asset::ENTITY_FACE::PLAYER].setScale(1, 0.75);
+
 }
 
 sf::Text game::asset::createString(const std::string s,
@@ -159,4 +171,8 @@ void game::asset::MusicClean() {
   {
     delete iter->second;
   }
+}
+
+sf::Sprite& game::asset::getFaceSprite(const game::asset::ENTITY_FACE& id) {
+  return _entityFaceSprite[id];
 }
