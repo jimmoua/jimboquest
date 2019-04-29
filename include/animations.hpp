@@ -6,8 +6,6 @@ namespace game {
 
   namespace ani {
     void fadeOut();
-    void fadeIn();
-    void fadeInMAP();
   }
 
 }
