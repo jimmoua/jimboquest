@@ -5,6 +5,7 @@
 #include <tuple>
 
 namespace {
+
   static game::entity::Player _Player;
 
   #define O  4       // The character sprites that I am using have an offset
@@ -12,14 +13,7 @@ namespace {
   #define X 24       // The character sprite is 24 px wide
   #define Y 16       // the character sprite is 16 px tall
 
-  enum class _faceDirection_ {
-    UP, DOWN, RIGHT, LEFT
-  };
-
-  /* By default, the player faces down */
-  static _faceDirection_ __CURRENT_FACE__ = _faceDirection_::DOWN;
-
-  static std::map<_faceDirection_, const sf::IntRect*> _face_map_;
+  static std::map<game::entity::_facedirection_, const sf::IntRect*> _face_map_;
 
   const static sf::IntRect __PLAYER_UP__ [] = {
     sf::IntRect(X*0+O,Y*1,X-O2,Y),
@@ -97,13 +91,13 @@ void game::entity::Player::handleMove() {
 
   auto animatePlayer = [this]() -> void {
     if(animationClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(300).asMilliseconds()) {
-      this->m_enSprite.setTextureRect(_face_map_[__CURRENT_FACE__][0]);
+      this->m_enSprite.setTextureRect(_face_map_[this->f_getFaceDir()][0]);
       if(animationClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(600).asMilliseconds()) {
-        this->m_enSprite.setTextureRect(_face_map_[__CURRENT_FACE__][1]);
+        this->m_enSprite.setTextureRect(_face_map_[this->f_getFaceDir()][1]);
         if(animationClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(900).asMilliseconds()) {
-          this->m_enSprite.setTextureRect(_face_map_[__CURRENT_FACE__][2]);
+          this->m_enSprite.setTextureRect(_face_map_[this->f_getFaceDir()][2]);
             if(animationClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(1200).asMilliseconds()) {
-              this->m_enSprite.setTextureRect(_face_map_[__CURRENT_FACE__][1]);
+              this->m_enSprite.setTextureRect(_face_map_[this->f_getFaceDir()][1]);
               animationClock.restart();
             }
         }
@@ -129,8 +123,8 @@ void game::entity::Player::handleMove() {
     if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
       asset::getSound(asset::snd::FOOTSTEPS_GRASS).play();
     }
-    if(__CURRENT_FACE__ != _faceDirection_::UP) {
-      __CURRENT_FACE__ = _faceDirection_::UP;
+    if(this->f_getFaceDir() != _facedirection_::UP) {
+      this->f_setFaceDir( _facedirection_::UP );
       this->m_enSprite.setTextureRect(__PLAYER_UP__[0]);
     }
     this->m_enSprite.move(0, -ms);
@@ -139,9 +133,9 @@ void game::entity::Player::handleMove() {
     if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
       asset::getSound(asset::snd::FOOTSTEPS_GRASS).play();
     }
-    if(__CURRENT_FACE__ != _faceDirection_::DOWN) {
+    if(this->f_getFaceDir() != _facedirection_::DOWN) {
       this->m_enSprite.setTextureRect(__PLAYER_DOWN__[0]);
-      __CURRENT_FACE__ = _faceDirection_::DOWN;
+      this->f_setFaceDir( _facedirection_::DOWN );
     }
     this->m_enSprite.move(0, ms);
   }
@@ -149,9 +143,9 @@ void game::entity::Player::handleMove() {
     if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
       asset::getSound(asset::snd::FOOTSTEPS_GRASS).play();
     }
-    if(__CURRENT_FACE__ != _faceDirection_::LEFT) {
+    if(this->f_getFaceDir() != _facedirection_::LEFT) {
       this->m_enSprite.setTextureRect(__PLAYER_LEFT__[0]);
-      __CURRENT_FACE__ = _faceDirection_::LEFT;
+      this->f_setFaceDir( _facedirection_::LEFT );
     }
     this->m_enSprite.move(-ms, 0);
   }
@@ -159,9 +153,9 @@ void game::entity::Player::handleMove() {
     if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
       asset::getSound(asset::snd::FOOTSTEPS_GRASS).play();
     }
-    if(__CURRENT_FACE__ != _faceDirection_::RIGHT) {
+    if(this->f_getFaceDir() != _facedirection_::RIGHT) {
       this->m_enSprite.setTextureRect(__PLAYER_RIGHT__[0]);
-      __CURRENT_FACE__ = _faceDirection_::RIGHT;
+      this->f_setFaceDir( _facedirection_::RIGHT );
     }
     this->m_enSprite.move(ms, 0);
   }
@@ -207,8 +201,8 @@ void game::entity::Player::handleMove() {
 } // end of handleMove function
 
 void game::entity::init() {
-  _face_map_[_faceDirection_::UP]    = __PLAYER_UP__;
-  _face_map_[_faceDirection_::DOWN]  = __PLAYER_DOWN__;
-  _face_map_[_faceDirection_::LEFT]  = __PLAYER_LEFT__;
-  _face_map_[_faceDirection_::RIGHT] = __PLAYER_RIGHT__;
+  _face_map_[_facedirection_::UP]    = __PLAYER_UP__;
+  _face_map_[_facedirection_::DOWN]  = __PLAYER_DOWN__;
+  _face_map_[_facedirection_::LEFT]  = __PLAYER_LEFT__;
+  _face_map_[_facedirection_::RIGHT] = __PLAYER_RIGHT__;
 }
