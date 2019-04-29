@@ -228,7 +228,8 @@ void game::map_ns::loadMap(const game::asset::MAP& mapID, const sf::Vector2f pla
   ani::fadeOut();
   entity::getPl().m_enSprite.setPosition(playerPos.x*_SLOC, playerPos.y*_SLOC);
   setMapID(mapID);
-  ani::fadeInMAP();
+  //ani::fadeInMAP();
+  game::ani::fadeIn();
 }
 
 void game::map_ns::displayMap_L1() {
