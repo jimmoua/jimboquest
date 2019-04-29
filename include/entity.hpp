@@ -9,6 +9,10 @@ namespace game {
 
   namespace entity {
 
+    enum class _facedirection_ {
+      UP,DOWN,RIGHT,LEFT
+    };
+
     class Entity {
       public:
 
@@ -56,6 +60,7 @@ namespace game {
         void f_get_ttlBattles(const int x) { this->m_ttlBattles = x; }
         void f_get_ttlExp(const int x) { this->m_ttlExp = x; }
         void f_get_ttlMonKill(const int x) { this->m_ttlMonstersKilled = x; }
+        void f_setFaceDir(const _facedirection_& id) { this->m_CurrentFaceDir = id; }
 
         void f_SetName(const std::string n) { this->m_Name = n; }
         void f_setRace(const asset::entity::RACE r) { this->m_Race = r; }
@@ -80,6 +85,7 @@ namespace game {
         int f_get_ttlBattles() { return this->m_ttlBattles; }
         int f_get_ttlExp() { return this->m_ttlExp; }
         int f_get_ttlMonKill() { return this->m_ttlMonstersKilled; }
+        _facedirection_ f_getFaceDir() { return this->m_CurrentFaceDir; }
 
       private:
         std::string m_Name;
@@ -102,6 +108,7 @@ namespace game {
 
         game::asset::entity::RACE       m_Race;
         game::asset::entity::BASE_CLASS m_JobClass;
+        _facedirection_ m_CurrentFaceDir = _facedirection_::DOWN;
     };
 
     class Player : public Entity {
