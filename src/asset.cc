@@ -28,15 +28,13 @@ namespace {
 
 void game::asset::init() {
 
-  auto lamda_CreateMus = [](const MUSIC& id, const std::string& s) {
-    sf::Music *t = new sf::Music;
-    if(!t->openFromFile(s)) {
-      delete t;
+  auto lambda_CreateMus = [](const MUSIC& id, const std::string& s) {
+    _gameMusic[id] = new sf::Music;
+    if(!_gameMusic[id]->openFromFile(s)) {
+      delete _gameMusic[id];
       std::cerr << "Unable to create music from path: " << s << std::endl;
       exit(1);
     }
-    else
-      _gameMusic.insert(std::pair<MUSIC, sf::Music*>(id, t));
   };
 
   /* Font location. I am only using 1 font for my game, so no need for maps */
@@ -64,8 +62,8 @@ void game::asset::init() {
 
   /* musics for the game */
 
-  lamda_CreateMus(MUSIC::AMBI_WIND, "data/music/AMB_wind.ogg");
-  lamda_CreateMus(MUSIC::TITLESCREEN, "data/music/BetweenWorlds.ogg");
+  lambda_CreateMus(MUSIC::AMBI_WIND, "data/music/AMB_wind.ogg");
+  lambda_CreateMus(MUSIC::TITLESCREEN, "data/music/BetweenWorlds.ogg");
 
   /* Sound buffers for the game */
   static sf::SoundBuffer SB_menuHover;
