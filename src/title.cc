@@ -1,5 +1,7 @@
 #include "title.hpp"
 #include <ui.hpp>
+#include <thread>
+#include "game.hpp"
 
 namespace {
 
@@ -86,7 +88,7 @@ namespace {
     for(auto& iter : UI.ui_texts) {
       game::win::getWin().draw(iter);
     }
-    game::win::getWin().display();
+    game::win::display();
   }
 
 }
@@ -99,6 +101,7 @@ void game::title::init() {
   asset::getMusic(asset::MUSIC::TITLESCREEN).setLoop(true);
   asset::getMusic(asset::MUSIC::AMBI_WIND).play();
   asset::getMusic(asset::MUSIC::TITLESCREEN).play();
+  game::ani::fadeIn();
   while(game::getGS() == asset::GS::TITLE) {
     _run();
   }
