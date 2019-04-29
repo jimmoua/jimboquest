@@ -49,7 +49,10 @@ void game::asset::init() {
   _mapLoc[MAP::TEST_MAP02] = "data/map/testMap02.txt";
 
   /* Game textures load from file */
-  _mapTexture.loadFromFile("data/tileset/DQ_Tileset.png");
+  static sf::Image tileSetImage;
+  tileSetImage.loadFromFile("data/tileset/DQ_Tileset.png");
+  tileSetImage.createMaskFromColor(sf::Color(255,121,155));
+  _mapTexture.loadFromImage(tileSetImage);
 
   static sf::Image actorImage;
   actorImage.loadFromFile(_imgLoc[asset::img::ACTOR_PNG]);
