@@ -105,8 +105,6 @@ void game::entity::Player::handleMove() {
     }
   };
 
-  static sf::Clock keyPressTimer;  // portal timer
-
   /* cV = collisions vector */
   auto cV = map_ns::getMapObjectByID(map_ns::getCurrentMapID())->_map_lay02_S;
 
