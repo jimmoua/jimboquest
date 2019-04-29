@@ -8,8 +8,14 @@ namespace game {
     void init();
     sf::RenderWindow& getWin();
     sf::Event& getEv();
+    void display();
     const unsigned short int& getRes_x();
     const unsigned short int& getRes_y();
   }
+
+  namespace ani {
+    void fadeIn();
+  }
+
 }
 #endif
