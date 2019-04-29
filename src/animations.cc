@@ -64,7 +64,7 @@ void game::ani::fadeInMAP() {
       win::getWin().draw(r);
       win::getWin().display();
     }
-    if( alpha < 10 ) return;
+    if( alpha < 10 ) break;;
   }
   r.setFillColor(sf::Color(0,0,0,0));
 }
@@ -78,11 +78,12 @@ void game::ani::fadeIn() {
     if(fadeClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(10).asMilliseconds())
     {
       fadeClock.restart();
-      alpha-=60.f;
+      alpha-=1.f;
       r.setFillColor(sf::Color(0, 0, 0, alpha));
       win::getWin().draw(r);
       win::getWin().display();
     }
+    if( alpha < 10 ) break;
   }
-  r.setFillColor(sf::Color(0,0,0,0));
+  //r.setFillColor(sf::Color(0,0,0,0));
 }
