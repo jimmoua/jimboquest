@@ -5,6 +5,7 @@
 #include "game.hpp"
 #include "ui.hpp"
 #include <thread>
+#include "animations.hpp"
 
 namespace {
   static bool in_uiMenu = false;
@@ -275,6 +276,7 @@ namespace {
                     else if(menuCounter_exit == 1) {
                       game::setGS(game::asset::GS::TITLE);
                       game::win::getWin().setView(game::win::getWin().getDefaultView());
+                      game::ani::fadeOut();
                       return;
                     }
                     else if(menuCounter_exit == 2) {
