@@ -93,8 +93,8 @@ void game::ui::init() {
   p.ui_texts[12] = asset::createString("ttl mon");   // ttl monsters slain
   p.ui_texts[13] = asset::createString("ttl exp");   // ttl exp earned
 
-  p.anotherOne();  // Player picture
-  p.anotherOne();  // stat UI
+  p.anotherOne();  // status ui
+  p.anotherOne();  // player face pic
   inGame_PlayerStatus.menu_sprite[0].setSize(sf::Vector2f(800,580));
   inGame_PlayerStatus.menu_sprite[1].setSize(sf::Vector2f(780,560));
   inGame_PlayerStatus.menu_sprite[2].setSize(sf::Vector2f(390,280));
