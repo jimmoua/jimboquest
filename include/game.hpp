@@ -5,6 +5,8 @@
 #include <iostream>
 #include "window.hpp"
 #include "asset.hpp"
+#include <thread>
+#include <vector>
 
 using ushort = unsigned short int;
 
@@ -15,7 +17,11 @@ constexpr static ushort _SS = 16;                 // Sprite size
 constexpr static int _SLOC = _SS*SPRITE_SCALE;    // Useful for pos setting
 constexpr static int __PORTAL_OFFSET__ = 15;      // For portal offset
 
+
 namespace game {
+
+  std::vector<std::thread>& thread_vector();
+
   void init();
 
   // run the show

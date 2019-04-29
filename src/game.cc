@@ -5,10 +5,12 @@
 #include "entity.hpp"
 #include "ui.hpp"
 #include "animations.hpp"
+#include <thread>
 
 namespace {
   // By default, state is in title screen
   static game::asset::GS _currentGS = game::asset::GS::TITLE;
+  static std::vector<std::thread> __thread_vector__;
 }
 
 void game::init() {
@@ -53,4 +55,8 @@ const game::asset::GS& game::getGS() {
 
 void game::setGS(const game::asset::GS g) {
   _currentGS = g;
+}
+
+std::vector<std::thread>& game::thread_vector() {
+  return __thread_vector__;
 }
