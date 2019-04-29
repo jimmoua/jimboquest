@@ -59,11 +59,12 @@ void game::ani::fadeInMAP() {
     if(fadeClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(10).asMilliseconds())
     {
       fadeClock.restart();
-      alpha-=60.f;
+      alpha-=10.f;
       r.setFillColor(sf::Color(0, 0, 0, alpha));
       win::getWin().draw(r);
       win::getWin().display();
     }
+    if( alpha < 10 ) return;
   }
   r.setFillColor(sf::Color(0,0,0,0));
 }
