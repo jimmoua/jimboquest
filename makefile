@@ -1,4 +1,4 @@
-CC=gcc
+CC=clang
 
 SRC_DIR=src
 
@@ -20,9 +20,7 @@ CFLAGS=-lstdc++ \
 			 -lX11
 
 WFLAGS=-Wall \
-			 -Wextra \
-			 -std=c++17 \
-			 -lstdc++
+			 -Wextra
 
 EXE=jimboQuest.out
 
