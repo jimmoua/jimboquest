@@ -6,6 +6,7 @@ namespace game {
 
   namespace ani {
     void fadeOut();
+    void particleEffect();
   }
 
 }
