@@ -35,63 +35,50 @@ void game::ani::particleEffect() {
    * function is because I want to have some particles floating about in the
    * title screen to make it look less boring */
 
-  /* Lambda that will create particles */
-  auto createParticle = []() -> sf::CircleShape {
-    sf::CircleShape c;
-    c.setFillColor(sf::Color::Yellow);
-    c.setRadius(2.0f);
+
+  /* Lambda that will create a particle */
+  auto createParticle = []() -> std::pair<sf::CircleShape, float> {
+    std::pair<sf::CircleShape, float> c;
+    c.first.setFillColor(sf::Color::Yellow);
+    c.first.setRadius(game::genRand(1, 3));
     /* Place the particles at the bottom right of the screen. We will then move
      * in directions to simulate a float effect */
-    c.setPosition(win::getWin().getSize().x, win::getWin().getSize().y);
+    c.first.setPosition(game::genRand(0, win::getRes_x()), win::getRes_y());
+    c.second = game::genRand(1,5);
     return c;
   };
 
-  static std::vector<sf::CircleShape> particles;
-  constexpr size_t maxParticles = 500;
-  if(particles.capacity() != maxParticles) {
-    particles.resize(maxParticles);
-  }
-  if(particles.size() != maxParticles) {
-    for(size_t i = particles.size(); i < maxParticles; i++) {
+  static std::vector<std::pair<sf::CircleShape, float>> particles;
+  constexpr size_t maxParticles = 100;
+  if(particles.size() < maxParticles) {
+    static sf::Clock particleSpawnClock;
+    if(particleSpawnClock.getElapsedTime().asMilliseconds() > sf::milliseconds(125).asMilliseconds()) {
+      particleSpawnClock.restart();
       particles.push_back(createParticle());
     }
   }
-
-  /* 1 = up left
-   * 2 = straight up
-   * 3 = up right */
   
   /* Move the particles */
   for(auto& iter : particles) {
-    static std::random_device rd;
-    std::mt19937 seed(rd());
-    std::uniform_int_distribution<> rand(1, 2);
-    auto dir = rand(seed);
-    if(dir == 1) {
-      iter.move(-1,-1);
-    }
-    else if(dir == 2) {
-      iter.move(0, -.5);
-    }
-    else if(dir == 3) {
-      iter.move(1, -1);
+    iter.first.move(0, -iter.second);
+  }
+
+  /* Create a vector to collect iterators on which particles have left outside
+   * the window. */
+  std::vector<std::vector<std::pair<sf::CircleShape, float>>::iterator> toDelete;
+  for(auto iter = particles.begin(); iter != particles.end(); iter++) {
+    if(iter->first.getPosition().y < 0 || iter->first.getPosition().y > win::getRes_y()) {
+      toDelete.push_back(iter);
     }
   }
 
-  for(auto iter = particles.begin(); iter!= particles.end(); iter++) {
-    #define pos iter->getPosition()
-    if(pos.x < 0 || pos.x > win::getRes_x() || pos.y < 0 || pos.y > win::getRes_y()) {
-      particles.erase(iter);
-    }
-    #undef pos
+  /* Delete the particles that have gone out of bounds */
+  for(auto iter = toDelete.begin(); iter != toDelete.end(); iter++) {
+    particles.erase(*iter);
   }
 
   /* Draw the particles on the screen */
   for(auto& i : particles) {
-    win::getWin().draw(i);
+    win::getWin().draw(i.first);
   }
-
-
-  /* After generating the particles, we will draw them */
-  win::display();
 }
