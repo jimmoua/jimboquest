@@ -51,12 +51,10 @@ namespace {
     r.setPosition(_win.getView().getCenter().x-res_x/2, _win.getView().getCenter().y-res_y/2);
     r.setSize(sf::Vector2f(_win.getSize().x+40, _win.getSize().y+40));
     fadeClock.restart();
-    for(float alpha = 255.f; alpha >= 0;)
-    {
-      if(fadeClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(10).asMilliseconds())
-      {
+    for(float alpha = 255.f; alpha >= 0;) {
+      if(fadeClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(10).asMilliseconds()) {
         fadeClock.restart();
-        alpha-=3.f;
+        alpha-=6.f;
         r.setFillColor(sf::Color(0, 0, 0, alpha));
       }
       if( alpha < 10 ) break;
