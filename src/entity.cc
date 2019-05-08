@@ -88,6 +88,7 @@ game::entity::Player::Player(const std::string& n,
 void game::entity::Player::handleMove() {
 
   static sf::Clock animationClock;
+  bool keyPressed = false;
 
   auto animatePlayer = [this]() -> void {
     if(animationClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(300).asMilliseconds()) {
@@ -126,6 +127,7 @@ void game::entity::Player::handleMove() {
       this->m_enSprite.setTextureRect(__PLAYER_UP__[0]);
     }
     this->m_enSprite.move(0, -ms);
+    keyPressed = true;
   }
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
     if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
@@ -136,6 +138,7 @@ void game::entity::Player::handleMove() {
       this->f_setFaceDir( _facedirection_::DOWN );
     }
     this->m_enSprite.move(0, ms);
+    keyPressed = true;
   }
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
     if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
@@ -146,6 +149,7 @@ void game::entity::Player::handleMove() {
       this->f_setFaceDir( _facedirection_::LEFT );
     }
     this->m_enSprite.move(-ms, 0);
+    keyPressed = true;
   }
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
     if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
@@ -156,6 +160,7 @@ void game::entity::Player::handleMove() {
       this->f_setFaceDir( _facedirection_::RIGHT );
     }
     this->m_enSprite.move(ms, 0);
+    keyPressed = true;
   }
 
   animatePlayer();
@@ -192,6 +197,19 @@ void game::entity::Player::handleMove() {
         }
       }
 
+    }
+  }
+
+  if (keyPressed) {
+    /* Only initiate battle when the battleClock is over n seconds */
+    static sf::Clock battleClock;
+    if(battleClock.getElapsedTime().asSeconds() >= sf::seconds(3).asSeconds()) {
+      if(map_ns::getMapObjectByID(map_ns::getCurrentMapID())->_mapLevel == map_ns::MAP_LEVEL::DANGER_ZONE) {
+        if(game::genRand(0, 30) == 10) {
+          std::cout << "ENCOUNTER BATTLE\n";
+          battleClock.restart();
+        }
+      }
     }
   }
 
