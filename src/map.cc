@@ -14,9 +14,9 @@ namespace {
 
 namespace {
 
-  static game::map_ns::MapInfo testMap00(game::asset::MAP::TEST_MAP00, "tstMap00");
-  static game::map_ns::MapInfo testMap01(game::asset::MAP::TEST_MAP01, "tstMap01");
-  static game::map_ns::MapInfo testMap02(game::asset::MAP::TEST_MAP02, "tstMap02");
+  static game::map_ns::MapInfo testMap00(game::asset::MAP::TEST_MAP00, "tstMap00", game::map_ns::MAP_LEVEL::SAFE_ZONE);
+  static game::map_ns::MapInfo testMap01(game::asset::MAP::TEST_MAP01, "tstMap01", game::map_ns::MAP_LEVEL::SAFE_ZONE);
+  static game::map_ns::MapInfo testMap02(game::asset::MAP::TEST_MAP02, "tstMap02", game::map_ns::MAP_LEVEL::SAFE_ZONE);
 
   /* Making a std::map so we can map map enums to objects */
   static std::map<game::asset::MAP, game::map_ns::MapInfo*> mapInfoContainerMap;
@@ -29,9 +29,9 @@ namespace {
     sf::IntRect(_SS*0,0,_SS,_SS),         // Black tile
     sf::IntRect(_SS*1,0,_SS,_SS),         // Grass
     sf::IntRect(_SS*16,_SS*3,_SS,_SS),    // Water
-    sf::IntRect(_SS*3,0,_SS,_SS),
-    sf::IntRect(_SS*4,0,_SS,_SS),
-    sf::IntRect(_SS*5,0,_SS,_SS)
+    sf::IntRect(_SS*9,_SS*10,_SS,_SS),    // Tree (world)
+    sf::IntRect(_SS*15,0,_SS,_SS),        // Castle
+    sf::IntRect(_SS*13,_SS*14,_SS,_SS),   // Stone wall
     #undef O
     #undef O2
   };
@@ -188,6 +188,9 @@ void game::map_ns::init() {
   createMap(asset::getMapName(asset::MAP::TEST_MAP00), &testMap00);
   createMap(asset::getMapName(asset::MAP::TEST_MAP01), &testMap01);
   createMap(asset::getMapName(asset::MAP::TEST_MAP02), &testMap02);
+
+  /* Define what map level they are */
+
 
 
   /* When placing portals, remember that the sprites are inverted accross the

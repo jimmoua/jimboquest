@@ -182,6 +182,12 @@ namespace game {
       PORTAL,
     };
 
+    enum class MAP_LEVEL {
+      OVERWORLD,
+      SAFE_ZONE,
+      DANGER_ZONE
+    };
+
     /* Define some things for the event sprites */
     struct mapEvStruct {
       TILE_EV ev = TILE_EV::NONE; // Enum of the event
@@ -218,13 +224,14 @@ namespace game {
     class MapInfo {
       public:
         MapInfo() { }
-        MapInfo(const game::asset::MAP& ID, const std::string& s) {
+        MapInfo(const game::asset::MAP& ID, const std::string& s, MAP_LEVEL ml) {
           this->m_mapID = ID;
           this->m_mapName = s;
+          this->_mapLevel = ml;
         }
         game::asset::MAP m_getMapID() const { return this->m_mapID; }
         std::string m_getName() const { return this->m_mapName; }
-
+        MAP_LEVEL _mapLevel;
 
 
         sf::Vector2i _mapSize;
