@@ -84,6 +84,7 @@ namespace {
       }
     }
     game::win::getWin().clear(sf::Color::Black);
+    game::ani::particleEffect();
     game::ui::getUI(game::ui::ENUM_UI::TITLESCREEN).drawUIsprites();
     for(auto& iter : UI.ui_texts) {
       game::win::getWin().draw(iter);
