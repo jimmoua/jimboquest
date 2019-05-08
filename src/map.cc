@@ -14,9 +14,9 @@ namespace {
 
 namespace {
 
-  static game::map_ns::MapInfo testMap00(game::asset::MAP::TEST_MAP00, "tstMap00", game::map_ns::MAP_LEVEL::SAFE_ZONE);
-  static game::map_ns::MapInfo testMap01(game::asset::MAP::TEST_MAP01, "tstMap01", game::map_ns::MAP_LEVEL::SAFE_ZONE);
-  static game::map_ns::MapInfo testMap02(game::asset::MAP::TEST_MAP02, "tstMap02", game::map_ns::MAP_LEVEL::SAFE_ZONE);
+  static game::map_ns::MapInfo testMap00(game::asset::MAP::TEST_MAP00, "tstMap00", game::map_ns::MAP_LEVEL::DANGER_ZONE);
+  static game::map_ns::MapInfo testMap01(game::asset::MAP::TEST_MAP01, "tstMap01", game::map_ns::MAP_LEVEL::DANGER_ZONE);
+  static game::map_ns::MapInfo testMap02(game::asset::MAP::TEST_MAP02, "tstMap02", game::map_ns::MAP_LEVEL::DANGER_ZONE);
 
   /* Making a std::map so we can map map enums to objects */
   static std::map<game::asset::MAP, game::map_ns::MapInfo*> mapInfoContainerMap;
