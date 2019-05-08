@@ -5,6 +5,7 @@
 #include <iostream>
 #include "window.hpp"
 #include "asset.hpp"
+#include "animations.hpp"
 #include <thread>
 #include <vector>
 
@@ -19,6 +20,8 @@ constexpr static int __PORTAL_OFFSET__ = 15;      // For portal offset
 
 
 namespace game {
+
+  int genRand(int min, int max);
 
   std::vector<std::thread>& thread_vector();
 
