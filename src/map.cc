@@ -179,6 +179,7 @@ void game::map_ns::init() {
     std::clog << "Successfully created map: " << mapName << "\n\n";
 
   };
+
   /* Map the object to a std::map */
   mapInfoContainerMap[game::asset::MAP::TEST_MAP00] = &testMap00;
   mapInfoContainerMap[game::asset::MAP::TEST_MAP01] = &testMap01;
@@ -189,10 +190,6 @@ void game::map_ns::init() {
   createMap(asset::getMapName(asset::MAP::TEST_MAP01), &testMap01);
   createMap(asset::getMapName(asset::MAP::TEST_MAP02), &testMap02);
 
-  /* Define what map level they are */
-
-
-
   /* When placing portals, remember that the sprites are inverted accross the
    * Cartesian-like x-y plane!!
    *
@@ -202,18 +199,32 @@ void game::map_ns::init() {
    * Well, my math seems to suck, so that's probably a reason why it's like
    * that. I'm too lazy to apply a fix, so I will just leave it as it is */
 
+  /* Below are the definitons of the map. Here, define portal locations,
+   * events, type of map level, etc. Comment the map name first as below.
+   * Follow this structure for defining maps
+   * 1. portal defintions
+   * 2. other event definitions. <- fix this up later
+   * 3. If a danger zone, define the types of monsters that are allowed to
+   *    spawn. */
+
+  /* Here, define some basic sets for monsters spawning patterns */
+  /* TODO: LEFT OFF HERE */
+  auto genMonstersList_Noob = [](game::map_ns::MapInfo& m) -> void {
+  };
+
   /* --------------------------------------------------------------------------
-   * TEST_MAP00 PORTALS
+   * TEST_MAP00
    * ------------------------------------------------------------------------*/
-  /* Event at [1][3] is a portal that leads to TEST_MAP02 */
   testMap00.evV[1][3].portalTransportLoc.first = game::asset::MAP::TEST_MAP02;
   testMap00.evV[1][3].portalTransportLoc.second = sf::Vector2f(2, 4);
-  /* Event at [3][5] is a portal that leads to TEST_MAP01 */
+
   testMap00.evV[3][5].portalTransportLoc.first = game::asset::MAP::TEST_MAP01;
   testMap00.evV[3][5].portalTransportLoc.second = sf::Vector2f(2, 3);
 
+  genMonstersList_Noob(testMap00);
+
   /* --------------------------------------------------------------------------
-   * TEST_MAP01 PORTALS
+   * TEST_MAP01
    * ------------------------------------------------------------------------*/
   testMap01.evV[3][1].portalTransportLoc.first = game::asset::MAP::TEST_MAP00;
   testMap01.evV[3][1].portalTransportLoc.second = sf::Vector2f(4, 3);

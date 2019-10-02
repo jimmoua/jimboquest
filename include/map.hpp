@@ -190,12 +190,12 @@ namespace game {
 
     /* Define some things for the event sprites */
     struct mapEvStruct {
-      TILE_EV ev = TILE_EV::NONE; // Enum of the event
+      game::map_ns::TILE_EV ev = game::map_ns::TILE_EV::NONE; // Enum of the event
 
       /* Only use if it's a portal event
        * first key  = Map ID that the portal leads to
        * second key = x and y locations that portal transports player to */
-      std::pair<asset::MAP, sf::Vector2f> portalTransportLoc;
+      std::pair<game::asset::MAP, sf::Vector2f> portalTransportLoc;
     };
 
     void init();
@@ -219,6 +219,11 @@ namespace game {
 
     /* Set current map id */
     void setMapID(const game::asset::MAP&);
+
+    /* Types of monsters */
+    enum class ENUM_MONSTER_TYPE {
+      SLIME
+    };
 
     /* Class definition of MapInfo here */
     class MapInfo {
@@ -248,6 +253,9 @@ namespace game {
         std::vector< std::vector<sf::Sprite> > _mapEvV;      // Event sprites
         /* This vector ↓ contains information about the event */
         std::vector< std::vector<game::map_ns::mapEvStruct> > evV;
+
+        /* Types of monsters that are on the map and their sets */
+        std::vector<std::pair<ENUM_MONSTER_TYPE, ushort>> monsterSet;
 
       private:
         game::asset::MAP m_mapID;

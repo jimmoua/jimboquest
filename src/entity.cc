@@ -2,6 +2,7 @@
 #include "game.hpp"
 #include "map.hpp"
 #include "animations.hpp"
+#include "battle.hpp"
 #include <tuple>
 
 namespace {
@@ -39,6 +40,11 @@ namespace {
   #undef O2
   #undef X
   #undef Y
+
+  /* Monster textures/images/sprites here */
+  static sf::Image _monsterImage_slime;
+  static sf::Texture _monsterTexture_slime;
+
 } // end of anon namespace
 
 game::entity::Player& game::entity::getPl() {
@@ -201,12 +207,14 @@ void game::entity::Player::handleMove() {
   }
 
   if (keyPressed) {
-    /* Only initiate battle when the battleClock is over n seconds */
+    /* Only initiate battle when the battleClock is over 3 seconds */
     static sf::Clock battleClock;
     if(battleClock.getElapsedTime().asSeconds() >= sf::seconds(3).asSeconds()) {
       if(map_ns::getMapObjectByID(map_ns::getCurrentMapID())->_mapLevel == map_ns::MAP_LEVEL::DANGER_ZONE) {
+        /* If the number generated is 10, we will initate battle. Battles, in
+         * this sense, are my take on an RNG battle encounterment system. */
         if(game::genRand(0, 30) == 10) {
-          std::cout << "ENCOUNTER BATTLE\n";
+          game::initBattle();
           battleClock.restart();
         }
       }
@@ -217,8 +225,31 @@ void game::entity::Player::handleMove() {
 } // end of handleMove function
 
 void game::entity::init() {
+  /* Define face character sprite facing direction here */
   _face_map_[_facedirection_::UP]    = __PLAYER_UP__;
   _face_map_[_facedirection_::DOWN]  = __PLAYER_DOWN__;
   _face_map_[_facedirection_::LEFT]  = __PLAYER_LEFT__;
   _face_map_[_facedirection_::RIGHT] = __PLAYER_RIGHT__;
+
+  /* Define the slime image and texture here */
+  _monsterImage_slime.loadFromFile("data/entity/monster/slimes.png");
+  _monsterImage_slime.createMaskFromColor(sf::Color::Magenta);
+  _monsterTexture_slime.loadFromImage(_monsterImage_slime);
+}
+
+game::entity::Entity game::entity::createSlime() {
+  game::entity::Entity slime;
+  slime.f_setHealth(10);
+  slime.f_setGold(3);
+  return slime;
+}
+
+sf::Sprite game::entity::sprite::sprite_slime() {
+  sf::Sprite s(_monsterTexture_slime);
+  #define loc_x
+  #define loc_y
+  /* TODO: left off here, need to load a slime texture into sprite */
+  //s.setTextureRect()
+  #undef loc_x
+  #undef loc_y
 }

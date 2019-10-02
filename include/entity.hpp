@@ -125,9 +125,18 @@ namespace game {
       private:
     };
 
+    /* Returns the player data. Use this to manipulate player data as well. */
     Player& getPl();
 
+
+    /* Monster data */
+    Entity createSlime();
+
     void init();
+
+    namespace sprite {
+      sf::Sprite sprite_slime();
+    }
 
   }
 
