@@ -97,6 +97,12 @@ namespace game {
 
     sf::Sprite& getFaceSprite(const ENTITY_FACE&);
 
+    namespace monster {
+      /* This init will load all the monster sprite locations */
+      void init();
+      sf::Texture& getTexture_Slimes();
+    }
+
   } // end of asset namespace
 
 }

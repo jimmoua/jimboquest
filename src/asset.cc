@@ -15,6 +15,9 @@ namespace {
   /* Actor sprite textures */
   static sf::Texture _actorTexture;
 
+  /* Monster textures */
+  static sf::Texture _monster_slimeTexture;
+
   /* musics */
   static std::map<game::asset::MUSIC, sf::Music*> _gameMusic;
 
@@ -63,7 +66,8 @@ void game::asset::init() {
   /* musics for the game */
 
   lambda_CreateMus(MUSIC::AMBI_WIND, "data/music/AMB_wind.ogg");
-  lambda_CreateMus(MUSIC::TITLESCREEN, "data/music/BetweenWorlds.ogg");
+  //lambda_CreateMus(MUSIC::TITLESCREEN, "data/music/BetweenWorlds.ogg");
+  lambda_CreateMus(MUSIC::TITLESCREEN, "data/music/beauitful_memories.ogg");
 
   /* Sound buffers for the game */
   static sf::SoundBuffer SB_menuHover;
@@ -101,6 +105,11 @@ void game::asset::init() {
   _entityFaceSprite[game::asset::ENTITY_FACE::PLAYER].setTexture(__playerfaceTexture__);
   _entityFaceSprite[game::asset::ENTITY_FACE::PLAYER].setScale(1, 0.75);
 
+  /* Load monster textures */
+  static sf::Image _monsterImageSlime;
+  _monsterImageSlime.loadFromFile("data/entity/monster/slimes.png");
+  _monsterImageSlime.createMaskFromColor(sf::Color::Magenta);
+  _monster_slimeTexture.loadFromImage(_monsterImageSlime);
 }
 
 sf::Text game::asset::createString(const std::string s,
@@ -173,4 +182,8 @@ void game::asset::MusicClean() {
 
 sf::Sprite& game::asset::getFaceSprite(const game::asset::ENTITY_FACE& id) {
   return _entityFaceSprite[id];
+}
+
+sf::Texture& game::asset::monster::getTexture_Slimes() {
+  return _monster_slimeTexture;
 }

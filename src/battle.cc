@@ -12,21 +12,23 @@ namespace {
    * display and handle logics of battle */
   namespace _battleData {
     /* Monster list vector
-     * We have a double vector because we can have something like
-     *    3x slimes        2x bodkin archers         1x slime knight
-     *    
-     *    where each monster represents a group (vector in this case)
-     *      and the whole thing can be pushed into double vector */
-    static std::vector<std::vector<game::entity::Entity>>* _monsterList;
+     * For now, let's keep the list simple and only set singleton sets of
+     *   common enemy monsters. */
+    static std::vector<game::entity::Entity> _monsterList;
+
+    /* This will be the monster sprites vector to draw on the screen */
+    static std::vector<sf::Sprite> _monsterSprites;
 
   }
 
 
   /* Define some groups of possible monsters*/
   void _createSlimeGroup_3() {
-    std::vector<game::entity::Entity> t;
-    for(int i = 0; i < 3; i++) {
-      t.push_back(game::entity::createSlime());
+    if(!_battleData::_monsterList.empty() && !_battleData::_monsterSprites.empty()) {
+    }
+    for(unsigned int i = 0; i < 3; i++ ) {
+      _battleData::_monsterSprites.push_back(game::entity::sprite::sprite_slime());
+      _battleData::_monsterList.push_back(game::entity::createSlime());
     }
   };
 
@@ -42,9 +44,7 @@ void game::initBattle() {
    *   20-24  SAVAGE
    *   25+    LEGENDARY   */
 
-   /* Initialize the monster list */
-  _battleData::_monsterList = new std::vector<std::vector<game::entity::Entity>>;
-
+  /* Below is the battle window where all monster sprites will be drawn */
   /* Got the battle window working. DO NOT TOUCH! */
   sf::RectangleShape l_battleWindow[2];
   sf::RectangleShape l_battleWindow_Choices[2];
@@ -98,18 +98,29 @@ void game::initBattle() {
     *
     * */
 
+   /* Get the view for the window so we can use it when displaying monsters. We
+    * will then need an offset, since l_battleWindow is not the same as as the
+    * view size */
+   sf::View v = win::getWin().getView();
+   const auto offset = (v.getSize().x - l_battleWindow[0].getSize().x)/2;
+   for(unsigned int i = 0; i < _battleData::_monsterSprites.size(); i++) {
+     _battleData::_monsterSprites[i].setPosition(v.getCenter());
+   }
    while(true) {
      while(game::win::getWin().pollEvent(game::win::getEv())) {
        if(game::win::getEv().key.code == sf::Keyboard::Escape) {
          return;
        }
      }
-       game::win::getWin().draw(l_battleWindow[0]);
-       game::win::getWin().draw(l_battleWindow[1]);
-       game::win::getWin().display();
+     game::win::getWin().draw(l_battleWindow[0]);
+     game::win::getWin().draw(l_battleWindow[1]);
+     /* Set the monster positions relative to the window */
+     for(auto& i : _battleData::_monsterSprites) {
+       game::win::getWin().draw(i);
+     }
+     game::win::getWin().display();
    }
 
-   delete _battleData::_monsterList;
 
   /* end of battle */
 }

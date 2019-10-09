@@ -82,13 +82,14 @@ game::entity::Player::Player(const std::string& n,
 
                             Entity(n, h, m, str, dex, _int)
 {
+  /* DEFINE THE SPRITE FOR THE PLAYABLE CHARACTER HERE */
   this->m_enSprite.setTexture(game::asset::actorTexture());
   this->m_enSprite.setTextureRect(__PLAYER_DOWN__[0]);
-#define SCALE_OFFSET 2
+  /* need to scale the sprite or else display it too big */
+  #define SCALE_OFFSET 2
   this->m_enSprite.scale(SPRITE_SCALE-SCALE_OFFSET, SPRITE_SCALE-SCALE_OFFSET);
-  this->m_enSprite.setOrigin(this->m_enSprite.getOrigin().x-SCALE_OFFSET,
-                             this->m_enSprite.getOrigin().y-SCALE_OFFSET);
-#undef SCALE_OFFSET
+  this->m_enSprite.setOrigin(this->m_enSprite.getOrigin().x-SCALE_OFFSET, this->m_enSprite.getOrigin().y-SCALE_OFFSET);
+  #undef SCALE_OFFSET
 }
 
 void game::entity::Player::handleMove() {
@@ -237,6 +238,8 @@ void game::entity::init() {
   _monsterTexture_slime.loadFromImage(_monsterImage_slime);
 }
 
+/* Creates a slime data. This will be used to be pushed into the battle vector
+ * if needs be. */
 game::entity::Entity game::entity::createSlime() {
   game::entity::Entity slime;
   slime.f_setHealth(10);
@@ -245,11 +248,16 @@ game::entity::Entity game::entity::createSlime() {
 }
 
 sf::Sprite game::entity::sprite::sprite_slime() {
-  sf::Sprite s(_monsterTexture_slime);
-  #define loc_x
-  #define loc_y
+  /* Create the s sprite and set texture to slimes */
+  sf::Sprite s(game::asset::monster::getTexture_Slimes());
+  /* Define the locations of the pixels */
+  #define loc_x 0
+  #define loc_y 16
   /* TODO: left off here, need to load a slime texture into sprite */
-  //s.setTextureRect()
+  const sf::IntRect blueSlimeLoc(sf::Vector2i(6, 28), sf::Vector2i(16,16));
   #undef loc_x
   #undef loc_y
+  s.setTextureRect(blueSlimeLoc);
+  s.scale(sf::Vector2f(4,4));
+  return s;
 }
