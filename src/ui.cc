@@ -126,7 +126,7 @@ void game::ui::UI::set_menuTextsOrigin() {
 
 void game::ui::UI::set_menuTextsCenterOfUI() {
   auto v = win::getWin().getView();
-  static const auto c = this->menu_sprite[1];
+  const auto c = this->menu_sprite[1];
   float offset = 70;
   for(auto& i : this->ui_texts) {
     /* Window top is being defined as the origin of the window */
