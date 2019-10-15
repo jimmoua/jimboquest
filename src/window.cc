@@ -5,8 +5,8 @@
 namespace {
   static sf::RenderWindow _win;
   static sf::Event _eve;
-  constexpr unsigned short int res_x = 1600;
-  constexpr unsigned short int res_y = 900;
+  constexpr unsigned short int res_x = 640*1.5;
+  constexpr unsigned short int res_y = 480*1.5;
 
   /* The rectangle shape used for fade in effects. This animation effect is
    * special, so It will stay inside the scope of the window source file. */
@@ -26,12 +26,14 @@ const unsigned short int& game::win::getRes_y() {
 void game::win::init() {
 
   _win.create(sf::VideoMode(res_x, res_y), "Jimbo Quest", sf::Style::Close);
-  _win.setFramerateLimit(60u);
+  _win.setFramerateLimit(59);
   
   /* Set window position to the top left of the screen */
   _win.setPosition(sf::Vector2i(100,100));
   _win.clear(sf::Color::Black);
   _win.display();
+
+  r.setSize(sf::Vector2f(1e5, 1e5));
 
 }
 
@@ -48,8 +50,6 @@ void game::win::display() {
 
 namespace {
   void __FADE_IN_FUNCTION__() {
-    r.setPosition(_win.getView().getCenter().x-res_x/2, _win.getView().getCenter().y-res_y/2);
-    r.setSize(sf::Vector2f(_win.getSize().x+40, _win.getSize().y+40));
     fadeClock.restart();
     for(float alpha = 255.f; alpha >= 0;) {
       if(fadeClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(10).asMilliseconds()) {

@@ -35,7 +35,7 @@ namespace game {
         for(auto& i : this->menu_sprite) {
           i.setFillColor(sf::Color::Blue);
           i.setOutlineColor(sf::Color::White);
-          i.setOutlineThickness(3.f);
+          i.setOutlineThickness(1.f);
         }
       }
       
@@ -43,7 +43,7 @@ namespace game {
         sf::RectangleShape t;
         t.setFillColor(sf::Color::Blue);
         t.setOutlineColor(sf::Color::White);
-        t.setOutlineThickness(3.f);
+        t.setOutlineThickness(1.f);
         this->menu_sprite.push_back(t);
       }
 

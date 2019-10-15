@@ -29,11 +29,11 @@ void game::ui::init() {
   _ui[ENUM_UI::IN_GAME_PLAYER_STATUS] = &inGame_PlayerStatus;
 
   // BG where texts rests
-  titleScreen.menu_sprite[0].setSize(sf::Vector2f(300, 380));
-  titleScreen.menu_sprite[1].setSize(sf::Vector2f(280, 360));
+  titleScreen.menu_sprite[0].setSize(sf::Vector2f(game::win::getRes_x()/3,game::win::getRes_y()/2));
+  titleScreen.menu_sprite[1].setSize(sf::Vector2f(game::win::getRes_x()/3-10,game::win::getRes_y()/2-10));
   titleScreen.set_menuSpritesOrigin();
-  titleScreen.menu_sprite[0].setPosition(mid_x, mid_y+230);
-  titleScreen.menu_sprite[1].setPosition(mid_x, mid_y+230);
+  titleScreen.menu_sprite[0].setPosition(mid_x, mid_y + game::win::getRes_y()/6);
+  titleScreen.menu_sprite[1].setPosition(mid_x, mid_y + game::win::getRes_y()/6);
 
   // Create text and define their properties
   titleScreen.ui_texts.resize(4);
@@ -42,10 +42,12 @@ void game::ui::init() {
   titleScreen.ui_texts[2] = asset::createString("Exit");
   titleScreen.ui_texts[3] = asset::createString("Debug");
   titleScreen.set_menuTextsOrigin();
-  titleScreen.ui_texts[0].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+70);
-  titleScreen.ui_texts[1].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+70*2);
-  titleScreen.ui_texts[2].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+70*3);
-  titleScreen.ui_texts[3].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+70*4);
+
+  /* CUSTOM */
+  titleScreen.ui_texts[0].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+50);
+  titleScreen.ui_texts[1].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+50*2);
+  titleScreen.ui_texts[2].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+50*3);
+  titleScreen.ui_texts[3].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+50*4);
 
   /* In game UI texts */
   inGame.ui_texts.resize(5);
