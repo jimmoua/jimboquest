@@ -13,30 +13,12 @@ namespace {
 
   static void _run() {
     auto& UI = game::ui::getUI(game::ui::ENUM_UI::TITLESCREEN);
-    if(_counter == 0) {
-      UI.ui_texts[0].setFillColor(sf::Color::Yellow);
-      UI.ui_texts[1].setFillColor(sf::Color::White);
-      UI.ui_texts[2].setFillColor(sf::Color::White);
-      UI.ui_texts[3].setFillColor(sf::Color::White);
-    }
-    else if(_counter == 1) {
-      UI.ui_texts[0].setFillColor(sf::Color::White);
-      UI.ui_texts[1].setFillColor(sf::Color::Yellow);
-      UI.ui_texts[2].setFillColor(sf::Color::White);
-      UI.ui_texts[3].setFillColor(sf::Color::White);
-    }
-    else if(_counter == 2) {
-      UI.ui_texts[0].setFillColor(sf::Color::White);
-      UI.ui_texts[1].setFillColor(sf::Color::White);
-      UI.ui_texts[2].setFillColor(sf::Color::Yellow);
-      UI.ui_texts[3].setFillColor(sf::Color::White);
-    }
-    else if(_counter == 3) {
-      UI.ui_texts[0].setFillColor(sf::Color::White);
-      UI.ui_texts[1].setFillColor(sf::Color::White);
-      UI.ui_texts[2].setFillColor(sf::Color::White);
-      UI.ui_texts[3].setFillColor(sf::Color::Yellow);
-    }
+
+    UI.ui_texts[0].setFillColor(sf::Color::White);
+    UI.ui_texts[1].setFillColor(sf::Color::White);
+    UI.ui_texts[2].setFillColor(sf::Color::White);
+    UI.ui_texts[3].setFillColor(sf::Color::White);
+    UI.ui_texts[_counter].setFillColor(sf::Color::Yellow);
 
     while(game::win::getWin().pollEvent(game::win::getEv())) {
       if(game::win::getEv().type == sf::Event::Closed) {
