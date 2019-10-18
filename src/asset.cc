@@ -103,7 +103,7 @@ void game::asset::init() {
   static sf::Texture __playerfaceTexture__;
   __playerfaceTexture__.loadFromImage(__playerfaceImage__);
   _entityFaceSprite[game::asset::ENTITY_FACE::PLAYER].setTexture(__playerfaceTexture__);
-  _entityFaceSprite[game::asset::ENTITY_FACE::PLAYER].setScale(1, 0.75);
+  _entityFaceSprite[game::asset::ENTITY_FACE::PLAYER].setScale(0.75, 0.75);
 
   /* Load monster textures */
   static sf::Image _monsterImageSlime;
@@ -146,10 +146,10 @@ sf::Text game::asset::createString(const std::string s)
   sf::Text t;
   t.setFont(_font);
   t.setString(s);
-  t.setCharacterSize(24);
+  t.setCharacterSize(32);
   t.setFillColor(sf::Color::White);
   t.setOutlineColor(sf::Color::Black);
-  t.setOutlineThickness(2);
+  t.setOutlineThickness(2.5f);
   return t;
 }
 

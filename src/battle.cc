@@ -33,7 +33,9 @@ namespace {
   };
 
 }
-
+/* FUNCTION: initBattle()
+ * This inits the battle everytime there is an encounter. Sets up and populates
+ * the monster vectors */
 void game::initBattle() {
 
   /* The RNG battles are going to be based off the player's level
@@ -49,8 +51,8 @@ void game::initBattle() {
   sf::RectangleShape l_battleWindow[2];
   sf::RectangleShape l_battleWindow_Choices[2];
 
-  l_battleWindow[0].setSize(sf::Vector2f(700, 500));
-  l_battleWindow[1].setSize(sf::Vector2f(680, 480));
+  l_battleWindow[0].setSize(sf::Vector2f(game::win::getRes_x()/1.5, game::win::getRes_y()/1.7));
+  l_battleWindow[1].setSize(sf::Vector2f(l_battleWindow[0].getSize().x*game::ui::ui_SF_x, l_battleWindow[0].getSize().y*game::ui::ui_SF_y));
   for(auto& i : l_battleWindow) {
     i.setFillColor(sf::Color::Black);
     i.setOutlineThickness(3);
@@ -102,9 +104,9 @@ void game::initBattle() {
     * will then need an offset, since l_battleWindow is not the same as as the
     * view size */
    sf::View v = win::getWin().getView();
-   const auto offset = (v.getSize().x - l_battleWindow[0].getSize().x)/2;
+   const auto offset = l_battleWindow[1].getSize().x/_battleData::_monsterSprites.size();
    for(unsigned int i = 0; i < _battleData::_monsterSprites.size(); i++) {
-     _battleData::_monsterSprites[i].setPosition(v.getCenter());
+     _battleData::_monsterSprites[i].setPosition(l_battleWindow[1].getPosition());
    }
    while(true) {
      while(game::win::getWin().pollEvent(game::win::getEv())) {

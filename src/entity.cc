@@ -45,6 +45,8 @@ namespace {
   static sf::Image _monsterImage_slime;
   static sf::Texture _monsterTexture_slime;
 
+  static sf::Clock battleClock;
+
 } // end of anon namespace
 
 game::entity::Player& game::entity::getPl() {
@@ -199,6 +201,7 @@ void game::entity::Player::handleMove() {
         if(evSpInfo[i][j].ev == map_ns::TILE_EV::PORTAL) {
           //ani::fadeOut();
           map_ns::loadMap(evSpInfo[i][j].portalTransportLoc.first, evSpInfo[i][j].portalTransportLoc.second);
+          battleClock.restart();
           //ani::fadeIn();
           std::cout << "Index: " << i << " " << j << std::endl;
         }
@@ -209,7 +212,6 @@ void game::entity::Player::handleMove() {
 
   if (keyPressed) {
     /* Only initiate battle when the battleClock is over 3 seconds */
-    static sf::Clock battleClock;
     if(battleClock.getElapsedTime().asSeconds() >= sf::seconds(3).asSeconds()) {
       if(map_ns::getMapObjectByID(map_ns::getCurrentMapID())->_mapLevel == map_ns::MAP_LEVEL::DANGER_ZONE) {
         /* If the number generated is 10, we will initate battle. Battles, in
@@ -231,11 +233,6 @@ void game::entity::init() {
   _face_map_[_facedirection_::DOWN]  = __PLAYER_DOWN__;
   _face_map_[_facedirection_::LEFT]  = __PLAYER_LEFT__;
   _face_map_[_facedirection_::RIGHT] = __PLAYER_RIGHT__;
-
-  /* Define the slime image and texture here */
-  _monsterImage_slime.loadFromFile("data/entity/monster/slimes.png");
-  _monsterImage_slime.createMaskFromColor(sf::Color::Magenta);
-  _monsterTexture_slime.loadFromImage(_monsterImage_slime);
 }
 
 /* Creates a slime data. This will be used to be pushed into the battle vector
@@ -259,5 +256,6 @@ sf::Sprite game::entity::sprite::sprite_slime() {
   #undef loc_y
   s.setTextureRect(blueSlimeLoc);
   s.scale(sf::Vector2f(4,4));
+  game::asset::setOriginCenter(s);
   return s;
 }

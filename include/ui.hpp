@@ -9,6 +9,19 @@
 namespace game {
   namespace ui {
 
+    /* Title: sprite_menu creations
+     * There are two sprite_menu that are very important when considering that
+     * blue UI. Or whatever color I may change it to in the future. It is that
+     * when we make our sprites, the second sprite_menu in the vector is a
+     * little smaller so that we can create a border effect. In order to do
+     * this, multiple in the parameter by the ui_SF_* in order to set the size properly.
+     * 
+     *   someUI.sprite_menu[0].setSize(game::win::getRes_X, game::win::getRex_Y);
+     *   someUI.sprite_menu[1].setSize(someUI.sprite_menu[0].getSize().x*ui_SF_x, someUI.sprite_menu[0].getSize().y*ui_SF_y);
+     */
+    static constexpr float ui_SF_x = 0.95;
+    static constexpr float ui_SF_y = 0.93;
+
     /* enum class of UI */
     enum class ENUM_UI {
       TITLESCREEN,
@@ -30,12 +43,13 @@ namespace game {
       std::vector<sf::Text>   ui_texts;
 
       UI() {
-        /* The default ctor will create the UI */
+        /* The default ctor will create the UI. It does not specify the size, so
+         * when creating UI, we must specify the size of the UI window. */
         this->menu_sprite.resize(2);
         for(auto& i : this->menu_sprite) {
           i.setFillColor(sf::Color::Blue);
           i.setOutlineColor(sf::Color::White);
-          i.setOutlineThickness(1.f);
+          i.setOutlineThickness(3.f);
         }
       }
       
@@ -43,7 +57,7 @@ namespace game {
         sf::RectangleShape t;
         t.setFillColor(sf::Color::Blue);
         t.setOutlineColor(sf::Color::White);
-        t.setOutlineThickness(1.f);
+        t.setOutlineThickness(3.f);
         this->menu_sprite.push_back(t);
       }
 

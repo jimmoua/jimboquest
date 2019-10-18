@@ -18,8 +18,8 @@ namespace {
 
 void game::ui::init() {
 
-  const static int mid_x = win::getRes_x()/2;
-  const static int mid_y = win::getRes_y()/2;
+  const int mid_x = win::getRes_x()/2;
+  const int mid_y = win::getRes_y()/2;
 
   /* INIT UI */
 
@@ -29,8 +29,8 @@ void game::ui::init() {
   _ui[ENUM_UI::IN_GAME_PLAYER_STATUS] = &inGame_PlayerStatus;
 
   // BG where texts rests
-  titleScreen.menu_sprite[0].setSize(sf::Vector2f(game::win::getRes_x()/3,game::win::getRes_y()/2));
-  titleScreen.menu_sprite[1].setSize(sf::Vector2f(game::win::getRes_x()/3-10,game::win::getRes_y()/2-10));
+  titleScreen.menu_sprite[0].setSize(sf::Vector2f(game::win::getRes_x()/3,game::win::getRes_y()/3));
+  titleScreen.menu_sprite[1].setSize(sf::Vector2f(titleScreen.menu_sprite[0].getSize().x*game::ui::ui_SF_x,titleScreen.menu_sprite[0].getSize().y*game::ui::ui_SF_y));
   titleScreen.set_menuSpritesOrigin();
   titleScreen.menu_sprite[0].setPosition(mid_x, mid_y + game::win::getRes_y()/6);
   titleScreen.menu_sprite[1].setPosition(mid_x, mid_y + game::win::getRes_y()/6);
@@ -44,10 +44,10 @@ void game::ui::init() {
   titleScreen.set_menuTextsOrigin();
 
   /* CUSTOM */
-  titleScreen.ui_texts[0].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+50);
-  titleScreen.ui_texts[1].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+50*2);
-  titleScreen.ui_texts[2].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+50*3);
-  titleScreen.ui_texts[3].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+50*4);
+  titleScreen.ui_texts[0].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+45);
+  titleScreen.ui_texts[1].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+45*2);
+  titleScreen.ui_texts[2].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+45*3);
+  titleScreen.ui_texts[3].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+45*4);
 
   /* In game UI texts */
   inGame.ui_texts.resize(5);
@@ -60,8 +60,8 @@ void game::ui::init() {
   inGame.set_menuTextsCenterOfUI();
 
   /* IN GAME UI menu */
-  inGame.menu_sprite[0].setSize(sf::Vector2f(500,460));
-  inGame.menu_sprite[1].setSize(sf::Vector2f(480,440));
+  inGame.menu_sprite[0].setSize(sf::Vector2f(game::win::getRes_x()/2, game::win::getRes_y()/1.7));
+  inGame.menu_sprite[1].setSize(sf::Vector2f(inGame.menu_sprite[0].getSize().x*game::ui::ui_SF_x,inGame.menu_sprite[0].getSize().y*game::ui::ui_SF_y));
   inGame.set_menuSpritesOrigin();
 
   /* In game player status UI */
@@ -97,11 +97,24 @@ void game::ui::init() {
 
   p.anotherOne();  // status ui
   p.anotherOne();  // player face pic
-  inGame_PlayerStatus.menu_sprite[0].setSize(sf::Vector2f(800,580));
-  inGame_PlayerStatus.menu_sprite[1].setSize(sf::Vector2f(780,560));
-  inGame_PlayerStatus.menu_sprite[2].setSize(sf::Vector2f(390,280));
-  inGame_PlayerStatus.menu_sprite[3].setSize(sf::Vector2f(780,280));
+  inGame_PlayerStatus.menu_sprite[0].setSize(sf::Vector2f(game::win::getRes_x()/1.5, game::win::getRes_y()/1.5));
+  sf::Vector2f stat = sf::Vector2f(inGame_PlayerStatus.menu_sprite[0].getSize());
+  inGame_PlayerStatus.menu_sprite[1].setSize(sf::Vector2f(stat.x*game::ui::ui_SF_x, stat.y*game::ui::ui_SF_y));
+  inGame_PlayerStatus.menu_sprite[2].setSize(sf::Vector2f(stat.x*game::ui::ui_SF_x/2, stat.y*game::ui::ui_SF_y/2));
+  inGame_PlayerStatus.menu_sprite[3].setSize(sf::Vector2f(stat.x*game::ui::ui_SF_x, stat.y*game::ui::ui_SF_y/2));
+
+  inGame_PlayerStatus.menu_sprite[0].setFillColor(sf::Color::Transparent);
+  inGame_PlayerStatus.menu_sprite[1].setFillColor(sf::Color::Transparent);
+  inGame_PlayerStatus.menu_sprite[0].setOutlineColor(sf::Color::Transparent);
+  inGame_PlayerStatus.menu_sprite[1].setOutlineColor(sf::Color::Transparent);
+
+
+  //inGame_PlayerStatus.menu_sprite[0].setSize(sf::Vector2f(800,580));
+  //inGame_PlayerStatus.menu_sprite[1].setSize(sf::Vector2f(780,560));
+  //inGame_PlayerStatus.menu_sprite[2].setSize(sf::Vector2f(390,280));
+  //inGame_PlayerStatus.menu_sprite[3].setSize(sf::Vector2f(780,280));
   inGame_PlayerStatus.set_menuSpritesOrigin();
+  //inGame_PlayerStatus.menu_sprite[2].setPosition(game::win::getRes_x(), game::win::getRes_y());
   #undef p
 }
 
