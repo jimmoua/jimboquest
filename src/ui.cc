@@ -175,3 +175,58 @@ void game::entity::updatePlayerStatusUI() {
     statUI->ui_texts[i].setOutlineThickness(2.f);
   }
 }
+
+// Function that updates the in-game status UI menus
+void game::ui::updateUI_inGame_Status() {
+  // README: The following code was cut from debug.cc and pasted here for
+  // refactorign purposes. debug.cc is getting a litle bloated, and things that
+  // should not be there are there.
+
+  #define p game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS)
+  // Sets all the UI menus to the center. This is fine for the border
+  // and the main UI, but other status UI 2 and 3 need to be set to
+  // their locations.
+  p.set_menuPositionToCen();
+  p.menu_sprite[2].move(p.menu_sprite[2].getSize().x/2, -(p.menu_sprite[2].getSize().y/2));
+  p.menu_sprite[3].move(0, p.menu_sprite[3].getSize().y/2+3);
+
+  auto m_ui1 = &game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS).menu_sprite[1];
+  auto m_ui2 = &game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS).menu_sprite[2];
+  auto m_ui3 = &game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS).menu_sprite[3];
+  float statusMenuOffset2_x = m_ui2->getSize().x*0.1;
+  float statusMenuOffset2_y = m_ui2->getSize().y*0.15;
+
+  // Texts for the menu_ui[2]
+  p.ui_texts[0].setPosition(m_ui2->getPosition().x-m_ui2->getSize().x/2+statusMenuOffset2_x, m_ui2->getPosition().y-m_ui2->getSize().y/2+statusMenuOffset2_y*1);
+  p.ui_texts[1].setPosition(m_ui2->getPosition().x-m_ui2->getSize().x/2+statusMenuOffset2_x, m_ui2->getPosition().y-m_ui2->getSize().y/2+statusMenuOffset2_y*2);
+  p.ui_texts[2].setPosition(m_ui2->getPosition().x-m_ui2->getSize().x/2+statusMenuOffset2_x, m_ui2->getPosition().y-m_ui2->getSize().y/2+statusMenuOffset2_y*3);
+  p.ui_texts[3].setPosition(m_ui2->getPosition().x-m_ui2->getSize().x/2+statusMenuOffset2_x, m_ui2->getPosition().y-m_ui2->getSize().y/2+statusMenuOffset2_y*4);
+  p.ui_texts[4].setPosition(m_ui2->getPosition().x-m_ui2->getSize().x/2+statusMenuOffset2_x, m_ui2->getPosition().y-m_ui2->getSize().y/2+statusMenuOffset2_y*5);
+
+  // The offsets for the texts of the third status UI menu. This seems
+  // to work, although it can be improved. I'd rather not spend too
+  // much time trying to figure how which values would work best so
+  // that I can just get some texts to look nice.
+  float statusMenuOffset3_x = m_ui3->getSize().x*0.05;
+  float statusMenuOffset3_y = m_ui3->getSize().y*0.13;
+
+  // Texts for the menu_ui[3]
+  p.ui_texts[5].setPosition(m_ui3->getPosition().x-m_ui3->getSize().x/2+statusMenuOffset3_x, m_ui3->getPosition().y-m_ui3->getSize().y/2+statusMenuOffset3_y*1);
+  p.ui_texts[6].setPosition(m_ui3->getPosition().x-m_ui3->getSize().x/2+statusMenuOffset3_x, m_ui3->getPosition().y-m_ui3->getSize().y/2+statusMenuOffset3_y*2);
+  p.ui_texts[7].setPosition(m_ui3->getPosition().x-m_ui3->getSize().x/2+statusMenuOffset3_x, m_ui3->getPosition().y-m_ui3->getSize().y/2+statusMenuOffset3_y*3);
+  p.ui_texts[8].setPosition(m_ui3->getPosition().x-m_ui3->getSize().x/2+statusMenuOffset3_x, m_ui3->getPosition().y-m_ui3->getSize().y/2+statusMenuOffset3_y*4);
+  p.ui_texts[9].setPosition(m_ui3->getPosition().x-m_ui3->getSize().x/2+statusMenuOffset3_x, m_ui3->getPosition().y-m_ui3->getSize().y/2+statusMenuOffset3_y*5);
+  p.ui_texts[10].setPosition(m_ui3->getPosition().x-m_ui3->getSize().x/2+statusMenuOffset3_x, m_ui3->getPosition().y-m_ui3->getSize().y/2+statusMenuOffset3_y*6);
+
+  // Texts for menu_ui[3], spaced out like this because these aren't
+  // really player stats, but more like achievements.
+  p.ui_texts[11].setPosition(m_ui3->getPosition().x-3.3*statusMenuOffset3_x, m_ui3->getPosition().y-m_ui3->getSize().y/2+statusMenuOffset3_y*1);
+  p.ui_texts[12].setPosition(m_ui3->getPosition().x-3.3*statusMenuOffset3_x, m_ui3->getPosition().y-m_ui3->getSize().y/2+statusMenuOffset3_y*3);
+  p.ui_texts[13].setPosition(m_ui3->getPosition().x-3.3*statusMenuOffset3_x, m_ui3->getPosition().y-m_ui3->getSize().y/2+statusMenuOffset3_y*5);
+
+
+  //game::asset::getFaceSprite(game::asset::ENTITY_FACE::PLAYER).setPosition(c.getPosition().x-350, v.getCenter().y-250);
+  game::asset::getFaceSprite(game::asset::ENTITY_FACE::PLAYER).setPosition(sf::Vector2f(m_ui1->getPosition().x-m_ui1->getSize().x/2+statusMenuOffset3_x, m_ui1->getPosition().y-m_ui1->getSize().y/2));
+  //game::asset::getFaceSprite(game::asset::ENTITY_FACE::PLAYER).move(p.
+  #undef p
+}

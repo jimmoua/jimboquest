@@ -86,5 +86,14 @@ namespace game {
   }
 }
 
+// Functions to update the in-game menu are here. We want to have this because
+// the sf::View is always changing. Therefore, the game sprite menu positions
+// need to be changed according to the view.
+namespace game {
+  namespace ui {
+    void updateUI_inGame_Status();
+  }
+}
+
 
 #endif /* UI_HPP */
