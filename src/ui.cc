@@ -64,21 +64,11 @@ void game::ui::init() {
   inGame.menu_sprite[1].setSize(sf::Vector2f(inGame.menu_sprite[0].getSize().x*game::ui::ui_SF_x,inGame.menu_sprite[0].getSize().y*game::ui::ui_SF_y));
   inGame.set_menuSpritesOrigin();
 
-  /* In game player status UI */
-  /* --------------------------------------------------------------------------
-   * PLAYER NAME
-   * LEVEL
-   * health/healh
-   * mana/mana
-   * GOLD
-   *
-   *
-   *
-   *
-   * ------------------------------------------------------------------------*/
+  // In-game Player Status UI + Text
   #define p inGame_PlayerStatus
+  // Create 14 texts for the UI and then define their default values
   p.ui_texts.resize(14);
-  p.ui_texts[0] = asset::createString("Jimbo");  // Name
+  
   p.ui_texts[1] = asset::createString("lvl");    // Level
   p.ui_texts[2] = asset::createString("hp");     // Health
   p.ui_texts[3] = asset::createString("mp");     // Mana
@@ -95,26 +85,27 @@ void game::ui::init() {
   p.ui_texts[12] = asset::createString("ttl mon");   // ttl monsters slain
   p.ui_texts[13] = asset::createString("ttl exp");   // ttl exp earned
 
-  p.anotherOne();  // status ui
-  p.anotherOne();  // player face pic
+  // Create the status UI and a UI for the Erdrick's face.
+  p.anotherOne();
+  p.anotherOne();
+
+  // Set the size of the player status UI here
   inGame_PlayerStatus.menu_sprite[0].setSize(sf::Vector2f(game::win::getRes_x()/1.5, game::win::getRes_y()/1.5));
   sf::Vector2f stat = sf::Vector2f(inGame_PlayerStatus.menu_sprite[0].getSize());
   inGame_PlayerStatus.menu_sprite[1].setSize(sf::Vector2f(stat.x*game::ui::ui_SF_x, stat.y*game::ui::ui_SF_y));
   inGame_PlayerStatus.menu_sprite[2].setSize(sf::Vector2f(stat.x*game::ui::ui_SF_x/2, stat.y*game::ui::ui_SF_y/2));
   inGame_PlayerStatus.menu_sprite[3].setSize(sf::Vector2f(stat.x*game::ui::ui_SF_x, stat.y*game::ui::ui_SF_y/2));
 
-  inGame_PlayerStatus.menu_sprite[0].setFillColor(sf::Color::Transparent);
-  inGame_PlayerStatus.menu_sprite[1].setFillColor(sf::Color::Transparent);
-  inGame_PlayerStatus.menu_sprite[0].setOutlineColor(sf::Color::Transparent);
-  inGame_PlayerStatus.menu_sprite[1].setOutlineColor(sf::Color::Transparent);
+  // menu_sprite[0] = border
+  // menu_sprite[1] = main
+  // menu_sprite[2] = Character name, hp, mp, gold
+  // menu_sprite[3] = Character status and battle status
+  //inGame_PlayerStatus.menu_sprite[0].setFillColor(sf::Color::Blue);
+  //inGame_PlayerStatus.menu_sprite[1].setFillColor(sf::Color::Blue);
+  inGame_PlayerStatus.menu_sprite[2].setFillColor(sf::Color::Transparent);
+  inGame_PlayerStatus.menu_sprite[3].setFillColor(sf::Color::Transparent);
 
-
-  //inGame_PlayerStatus.menu_sprite[0].setSize(sf::Vector2f(800,580));
-  //inGame_PlayerStatus.menu_sprite[1].setSize(sf::Vector2f(780,560));
-  //inGame_PlayerStatus.menu_sprite[2].setSize(sf::Vector2f(390,280));
-  //inGame_PlayerStatus.menu_sprite[3].setSize(sf::Vector2f(780,280));
   inGame_PlayerStatus.set_menuSpritesOrigin();
-  //inGame_PlayerStatus.menu_sprite[2].setPosition(game::win::getRes_x(), game::win::getRes_y());
   #undef p
 }
 
@@ -180,6 +171,7 @@ void game::entity::updatePlayerStatusUI() {
   s[13]= "TTL  EXP  EARNED:  " + std::to_string(p.f_get_ttlBattles());
 
   for(size_t i = 0; i < statUI->ui_texts.size(); i++) {
-    statUI->ui_texts[i] = asset::createString(s[i], 24);
+    statUI->ui_texts[i] = asset::createString(s[i], 20);
+    statUI->ui_texts[i].setOutlineThickness(2.f);
   }
 }
