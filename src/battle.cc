@@ -83,17 +83,23 @@ void game::initBattle() {
    /* Get the view for the window so we can use it when displaying monsters. We
     * will then need an offset, since l_battleWindow is not the same as as the
     * view size */
-   sf::CircleShape foo; // debugging circle...
-   foo.setFillColor(sf::Color::Blue);
-   foo.setRadius(3);
-   sf::View v = win::getWin().getView();
-   const auto offset = l_battleWindow[1].getSize().x/_battleData::_monsterSprites.size();
+
+   // offset is going to be the amount of times we will move each sprite for
+   // every monster we have in the list. offset is important because it will be
+   // the spacing between each monster.
+   auto offset = l_battleWindow[1].getSize().x/(_battleData::_monsterSprites.size()+1);
+
+   // pos is going to be the position of battleWindow[1].
+   auto pos = l_battleWindow[1].getPosition(); 
+
+   // Set the initial position to the right of the battle window. We will then
+   // add pos.x to it. We do this so there is the correct amount of spacing
+   // between the monsters and the window.
+   auto initPos = pos.x + offset - l_battleWindow[1].getSize().x/2; 
 
    // Set the monster locations on the screen
    for(unsigned int i = 0; i < _battleData::_monsterSprites.size(); i++) {
-     // I think before setting the positions, I should probably get the center of the battle window
-     _battleData::_monsterSprites[i].setPosition(v.getCenter().x, v.getCenter().y);
-     foo.setPosition(_battleData::_monsterSprites[i].getPosition());
+     _battleData::_monsterSprites[i].setPosition(initPos + offset*(i), pos.y);
    }
    printf("The size is: ");
    std::cout << _battleData::_monsterSprites.size() << std::endl;
@@ -110,7 +116,6 @@ void game::initBattle() {
      for(auto& i : _battleData::_monsterSprites) {
        game::win::getWin().draw(i);
      }
-     game::win::getWin().draw(foo);
      game::win::getWin().display();
    }
 
