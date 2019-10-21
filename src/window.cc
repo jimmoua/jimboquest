@@ -5,8 +5,8 @@
 namespace {
   static sf::RenderWindow _win;
   static sf::Event _eve;
-  constexpr unsigned short int res_x = 640*1.5;
-  constexpr unsigned short int res_y = 480*1.5;
+  constexpr unsigned short int res_x = 960;
+  constexpr unsigned short int res_y = 720;
 
   /* The rectangle shape used for fade in effects. This animation effect is
    * special, so It will stay inside the scope of the window source file. */
