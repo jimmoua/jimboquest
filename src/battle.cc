@@ -24,8 +24,8 @@ namespace {
 
   /* Define some groups of possible monsters*/
   void _createSlimeGroup_3() {
-    if(!_battleData::_monsterList.empty() && !_battleData::_monsterSprites.empty()) {
-    }
+    _battleData::_monsterList.clear();
+    _battleData::_monsterSprites.clear();
     for(unsigned int i = 0; i < 3; i++ ) {
       _battleData::_monsterSprites.push_back(game::entity::sprite::sprite_slime());
       _battleData::_monsterList.push_back(game::entity::createSlime());
@@ -62,34 +62,14 @@ void game::initBattle() {
     i.setPosition(v.getCenter());
     i.move(0, -100);
   }
+  if(!_battleData::_monsterSprites.empty()) _battleData::_monsterSprites.clear();
+  if(!_battleData::_monsterList.empty()) _battleData::_monsterList.clear();
   /* ------------DO-NOT-MODIFY-ABOVE------------- */
 
-   /* Players will fight monsters depending on what their levels are. */
+   // Players will fight monsters depending on what their levels are.
    if(game::entity::getPl().f_getLevel() < 5) {
      /* EASY LEVELED MONSTERS */
-     std::cout << "Player level is less than 5, initiating easy leveled monsters\n";
      _createSlimeGroup_3();
-     std::cout << "Created slime group x3\n";
-   }
-   else if(game::entity::getPl().f_getLevel() >= 5) {
-     /* MEDIUM LEVELED MONSTERS */
-     std::cout << "Player level is geq than 5, initiating medium-leveled monsters\n";
-   }
-   else if(game::entity::getPl().f_getLevel() >= 10) {
-     /* HARD LEVELED MONSTERS */
-     std::cout << "Player level is geq than 10, initiating hard-leveled mosnters.\n";
-   }
-   else if(game::entity::getPl().f_getLevel() >= 15) {
-     /* EXTREME LEVELED MONSTERS */
-     std::cout << "Player level is geq than 15, initiating extreme-leveled monsters.\n";
-   }
-   else if(game::entity::getPl().f_getLevel() >= 20) {
-     /* SAVAGE LEVELED MONSTERS */
-     std::cout << "Player level is geq than 15, initiating savage-leveled monsters.\n";
-   }
-   else if(game::entity::getPl().f_getLevel() >= 25) {
-     /* LEGENDARY LEVELED MONSTERS */
-     std::cout << "Player level is geq than 25, initiating legendary-leveled monsters.\n";
    }
 
    /* While there are monsters, keep the fight going. The condition will be
@@ -103,11 +83,21 @@ void game::initBattle() {
    /* Get the view for the window so we can use it when displaying monsters. We
     * will then need an offset, since l_battleWindow is not the same as as the
     * view size */
+   sf::CircleShape foo; // debugging circle...
+   foo.setFillColor(sf::Color::Blue);
+   foo.setRadius(3);
    sf::View v = win::getWin().getView();
    const auto offset = l_battleWindow[1].getSize().x/_battleData::_monsterSprites.size();
+
+   // Set the monster locations on the screen
    for(unsigned int i = 0; i < _battleData::_monsterSprites.size(); i++) {
-     _battleData::_monsterSprites[i].setPosition(l_battleWindow[1].getPosition());
+     // I think before setting the positions, I should probably get the center of the battle window
+     _battleData::_monsterSprites[i].setPosition(v.getCenter().x, v.getCenter().y);
+     foo.setPosition(_battleData::_monsterSprites[i].getPosition());
    }
+   printf("The size is: ");
+   std::cout << _battleData::_monsterSprites.size() << std::endl;
+
    while(true) {
      while(game::win::getWin().pollEvent(game::win::getEv())) {
        if(game::win::getEv().key.code == sf::Keyboard::Escape) {
@@ -120,6 +110,7 @@ void game::initBattle() {
      for(auto& i : _battleData::_monsterSprites) {
        game::win::getWin().draw(i);
      }
+     game::win::getWin().draw(foo);
      game::win::getWin().display();
    }
 
