@@ -41,10 +41,6 @@ namespace {
   #undef X
   #undef Y
 
-  /* Monster textures/images/sprites here */
-  static sf::Image _monsterImage_slime;
-  static sf::Texture _monsterTexture_slime;
-
   static sf::Clock battleClock;
 
 } // end of anon namespace
@@ -248,14 +244,15 @@ sf::Sprite game::entity::sprite::sprite_slime() {
   /* Create the s sprite and set texture to slimes */
   sf::Sprite s(game::asset::monster::getTexture_Slimes());
   /* Define the locations of the pixels */
-  #define loc_x 0
-  #define loc_y 16
-  /* TODO: left off here, need to load a slime texture into sprite */
-  const sf::IntRect blueSlimeLoc(sf::Vector2i(6, 28), sf::Vector2i(16,16));
-  #undef loc_x
-  #undef loc_y
+  // Define the location and the size of the sprite
+  // The first parameter is where the slime sprite is in the sprite sheet.
+  // The second parameter is the size of the sprite.
+  const sf::IntRect blueSlimeLoc(sf::Vector2i(5, 27), sf::Vector2i(17,16));
   s.setTextureRect(blueSlimeLoc);
   s.scale(sf::Vector2f(4,4));
-  game::asset::setOriginCenter(s);
+  // We are setting origin to 8,8 because the size of the sprite image is 16,16.
+  // Since I want the origin to be in the middle of the sprite, I specify half
+  // the size of its sprite size (16 in this case) to be 8.
+  s.setOrigin(8,8);
   return s;
 }
