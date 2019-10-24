@@ -66,6 +66,22 @@ void game::initBattle() {
   if(!_battleData::_monsterList.empty()) _battleData::_monsterList.clear();
   /* ------------DO-NOT-MODIFY-ABOVE------------- */
 
+  ////////////////////////////////////////////////// 
+  //          Battle Choices UI Creation
+  ////////////////////////////////////////////////// 
+  l_battleWindow_Choices[0].setSize(sf::Vector2f(game::win::getRes_x()/1.5, game::win::getRes_y()/4));
+  // Did not multiply by ui_SF_y because it makes the border to small
+  l_battleWindow_Choices[1].setSize(sf::Vector2f(l_battleWindow_Choices[0].getSize().x*game::ui::ui_SF_x, l_battleWindow_Choices[0].getSize().y*.9));
+  for(auto& i : l_battleWindow_Choices) {
+    i.setFillColor(sf::Color::Black);
+    i.setOutlineThickness(3);
+    i.setOutlineColor(sf::Color::White);
+    game::asset::setOriginCenter(i);
+    sf::View v = game::win::getWin().getView();
+    i.setPosition(v.getCenter());
+    i.move(0, 220);
+  }
+
    // Players will fight monsters depending on what their levels are.
    if(game::entity::getPl().f_getLevel() < 5) {
      /* EASY LEVELED MONSTERS */
@@ -112,6 +128,8 @@ void game::initBattle() {
      }
      game::win::getWin().draw(l_battleWindow[0]);
      game::win::getWin().draw(l_battleWindow[1]);
+     game::win::getWin().draw(l_battleWindow_Choices[0]);
+     game::win::getWin().draw(l_battleWindow_Choices[1]);
      /* Set the monster positions relative to the window */
      for(auto& i : _battleData::_monsterSprites) {
        game::win::getWin().draw(i);
