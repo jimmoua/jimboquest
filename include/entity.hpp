@@ -63,10 +63,6 @@ namespace game {
         void f_setFaceDir(const _facedirection_& id) { this->m_CurrentFaceDir = id; }
 
         void f_SetName(const std::string n) { this->m_Name = n; }
-        void f_setRace(const asset::entity::RACE r) { this->m_Race = r; }
-        void f_setJobClass(const asset::entity::BASE_CLASS c) {
-          this->m_JobClass = c;
-        }
         
         /* Getters */
         std::string f_getName() const { return this->m_Name; }
@@ -106,8 +102,6 @@ namespace game {
         int m_ttlMonstersKilled = 0;
         int m_ttlExp = 0;
 
-        game::asset::entity::RACE       m_Race;
-        game::asset::entity::BASE_CLASS m_JobClass;
         _facedirection_ m_CurrentFaceDir = _facedirection_::DOWN;
     };
 
