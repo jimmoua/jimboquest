@@ -42,30 +42,11 @@ namespace game {
       std::vector<sf::RectangleShape> menu_sprite;  // The sprite behind text
       std::vector<sf::Text>   ui_texts;
 
-      UI() {
-        /* The default ctor will create the UI. It does not specify the size, so
-         * when creating UI, we must specify the size of the UI window. */
-        this->menu_sprite.resize(2);
-        for(auto& i : this->menu_sprite) {
-          i.setFillColor(sf::Color::Blue);
-          i.setOutlineColor(sf::Color::White);
-          i.setOutlineThickness(3.f);
-        }
-      }
+      UI();
       
-      void anotherOne() {
-        sf::RectangleShape t;
-        t.setFillColor(sf::Color::Blue);
-        t.setOutlineColor(sf::Color::White);
-        t.setOutlineThickness(3.f);
-        this->menu_sprite.push_back(t);
-      }
+      void anotherOne();
 
-      void set_menuSpritesOrigin() {
-        for(auto& i : this->menu_sprite) {
-          asset::setOriginCenter(i);
-        }
-      }
+      void set_menuSpritesOrigin();
       void set_menuTextsOrigin();
       void set_menuTextsCenterOfUI();
       void set_menuPositionToCen();

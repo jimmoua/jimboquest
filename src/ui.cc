@@ -230,3 +230,43 @@ void game::ui::updateUI_inGame_Status() {
   //game::asset::getFaceSprite(game::asset::ENTITY_FACE::PLAYER).move(p.
   #undef p
 }
+
+namespace game {
+  namespace ui {
+    ////////////////////////////////////////////////// 
+    //                  UI STRUCT
+    ////////////////////////////////////////////////// 
+
+    // Ctor
+    UI::UI() {
+      /* The default ctor will create the UI. It does not specify the size, so
+       * when creating UI, we must specify the size of the UI window. */
+      this->menu_sprite.resize(2);
+      for(auto& i : this->menu_sprite) {
+        i.setFillColor(sf::Color::Blue);
+        i.setOutlineColor(sf::Color::White);
+        i.setOutlineThickness(3.f);
+      }
+    }
+
+    // Funnction that creates another blue UI window
+    void UI::anotherOne() {
+      sf::RectangleShape t;
+      t.setFillColor(sf::Color::Blue);
+      t.setOutlineColor(sf::Color::White);
+      t.setOutlineThickness(3.f);
+      this->menu_sprite.push_back(t);
+    }
+
+    // Function to set the menu sprites to their origins
+    void UI::set_menuSpritesOrigin() {
+      for(auto& i : this->menu_sprite) {
+        asset::setOriginCenter(i);
+      }
+    }
+
+    ////////////////////////////////////////////////// 
+    //                  UI STRUCT
+    ////////////////////////////////////////////////// 
+  }
+}
