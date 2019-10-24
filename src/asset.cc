@@ -29,8 +29,14 @@ namespace {
 
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// INITIALIZER FUNCTION FOR game::asset
+////////////////////////////////////////////////////////////////////////////////
 void game::asset::init() {
 
+  ////////////////////////////////////////////////// 
+  // Load Music Lambda Function
+  ////////////////////////////////////////////////// 
   auto lambda_CreateMus = [](const MUSIC& id, const std::string& s) {
     _gameMusic[id] = new sf::Music;
     if(!_gameMusic[id]->openFromFile(s)) {
@@ -40,19 +46,30 @@ void game::asset::init() {
     }
   };
 
-  /* Font location. I am only using 1 font for my game, so no need for maps */
+  ////////////////////////////////////////////////// 
+  // GAME FONT
+  ////////////////////////////////////////////////// 
   _font.loadFromFile("data/font/oldschooladventures.ttf");
-  /* In this function, init the assets. This means get the string locs for
-   * assets and other useful things... */
+
+  ////////////////////////////////////////////////// 
+  // IMAGES
+  // Load images for scenenic purposes.
+  // These may include faces (may need seperation
+  // layer on), backgrounds, parallaxes, etc.
+  ////////////////////////////////////////////////// 
   _imgLoc[asset::img::TS_BG] = "data/bg/titlescreen.png";
   _imgLoc[asset::img::ACTOR_PNG] = "data/entity/actor/DQ_CharacterSet.png";
 
-  /* Game map locations */
+  ////////////////////////////////////////////////// 
+  // GAME MAP LOCATIONS USING STRINGS
+  ////////////////////////////////////////////////// 
   _mapLoc[MAP::TEST_MAP00] = "data/map/testMap00.txt";
   _mapLoc[MAP::TEST_MAP01] = "data/map/testMap01.txt";
   _mapLoc[MAP::TEST_MAP02] = "data/map/testMap02.txt";
 
-  /* Game textures load from file */
+  ////////////////////////////////////////////////// 
+  // GAME TEXTURES
+  ////////////////////////////////////////////////// 
   static sf::Image tileSetImage;
   tileSetImage.loadFromFile("data/tileset/DQ_Tileset.png");
   tileSetImage.createMaskFromColor(sf::Color(255,121,155));
@@ -63,29 +80,28 @@ void game::asset::init() {
   actorImage.createMaskFromColor(sf::Color::Magenta);
   _actorTexture.loadFromImage(actorImage);
 
-  /* musics for the game */
-
-  lambda_CreateMus(MUSIC::AMBI_WIND, "data/music/AMB_wind.ogg");
-  //lambda_CreateMus(MUSIC::TITLESCREEN, "data/music/BetweenWorlds.ogg");
+  ////////////////////////////////////////////////// 
+  // Music for the game, and definition of lambda
+  // function to dynamically load music
+  ////////////////////////////////////////////////// 
+  lambda_CreateMus(MUSIC::AMBI_WIND,   "data/music/AMB_wind.ogg");
   lambda_CreateMus(MUSIC::TITLESCREEN, "data/music/beauitful_memories.ogg");
 
-  /* Sound buffers for the game */
+  ////////////////////////////////////////////////// 
+  // Sound buffers For Environment/Menu/ETC
+  ////////////////////////////////////////////////// 
   static sf::SoundBuffer SB_menuHover;
   static sf::SoundBuffer SB_menuSubmit;
   static sf::SoundBuffer SB_menuCancel;
   static sf::SoundBuffer SB_menuAppear;
   static sf::SoundBuffer SB_menuDisappear;
-
-  /* Sounds for environment */
   static sf::SoundBuffer SB_env_ft_grass;
-
 
   SB_menuHover.loadFromFile("data/sound/sound_menu_hover.ogg");
   SB_menuSubmit.loadFromFile("data/sound/sound_menu_submit.ogg");
   SB_menuCancel.loadFromFile("data/sound/sound_menu_cancle.ogg");
   SB_menuAppear.loadFromFile("data/sound/sound_menu_appear.ogg");
   SB_menuDisappear.loadFromFile("data/sound/sound_menu_blocked.ogg");
-
   SB_env_ft_grass.loadFromFile("data/sound/env/ft_grass2.ogg");
 
   _gameSound[snd::MENU_HOVER].setBuffer(SB_menuHover);
@@ -96,7 +112,9 @@ void game::asset::init() {
   _gameSound[snd::FOOTSTEPS_GRASS].setBuffer(SB_env_ft_grass);
   _gameSound[snd::FOOTSTEPS_GRASS].setVolume(50);
 
-  /* Declare face data here */
+  ////////////////////////////////////////////////// 
+  // Player Face Data
+  ////////////////////////////////////////////////// 
   static sf::Image __playerfaceImage__;
   __playerfaceImage__.loadFromFile("data/entity/actor/face/roto.png");
   __playerfaceImage__.createMaskFromColor(sf::Color::Magenta);
@@ -105,7 +123,9 @@ void game::asset::init() {
   _entityFaceSprite[game::asset::ENTITY_FACE::PLAYER].setTexture(__playerfaceTexture__);
   _entityFaceSprite[game::asset::ENTITY_FACE::PLAYER].setScale(0.75, 0.75);
 
-  /* Load monster textures */
+  ////////////////////////////////////////////////// 
+  // Load monster images and textures
+  ////////////////////////////////////////////////// 
   static sf::Image _monsterImageSlime;
   _monsterImageSlime.loadFromFile("data/entity/monster/slimes.png");
   _monsterImageSlime.createMaskFromColor(sf::Color::Magenta);
