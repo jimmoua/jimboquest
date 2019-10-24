@@ -274,3 +274,14 @@ const game::asset::MAP& game::map_ns::getCurrentMapID() {
 void game::map_ns::setMapID(const game::asset::MAP& ID) {
   currentMap = ID;
 }
+
+namespace game {
+  namespace map_ns {
+    MapInfo::MapInfo() { }
+    MapInfo::MapInfo(const game::asset::MAP& ID, const std::string& s, game::map_ns::MAP_LEVEL ml) {
+      this->m_mapID = ID;
+      this->m_mapName = s;
+      this->_mapLevel = ml;
+    }
+  }
+}
