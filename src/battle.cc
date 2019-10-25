@@ -8,21 +8,29 @@
 
 namespace {
 
-  /* The battle data. Here will contain sprites, vectors, etc to properly
-   * display and handle logics of battle */
+  ////////////////////////////////////////////////// 
+  // Battle Data Namespace
+  //
+  // Contains monster list and monster sprite
+  // vectors, and pretty much anything that displays
+  // when a battle is initialized.
+  ////////////////////////////////////////////////// 
   namespace _battleData {
-    /* Monster list vector
-     * For now, let's keep the list simple and only set singleton sets of
-     *   common enemy monsters. */
+    // Monster list vector.
+    //
+    // For now, let's keep the list simple and only set singleton sets of
+    // common enemy monsters.
     static std::vector<game::entity::Entity> _monsterList;
 
-    /* This will be the monster sprites vector to draw on the screen */
+    // This will be the monster sprites vector to draw on the screen
     static std::vector<sf::Sprite> _monsterSprites;
 
   }
 
 
-  /* Define some groups of possible monsters*/
+  ////////////////////////////////////////////////// 
+  //              MONSTER GROUPS
+  ////////////////////////////////////////////////// 
   void _createSlimeGroup_3() {
     _battleData::_monsterList.clear();
     _battleData::_monsterSprites.clear();
@@ -123,20 +131,45 @@ void game::initBattle() {
   printf("The size is: ");
   std::cout << _battleData::_monsterSprites.size() << std::endl;
 
+  // Create some text for the choices that player is allowed to do during a
+  // battle. Also define their positions.
+  sf::Text text_fight   = game::asset::createString("Fight");
+  sf::Text text_flee    = game::asset::createString("Flee");
+  sf::Text text_ability = game::asset::createString("Abilities");
+  text_fight.setPosition(game::win::getWin().getView().getCenter().x, game::win::getWin().getView().getCenter().y);
+  text_flee.setPosition(game::win::getWin().getView().getCenter().x, game::win::getWin().getView().getCenter().y);
+  text_ability.setPosition(game::win::getWin().getView().getCenter().x, game::win::getWin().getView().getCenter().y);
+  // Moving the Y by increments of 50 seem to work OK. Unless I change the
+  // resolution of the game again, I should not have to modify these values.
+  text_fight.move(-290,150);
+  text_flee.move(-290,200);
+  text_ability.move(-290,250);
+
   while(true) {
     while(game::win::getWin().pollEvent(game::win::getEv())) {
       if(game::win::getEv().key.code == sf::Keyboard::Escape) {
         return;
       }
     }
+    // First draw the battle windows
     game::win::getWin().draw(l_battleWindow[0]);
     game::win::getWin().draw(l_battleWindow[1]);
+
+    // Then draw the choices UI
     game::win::getWin().draw(l_battleWindow_Choices[0]);
     game::win::getWin().draw(l_battleWindow_Choices[1]);
-    /* Set the monster positions relative to the window */
+
+
+    // Draw the monsters
     for(auto& i : _battleData::_monsterSprites) {
       game::win::getWin().draw(i);
     }
+
+    // Draw the battle texts
+    game::win::getWin().draw(text_fight);
+    game::win::getWin().draw(text_flee);
+    game::win::getWin().draw(text_ability);
+
     game::win::getWin().display();
   }
 
