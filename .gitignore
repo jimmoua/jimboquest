@@ -2,3 +2,5 @@
 *.out
 *.o
 tags
+CMakeFiles/*
+cmake_install.cmake
