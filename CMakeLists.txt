@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 2.8)
 include_directories(include)
 file(GLOB sources src/*.c*)
 
@@ -9,3 +10,5 @@ add_executable(run.out ${sources})
 
 target_link_libraries(run.out pthread sfml-system sfml-window sfml-audio
   sfml-graphics)
+
+add_definitions("-Wfatal-errors")
