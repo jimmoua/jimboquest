@@ -145,7 +145,9 @@ void game::initBattle() {
   text_flee.move(-290,200);
   text_ability.move(-290,250);
 
-  while(true) {
+  // While there are monsters in the list, keep looping the battle. Monsters
+  // will only be removed from the list when they die.
+  while(!_battleData::_monsterList.empty()) {
     while(game::win::getWin().pollEvent(game::win::getEv())) {
       if(game::win::getEv().key.code == sf::Keyboard::Escape) {
         return;
