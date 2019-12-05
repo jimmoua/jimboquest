@@ -6,7 +6,6 @@
 #include "ui.hpp"
 #include "animations.hpp"
 #include <thread>
-#include <random>
 
 namespace {
   // By default, state is in title screen
@@ -62,9 +61,9 @@ std::vector<std::thread>& game::thread_vector() {
   return __thread_vector__;
 }
 
-int game::genRand(int min, int max) {
-  std::random_device rd;
-  std::mt19937 seed(rd());
-  std::uniform_int_distribution<> rand(min, max);
-  return static_cast<int>(rand(seed));
-}
+//int game::genRand(int min, int max) {
+  //std::random_device rd;
+  //std::mt19937 seed(rd());
+  //std::uniform_int_distribution<> rand(min, max);
+  //return static_cast<int>(rand(seed));
+//}

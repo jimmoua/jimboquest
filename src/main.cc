@@ -1,6 +1,7 @@
 #include "game.hpp"
 
 int main() {
+  srand(time(NULL));
   game::init();
   game::run();
   /* If we have threads going on, wait for them before closing the game */

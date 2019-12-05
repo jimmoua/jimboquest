@@ -21,7 +21,9 @@ constexpr static int __PORTAL_OFFSET__ = 15;      // For portal offset
 
 namespace game {
 
-  int genRand(int min, int max);
+  static int genRand(int min, int max) {
+    return rand()%max+min;
+  }
 
   std::vector<std::thread>& thread_vector();
 
