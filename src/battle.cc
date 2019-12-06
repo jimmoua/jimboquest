@@ -94,7 +94,7 @@ void game::initBattle() {
   // Generate the monsters to fight based on the
   // player's level
   ////////////////////////////////////////////////// 
-  if(game::entity::getPl().f_getLevel() < 5) {
+  if(game::entity::getPl().m_Level < 5) {
     /* EASY LEVELED MONSTERS */
     _createSlimeGroup_3();
   }
