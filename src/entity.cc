@@ -14,7 +14,7 @@ namespace {
   #define X 24       // The character sprite is 24 px wide
   #define Y 16       // the character sprite is 16 px tall
 
-  static std::map<game::entity::_facedirection_, const sf::IntRect*> _face_map_;
+  static std::map<game::entity::FaceDirection, const sf::IntRect*> face_map;
 
   const static sf::IntRect __PLAYER_UP__ [] = {
     sf::IntRect(X*0+O,Y*1,X-O2,Y),
@@ -97,13 +97,13 @@ void game::entity::Player::handleMove() {
 
   auto animatePlayer = [this]() -> void {
     if(animationClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(300).asMilliseconds()) {
-      this->m_enSprite.setTextureRect(_face_map_[this->f_getFaceDir()][0]);
+      this->m_enSprite.setTextureRect(face_map[this->m_CurrentFaceDir][0]);
       if(animationClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(600).asMilliseconds()) {
-        this->m_enSprite.setTextureRect(_face_map_[this->f_getFaceDir()][1]);
+        this->m_enSprite.setTextureRect(face_map[this->m_CurrentFaceDir][1]);
         if(animationClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(900).asMilliseconds()) {
-          this->m_enSprite.setTextureRect(_face_map_[this->f_getFaceDir()][2]);
+          this->m_enSprite.setTextureRect(face_map[this->m_CurrentFaceDir][2]);
             if(animationClock.getElapsedTime().asMilliseconds() >= sf::milliseconds(1200).asMilliseconds()) {
-              this->m_enSprite.setTextureRect(_face_map_[this->f_getFaceDir()][1]);
+              this->m_enSprite.setTextureRect(face_map[this->m_CurrentFaceDir][1]);
               animationClock.restart();
             }
         }
@@ -112,12 +112,12 @@ void game::entity::Player::handleMove() {
   };
 
   /* cV = collisions vector */
-  auto cV = map_ns::getMapObjectByID(map_ns::getCurrentMapID())->_map_lay02_S;
+  auto& cV = map_ns::getMapObjectByID(map_ns::getCurrentMapID())->_map_lay02_S;
 
   float ms = 3;
   const sf::Vector2f good = this->m_enSprite.getPosition();
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
-    ms+=2; // speed boost
+    ms+=3; // speed boost
     asset::getSound(asset::snd::FOOTSTEPS_GRASS).setPitch(1.6);
   }
   else {
@@ -127,8 +127,8 @@ void game::entity::Player::handleMove() {
     if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
       asset::getSound(asset::snd::FOOTSTEPS_GRASS).play();
     }
-    if(this->f_getFaceDir() != _facedirection_::UP) {
-      this->f_setFaceDir( _facedirection_::UP );
+    if(this->m_CurrentFaceDir != FaceDirection::UP) {
+      this->m_CurrentFaceDir = FaceDirection::UP;
       this->m_enSprite.setTextureRect(__PLAYER_UP__[0]);
     }
     this->m_enSprite.move(0, -ms);
@@ -138,9 +138,9 @@ void game::entity::Player::handleMove() {
     if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
       asset::getSound(asset::snd::FOOTSTEPS_GRASS).play();
     }
-    if(this->f_getFaceDir() != _facedirection_::DOWN) {
+    if(this->m_CurrentFaceDir != FaceDirection::DOWN) {
       this->m_enSprite.setTextureRect(__PLAYER_DOWN__[0]);
-      this->f_setFaceDir( _facedirection_::DOWN );
+      this->m_CurrentFaceDir = FaceDirection::DOWN;
     }
     this->m_enSprite.move(0, ms);
     keyPressed = true;
@@ -149,9 +149,9 @@ void game::entity::Player::handleMove() {
     if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
       asset::getSound(asset::snd::FOOTSTEPS_GRASS).play();
     }
-    if(this->f_getFaceDir() != _facedirection_::LEFT) {
+    if(this->m_CurrentFaceDir != FaceDirection::LEFT) {
       this->m_enSprite.setTextureRect(__PLAYER_LEFT__[0]);
-      this->f_setFaceDir( _facedirection_::LEFT );
+      this->m_CurrentFaceDir = FaceDirection::LEFT;
     }
     this->m_enSprite.move(-ms, 0);
     keyPressed = true;
@@ -160,9 +160,9 @@ void game::entity::Player::handleMove() {
     if(asset::getSound(asset::snd::FOOTSTEPS_GRASS).getStatus() != sf::Sound::Status::Playing) {
       asset::getSound(asset::snd::FOOTSTEPS_GRASS).play();
     }
-    if(this->f_getFaceDir() != _facedirection_::RIGHT) {
+    if(this->m_CurrentFaceDir != FaceDirection::RIGHT) {
       this->m_enSprite.setTextureRect(__PLAYER_RIGHT__[0]);
-      this->f_setFaceDir( _facedirection_::RIGHT );
+      this->m_CurrentFaceDir = FaceDirection::RIGHT;
     }
     this->m_enSprite.move(ms, 0);
     keyPressed = true;
@@ -188,8 +188,8 @@ void game::entity::Player::handleMove() {
 
   /* Check for portal collisiosn */
   auto* mapObj = map_ns::getMapObjectByID(map_ns::getCurrentMapID());
-  auto evSp = mapObj->_mapEvV; // Sprites
-  auto evSpInfo = mapObj->evV; // Struct info on event sprite (parallel arrays)
+  const auto& evSp = mapObj->_mapEvV; // Sprites
+  const auto& evSpInfo = mapObj->evV; // Struct info on event sprite (parallel arrays)
   for(int i = 0; i < mapObj->_mapSize.x; i++) {
     for(int j = 0; j < mapObj->_mapSize.y; j++) {
 
@@ -225,18 +225,18 @@ void game::entity::Player::handleMove() {
 
 void game::entity::init() {
   /* Define face character sprite facing direction here */
-  _face_map_[_facedirection_::UP]    = __PLAYER_UP__;
-  _face_map_[_facedirection_::DOWN]  = __PLAYER_DOWN__;
-  _face_map_[_facedirection_::LEFT]  = __PLAYER_LEFT__;
-  _face_map_[_facedirection_::RIGHT] = __PLAYER_RIGHT__;
+  face_map[FaceDirection::UP]    = __PLAYER_UP__;
+  face_map[FaceDirection::DOWN]  = __PLAYER_DOWN__;
+  face_map[FaceDirection::LEFT]  = __PLAYER_LEFT__;
+  face_map[FaceDirection::RIGHT] = __PLAYER_RIGHT__;
 }
 
 /* Creates a slime data. This will be used to be pushed into the battle vector
  * if needs be. */
 game::entity::Entity game::entity::createSlime() {
   game::entity::Entity slime;
-  slime.f_setHealth(10);
-  slime.f_setGold(3);
+  slime.m_Health = 10;
+  slime.m_Gold = 10;
   return slime;
 }
 

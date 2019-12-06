@@ -155,20 +155,20 @@ void game::entity::updatePlayerStatusUI() {
   auto statUI = &game::ui::getUI(game::ui::ENUM_UI::IN_GAME_PLAYER_STATUS);
   auto p = game::entity::getPl();
   std::string s[statUI->ui_texts.size()];
-  s[0] = "NAME:  " + p.f_getName();
-  s[1] = "LVL:  " + std::to_string(p.f_getLevel());
-  s[2] = "HP:  " + std::to_string(p.f_getHealth()) + "/" + std::to_string(p.f_getMaxHealth());
-  s[3] = "MP:  " + std::to_string(p.f_getMana()) + "/" + std::to_string(p.f_getMaxMana());
-  s[4] = "GOLD:  " + std::to_string(p.f_getGold()) + "  G";
-  s[5] = "STR:  " + std::to_string(p.f_getStr());
-  s[6] = "DEX:  " + std::to_string(p.f_getDex());
-  s[7] = "INT:  " + std::to_string(p.f_getInt());
-  s[8] = "DEF:  " + std::to_string(p.f_getDef());
-  s[9] = "LUK:  " + std::to_string(p.f_getLuck());
-  s[10]= "AGI:  " + std::to_string(p.f_getAgil());
-  s[11]= "BATTLES  FOUGHT:  " + std::to_string(p.f_get_ttlBattles());
-  s[12]= "MONSTERS  SLAIN:  " + std::to_string(p.f_get_ttlMonKill());
-  s[13]= "TTL  EXP  EARNED:  " + std::to_string(p.f_get_ttlBattles());
+  s[0] = "NAME:  " + p.m_Name;
+  s[1] = "LVL:  " + std::to_string(p.m_Level);
+  s[2] = "HP:  " + std::to_string(p.m_Health) + "/" + std::to_string(p.m_maxHealth);
+  s[3] = "MP:  " + std::to_string(p.m_Mana) + "/" + std::to_string(p.m_maxMana);
+  s[4] = "GOLD:  " + std::to_string(p.m_Gold) + "  G";
+  s[5] = "STR:  " + std::to_string(p.m_Str);
+  s[6] = "DEX:  " + std::to_string(p.m_Dex);
+  s[7] = "INT:  " + std::to_string(p.m_Int);
+  s[8] = "DEF:  " + std::to_string(p.m_def);
+  s[9] = "LUK:  " + std::to_string(p.m_luck);
+  s[10]= "AGI:  " + std::to_string(p.m_agil);
+  s[11]= "BATTLES  FOUGHT:  " + std::to_string(p.m_ttlBattles);
+  s[12]= "MONSTERS  SLAIN:  " + std::to_string(p.m_ttlMonstersKilled);
+  s[13]= "TTL  EXP  EARNED:  " + std::to_string(p.m_ttlExp);
 
   for(size_t i = 0; i < statUI->ui_texts.size(); i++) {
     statUI->ui_texts[i] = asset::createString(s[i], 20);

@@ -28,7 +28,7 @@ void game::debug::run() {
   /* Create the player object */
   game::entity::getPl() = game::entity::Player("Erdrick",100,100,20,10,30);
   game::entity::updatePlayerStatusUI();
-  std::cout << "Created player: " << game::entity::getPl().f_getName() << std::endl;
+  std::cout << "Created player: " << game::entity::getPl().m_Name << std::endl;
 
   /* Load the default map */
   game::map_ns::loadMap(game::asset::MAP::TEST_MAP00, sf::Vector2f(2, 2));

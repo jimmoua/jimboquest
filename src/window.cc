@@ -26,12 +26,7 @@ const unsigned short int& game::win::getRes_y() {
 void game::win::init() {
 
   _win.create(sf::VideoMode(res_x, res_y), "Jimbo Quest", sf::Style::Close);
-  _win.setVerticalSyncEnabled(true);
-
-  _win.setPosition(sf::Vector2i(100,100));
-  _win.clear(sf::Color::Black);
-  _win.display();
-
+  _win.setFramerateLimit(60);
   r.setSize(sf::Vector2f(1e5, 1e5));
 
 }

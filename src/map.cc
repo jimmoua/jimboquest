@@ -242,7 +242,6 @@ void game::map_ns::loadMap(const game::asset::MAP& mapID, const sf::Vector2f pla
   ani::fadeOut();
   entity::getPl().m_enSprite.setPosition(playerPos.x*_SLOC, playerPos.y*_SLOC);
   setMapID(mapID);
-  //ani::fadeInMAP();
   game::ani::fadeIn();
 }
 
@@ -250,13 +249,13 @@ void game::map_ns::displayMap_L1() {
 
   /* Clear the screen black */
   win::getWin().clear(sf::Color::Black);
-  for(auto& i : getMapObjectByID(currentMap)->_map_lay01_S) {
-    for(auto& j : i) {
+  for(const auto& i : getMapObjectByID(currentMap)->_map_lay01_S) {
+    for(const auto& j : i) {
       win::getWin().draw(j);
     }
   }
-  for(auto& i : getMapObjectByID(currentMap)->_mapEvV) {
-    for(auto& j : i) {
+  for(const auto& i : getMapObjectByID(currentMap)->_mapEvV) {
+    for(const auto& j : i) {
       win::getWin().draw(j);
     }
   }
