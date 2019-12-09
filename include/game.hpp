@@ -21,7 +21,7 @@ constexpr static int __PORTAL_OFFSET__ = 15;      // For portal offset
 
 namespace game {
 
-  static int genRand(int min, int max) {
+  inline int genRand(int min, int max) {
     return rand()%max+min;
   }
 
