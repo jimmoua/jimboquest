@@ -237,6 +237,7 @@ game::entity::Entity game::entity::createSlime() {
   game::entity::Entity slime;
   slime.m_Health = 10;
   slime.m_Gold = 10;
+  slime.m_Name = "Slime";
   return slime;
 }
 
