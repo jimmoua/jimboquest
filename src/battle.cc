@@ -73,7 +73,7 @@ void game::initBattle() {
   sf::RectangleShape l_battleWindow_Choices[2];
 
   l_battleWindow[0].setSize(sf::Vector2f(game::win::getRes_x()/1.5, game::win::getRes_y()/1.7));
-  l_battleWindow[1].setSize(sf::Vector2f(l_battleWindow[0].getSize().x*game::ui::ui_SF_x, l_battleWindow[0].getSize().y*game::ui::ui_SF_y));
+  l_battleWindow[1].setSize(sf::Vector2f(l_battleWindow[0].getSize().x-game::ui::ui_SF_x, l_battleWindow[0].getSize().y-game::ui::ui_SF_y));
   for(auto& i : l_battleWindow) {
     i.setFillColor(sf::Color::Black);
     i.setOutlineThickness(3);
@@ -92,7 +92,7 @@ void game::initBattle() {
   ////////////////////////////////////////////////// 
   l_battleWindow_Choices[0].setSize(sf::Vector2f(game::win::getRes_x()/1.5, game::win::getRes_y()/4));
   // Did not multiply by ui_SF_y because it makes the border to small
-  l_battleWindow_Choices[1].setSize(sf::Vector2f(l_battleWindow_Choices[0].getSize().x*game::ui::ui_SF_x, l_battleWindow_Choices[0].getSize().y*.9));
+  l_battleWindow_Choices[1].setSize(sf::Vector2f(l_battleWindow_Choices[0].getSize().x-game::ui::ui_SF_x, l_battleWindow_Choices[0].getSize().y*.9));
   for(auto& i : l_battleWindow_Choices) {
     i.setFillColor(sf::Color::Black);
     i.setOutlineThickness(3);
