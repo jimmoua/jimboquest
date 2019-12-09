@@ -4,7 +4,6 @@
 #include "entity.hpp"
 #include "animations.hpp"
 
-
 namespace {
 
   /* Current map enum */
@@ -46,7 +45,7 @@ void game::map_ns::init() {
     std::ifstream infile;
     infile.open(mapName.c_str());
     if(!infile) {
-      std::cerr << "Unable to open map: " << mapName << std::endl;
+      std::clog << "Unable to open map: " << mapName << std::endl;
       exit(1);
     }
     size_t row, col;
@@ -166,7 +165,7 @@ void game::map_ns::init() {
           mapObj->_mapEvV[i][j].setColor(sf::Color(0,0,0,0));
           #define O 10   // portal offset (change above if change here)
           mapObj->_mapEvV[i][j].setPosition(_SLOC*(j)+O*3, _SLOC*(i)+O*3);
-          std::cout << "Index of portal is " << i << " " << j << std::endl;
+          std::clog << "Index of portal for map " << mapName << ": " << '[' << i << ',' << j << ']' << std::endl;
           mapObj->evV[i][j].ev = game::map_ns::TILE_EV::PORTAL;
           #undef O
         }
@@ -175,9 +174,7 @@ void game::map_ns::init() {
         }
       }
     }
-
-    std::clog << "Successfully created map: " << mapName << "\n\n";
-
+    std::clog << "Created map: " << mapName << std::endl;
   };
 
   /* Map the object to a std::map */

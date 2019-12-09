@@ -195,18 +195,16 @@ void game::entity::Player::handleMove() {
 
       if(pSpriteGB.intersects(evSp[i][j].getGlobalBounds())) {
         if(evSpInfo[i][j].ev == map_ns::TILE_EV::PORTAL) {
-          //ani::fadeOut();
           map_ns::loadMap(evSpInfo[i][j].portalTransportLoc.first, evSpInfo[i][j].portalTransportLoc.second);
           battleClock.restart();
-          //ani::fadeIn();
-          std::cout << "Index: " << i << " " << j << std::endl;
+          std::clog << "Moved onto map with ID: " << map_ns::getMapObjectByID(map_ns::getCurrentMapID())->m_getName() << std::endl;
+          std::clog << "Map index: [" << i << ", " << j << "]" << std::endl;
         }
       }
-
     }
   }
 
-  if (keyPressed) {
+  if(keyPressed) {
     /* Only initiate battle when the battleClock is over 3 seconds */
     if(battleClock.getElapsedTime().asSeconds() >= sf::seconds(3).asSeconds()) {
       if(map_ns::getMapObjectByID(map_ns::getCurrentMapID())->_mapLevel == map_ns::MAP_LEVEL::DANGER_ZONE) {

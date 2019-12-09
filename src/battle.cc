@@ -5,14 +5,7 @@
 #include "battle.hpp"
 #include "ui.hpp"
 #include "game.hpp"
-#include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/System/Sleep.hpp>
-#include <SFML/System/Time.hpp>
-#include <SFML/System/Vector2.hpp>
-#include <SFML/Window/Event.hpp>
-#include <SFML/Window/Keyboard.hpp>
+#include <SFML/Graphics.hpp>
 
 namespace {
 
@@ -104,7 +97,6 @@ void game::initBattle() {
   //          Battle Choices UI Creation
   ////////////////////////////////////////////////// 
   l_battleWindow_Choices[0].setSize(sf::Vector2f(game::win::getRes_x()/1.5, game::win::getRes_y()/4));
-  // Did not multiply by ui_SF_y because it makes the border to small
   l_battleWindow_Choices[1].setSize(sf::Vector2f(l_battleWindow_Choices[0].getSize().x-game::ui::ui_SF_x, l_battleWindow_Choices[0].getSize().y*.9));
   for(auto& i : l_battleWindow_Choices) {
     i.setFillColor(sf::Color::Black);
@@ -154,8 +146,8 @@ void game::initBattle() {
   for(unsigned int i = 0; i < battleData::monsterSprites.size(); i++) {
     battleData::monsterSprites[i].setPosition(initPos + offset*(i), pos.y);
   }
-  printf("The size is: ");
-  std::cout << battleData::monsterSprites.size() << std::endl;
+
+  std::clog << "Monster list size is: " << battleData::monsterList.size() << std::endl;
 
   // Create some text for the choices that player is allowed to do during a
   // battle. Also define their positions.
@@ -227,6 +219,9 @@ void game::initBattle() {
               break;
           }
         }
+        //text_fight.setFillColor(sf::Color::Yellow);
+        //text_flee.setFillColor(sf::Color::White);
+        //text_ability.setFillColor(sf::Color::White);
         ////////////////////////////////////////////////// 
         // CHOICE FIGHT
         ////////////////////////////////////////////////// 
@@ -275,7 +270,7 @@ void game::initBattle() {
           }
         }
         else if(selected_choice == battle_choice::FLEE) {
-          printf("Fleeing\n");
+          std::clog << "Fleeing\n";
           return;
         }
       }
