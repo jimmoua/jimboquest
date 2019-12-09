@@ -5,19 +5,21 @@
 
 namespace {
 
-  static unsigned short int _counter = 0; /* 1 = start
-                                             2 = load
-                                             3 = exit
-                                             4 = debug */
+
+  enum class choices {
+    START,LOAD,EXIT
+  };
+
+  // _counter corresponds to integer value of casted choices above
+  static int _counter = 0;
 
 
   static void _run() {
     auto& UI = game::ui::getUI(game::ui::ENUM_UI::TITLESCREEN);
 
-    UI.ui_texts[0].setFillColor(sf::Color::White);
-    UI.ui_texts[1].setFillColor(sf::Color::White);
-    UI.ui_texts[2].setFillColor(sf::Color::White);
-    UI.ui_texts[3].setFillColor(sf::Color::White);
+    UI.ui_texts[static_cast<int>(choices::START)].setFillColor(sf::Color::White);
+    UI.ui_texts[static_cast<int>(choices::LOAD)].setFillColor(sf::Color::White);
+    UI.ui_texts[static_cast<int>(choices::EXIT)].setFillColor(sf::Color::White);
     UI.ui_texts[_counter].setFillColor(sf::Color::Yellow);
 
     while(game::win::getWin().pollEvent(game::win::getEv())) {
@@ -28,40 +30,30 @@ namespace {
         switch(game::win::getEv().key.code) {
           case sf::Keyboard::S:
             game::asset::getSound(game::asset::snd::MENU_HOVER).play();
-            if(_counter == 3) {
-              _counter = 0;
-            }
-            else {
-              _counter++;
-            }
+            _counter++;
+            if(_counter > static_cast<int>(choices::EXIT))
+              _counter = static_cast<int>(choices::START);
             break;
           case sf::Keyboard::W:
             game::asset::getSound(game::asset::snd::MENU_HOVER).play();
-            if(_counter == 0) {
-              _counter = 3;
-            }
-            else {
-              _counter--;
-            }
+            _counter--;
+            if(_counter < static_cast<int>(choices::START))
+                _counter = static_cast<int>(choices::EXIT);
             break;
           case sf::Keyboard::J:
             game::asset::getSound(game::asset::snd::MENU_SUBMIT).play();
-            if(_counter == 0) {
-              // start game
-              std::cout << "Not implemented yet...\n";
+            if(_counter == static_cast<int>(choices::START)) {
+              game::setGS(game::asset::GS::INGAME);
             }
-            else if(_counter == 1) {
+            else if(_counter == static_cast<int>(choices::LOAD)) {
               // load a game file
-              std::cout << "Not implemented yet...\n";
+              std::clog << "Load file not implemented yet!\n";
             }
-            else if(_counter == 2) {
+            else if(_counter == static_cast<int>(choices::EXIT)) {
+              // exit game
               game::setGS(game::asset::GS::NONE);
             }
-            else if(_counter == 3) {
-              game::setGS(game::asset::GS::DEBUG);
-            }
-          default:
-            ;
+          default: break;
         }
       }
     }
