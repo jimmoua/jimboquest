@@ -5,7 +5,12 @@
 #include "battle.hpp"
 #include "ui.hpp"
 #include "game.hpp"
+#include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/System/Sleep.hpp>
+#include <SFML/System/Time.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
@@ -18,15 +23,15 @@ namespace {
   // vectors, and pretty much anything that displays
   // when a battle is initialized.
   ////////////////////////////////////////////////// 
-  namespace _battleData {
+  namespace battleData {
     // Monster list vector.
     //
     // For now, let's keep the list simple and only set singleton sets of
     // common enemy monsters.
-    static std::vector<game::entity::Entity> _monsterList;
+    static std::vector<game::entity::Entity> monsterList;
 
     // This will be the monster sprites vector to draw on the screen
-    static std::vector<sf::Sprite> _monsterSprites;
+    static std::vector<sf::Sprite> monsterSprites;
 
   }
 
@@ -34,13 +39,21 @@ namespace {
   ////////////////////////////////////////////////// 
   //              MONSTER GROUPS
   ////////////////////////////////////////////////// 
-  void _createSlimeGroup_3() {
-    _battleData::_monsterList.clear();
-    _battleData::_monsterSprites.clear();
-    for(unsigned int i = 0; i < 3; i++ ) {
-      _battleData::_monsterSprites.push_back(game::entity::sprite::sprite_slime());
-      _battleData::_monsterList.push_back(game::entity::createSlime());
-    }
+  void createSlimeGroup_3() {
+    battleData::monsterList.clear();
+    battleData::monsterSprites.clear();
+    game::entity::Entity slimeA = game::entity::createSlime();
+    game::entity::Entity slimeB = game::entity::createSlime();
+    game::entity::Entity slimeC = game::entity::createSlime();
+    slimeA.m_Name.append(" A");
+    slimeB.m_Name.append(" B");
+    slimeC.m_Name.append(" C");
+    battleData::monsterSprites.push_back(game::entity::sprite::sprite_slime());
+    battleData::monsterSprites.push_back(game::entity::sprite::sprite_slime());
+    battleData::monsterSprites.push_back(game::entity::sprite::sprite_slime());
+    battleData::monsterList.push_back(slimeA);
+    battleData::monsterList.push_back(slimeB);
+    battleData::monsterList.push_back(slimeC);
   };
 
 }
@@ -83,8 +96,8 @@ void game::initBattle() {
     i.setPosition(v.getCenter());
     i.move(0, -100);
   }
-  if(!_battleData::_monsterSprites.empty()) _battleData::_monsterSprites.clear();
-  if(!_battleData::_monsterList.empty()) _battleData::_monsterList.clear();
+  if(!battleData::monsterSprites.empty()) battleData::monsterSprites.clear();
+  if(!battleData::monsterList.empty()) battleData::monsterList.clear();
   /* ------------DO-NOT-MODIFY-ABOVE------------- */
 
   ////////////////////////////////////////////////// 
@@ -109,7 +122,7 @@ void game::initBattle() {
   ////////////////////////////////////////////////// 
   if(game::entity::getPl().m_Level < 5) {
     /* EASY LEVELED MONSTERS */
-    _createSlimeGroup_3();
+    createSlimeGroup_3();
   }
 
   /* While there are monsters, keep the fight going. The condition will be
@@ -127,7 +140,7 @@ void game::initBattle() {
   // offset is going to be the amount of times we will move each sprite for
   // every monster we have in the list. offset is important because it will be
   // the spacing between each monster.
-  auto offset = l_battleWindow[1].getSize().x/(_battleData::_monsterSprites.size()+1);
+  auto offset = l_battleWindow[1].getSize().x/(battleData::monsterSprites.size()+1);
 
   // pos is going to be the position of battleWindow[1].
   auto pos = l_battleWindow[1].getPosition(); 
@@ -138,11 +151,11 @@ void game::initBattle() {
   auto initPos = pos.x + offset - l_battleWindow[1].getSize().x/2; 
 
   // Set the monster locations on the screen
-  for(unsigned int i = 0; i < _battleData::_monsterSprites.size(); i++) {
-    _battleData::_monsterSprites[i].setPosition(initPos + offset*(i), pos.y);
+  for(unsigned int i = 0; i < battleData::monsterSprites.size(); i++) {
+    battleData::monsterSprites[i].setPosition(initPos + offset*(i), pos.y);
   }
   printf("The size is: ");
-  std::cout << _battleData::_monsterSprites.size() << std::endl;
+  std::cout << battleData::monsterSprites.size() << std::endl;
 
   // Create some text for the choices that player is allowed to do during a
   // battle. Also define their positions.
@@ -158,9 +171,21 @@ void game::initBattle() {
   text_ability.move(-290,200);
   text_flee.move(-290,250);
 
+  // First  = monster data that cursor points to
+  // Second = monster sprite that cursor points to
+  std::pair<std::vector<game::entity::Entity>::iterator,std::vector<sf::Sprite>::iterator> monsterCursorData;
+  sf::CircleShape monsterCursor;
+  monsterCursor.setFillColor(sf::Color::Red);
+  monsterCursor.setRadius(10);
+  game::asset::setOriginCenter(monsterCursor);
+  monsterCursorData.first = battleData::monsterList.begin();
+  monsterCursorData.second = battleData::monsterSprites.begin();
+
   // While there are monsters in the list, keep looping the battle. Monsters
   // will only be removed from the list when they die.
-  while(!_battleData::_monsterList.empty()) {
+  while(!battleData::monsterList.empty()) {
+    monsterCursor.setPosition(monsterCursorData.second->getPosition().x, monsterCursorData.second->getGlobalBounds().top);
+    monsterCursor.move(0,-30);
 
     // Poll the window
     while(game::win::getWin().pollEvent(game::win::getEv())) {
@@ -176,44 +201,87 @@ void game::initBattle() {
             choice_counter = static_cast<int>(battle_choice::FIGHT);
         }
         // When J is pressed, set the current counter as the selected.
-        else if(game::win::getEv().key.code == sf::Keyboard::J) {
+        else if(game::win::getEv().key.code == sf::Keyboard::J && selected_choice == battle_choice::NONE) {
+          selected_choice = static_cast<battle_choice>(choice_counter);
+          game::win::getEv().key.code = sf::Keyboard::Unknown;
+        }
+        // Process selected battle choice
+        if(selected_choice == battle_choice::NONE) {
           switch(choice_counter) {
             case static_cast<int>(battle_choice::FIGHT):
-              printf("Option at FIGHT\n");
+              text_fight.setFillColor(sf::Color::Yellow);
+              text_flee.setFillColor(sf::Color::White);
+              text_ability.setFillColor(sf::Color::White);
               break;
             case static_cast<int>(battle_choice::ABILITY):
-              printf("Option at ABILITY\n");
+              text_fight.setFillColor(sf::Color::White);
+              text_flee.setFillColor(sf::Color::White);
+              text_ability.setFillColor(sf::Color::Yellow);
               break;
             case static_cast<int>(battle_choice::FLEE):
-              return;
-              printf("Option at FLEE\n");
+              text_fight.setFillColor(sf::Color::White);
+              text_flee.setFillColor(sf::Color::Yellow);
+              text_ability.setFillColor(sf::Color::White);
               break;
             default:
               break;
           }
         }
+        ////////////////////////////////////////////////// 
+        // CHOICE FIGHT
+        ////////////////////////////////////////////////// 
+        else if(selected_choice == battle_choice::FIGHT) {
+          if(game::win::getEv().key.code == sf::Keyboard::Escape) {
+            selected_choice = battle_choice::NONE;
+            choice_counter = static_cast<int>(battle_choice::FIGHT);
+          }
+          else if(game::win::getEv().key.code == sf::Keyboard::A) {
+            if(monsterCursorData.second != battleData::monsterSprites.begin()) {
+              monsterCursorData.second--;
+              monsterCursorData.first--;
+            }
+            else {
+              monsterCursorData.second = battleData::monsterSprites.end()-1;
+              monsterCursorData.first = battleData::monsterList.end()-1;
+            }
+          }
+          else if(game::win::getEv().key.code == sf::Keyboard::D) {
+            if(monsterCursorData.second != battleData::monsterSprites.end()-1) {
+              monsterCursorData.second++;
+              monsterCursorData.first++;
+            }
+            else {
+              monsterCursorData.second = battleData::monsterSprites.begin();
+              monsterCursorData.first = battleData::monsterList.begin();
+            }
+          }
+          else if(game::win::getEv().key.code == sf::Keyboard::J) {
+            // TODO: Actual calculations here for battle
+            battleData::monsterList.erase(monsterCursorData.first);
+            battleData::monsterSprites.erase(monsterCursorData.second);
+            monsterCursorData.first = battleData::monsterList.begin();
+            monsterCursorData.second = battleData::monsterSprites.begin();
+            selected_choice = battle_choice::NONE;
+          }
+        }
+        ////////////////////////////////////////////////// 
+        // CHOICE ABILITIES
+        ////////////////////////////////////////////////// 
+        else if(selected_choice == battle_choice::ABILITY) {
+          // TODO: Show abilities Erdrick can use
+          if(game::win::getEv().key.code == sf::Keyboard::Escape) {
+            selected_choice = battle_choice::NONE;
+            choice_counter = static_cast<int>(battle_choice::ABILITY);
+          }
+        }
+        else if(selected_choice == battle_choice::FLEE) {
+          printf("Fleeing\n");
+          return;
+        }
       }
     }
 
-    switch(choice_counter) {
-      case static_cast<int>(battle_choice::FIGHT):
-        text_fight.setFillColor(sf::Color::Yellow);
-        text_flee.setFillColor(sf::Color::White);
-        text_ability.setFillColor(sf::Color::White);
-        break;
-      case static_cast<int>(battle_choice::ABILITY):
-        text_fight.setFillColor(sf::Color::White);
-        text_flee.setFillColor(sf::Color::White);
-        text_ability.setFillColor(sf::Color::Yellow);
-        break;
-      case static_cast<int>(battle_choice::FLEE):
-        text_fight.setFillColor(sf::Color::White);
-        text_flee.setFillColor(sf::Color::Yellow);
-        text_ability.setFillColor(sf::Color::White);
-        break;
-      default:
-        break;
-    }
+
     // First draw the battle windows
     game::win::getWin().draw(l_battleWindow[0]);
     game::win::getWin().draw(l_battleWindow[1]);
@@ -224,8 +292,17 @@ void game::initBattle() {
 
 
     // Draw the monsters
-    for(auto& i : _battleData::_monsterSprites) {
+    for(auto& i : battleData::monsterSprites) {
       game::win::getWin().draw(i);
+    }
+
+    // Draw cursors (if in correct state)
+    if(selected_choice == battle_choice::FIGHT) {
+      game::win::getWin().draw(monsterCursor);
+      sf::Text monsterName =  game::asset::createString(monsterCursorData.first->m_Name);
+      game::asset::setOriginCenter(monsterName);
+      monsterName.setPosition(l_battleWindow_Choices[1].getPosition());
+      game::win::getWin().draw(monsterName);
     }
 
     if(selected_choice == battle_choice::NONE) {
@@ -237,7 +314,5 @@ void game::initBattle() {
 
     game::win::getWin().display();
   }
-
-
   /* end of battle */
 }
