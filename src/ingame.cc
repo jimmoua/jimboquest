@@ -1,4 +1,4 @@
-#include "debug.hpp"
+#include "ingame.hpp"
 #include "window.hpp"
 #include "asset.hpp"
 #include "entity.hpp"
@@ -19,7 +19,7 @@ namespace {
   static void handleUI_Menu();
 }
 
-void game::debug::run() {
+void game::ingame::run() {
 
   /* For key presses */
   static sf::Clock keyPressTimer;
@@ -38,7 +38,7 @@ void game::debug::run() {
 
   /* While the game setting is on DEBUG, run the game */
   /* handle view */
-  while(game::getGS() == asset::GS::DEBUG) {
+  while(game::getGS() == asset::GS::INGAME) {
 
     win::getWin().clear(sf::Color::Black);
     game::entity::updatePlayerStatusUI();
@@ -99,7 +99,7 @@ void game::debug::run() {
     
     /* Handling movement will deal with collisions layer */
     entity::getPl().handleMove();
-    while(in_uiMenu && game::getGS() == game::asset::GS::DEBUG) {
+    while(in_uiMenu && game::getGS() == game::asset::GS::INGAME) {
       handleUI_Menu();
     }
 
@@ -298,7 +298,7 @@ namespace {
       exitUI.set_menuTextsOrigin();
       exitUI.set_menuTextsCenterOfUI();
       exitUI.menu_sprite[0].setSize(sf::Vector2f(game::win::getRes_x()/1.5, game::win::getRes_y()/2));
-      exitUI.menu_sprite[1].setSize(sf::Vector2f(exitUI.menu_sprite[0].getSize().x*game::ui::ui_SF_x, exitUI.menu_sprite[0].getSize().y*game::ui::ui_SF_y));
+      exitUI.menu_sprite[1].setSize(sf::Vector2f(exitUI.menu_sprite[0].getSize().x-game::ui::ui_SF_x, exitUI.menu_sprite[0].getSize().y-game::ui::ui_SF_y));
       exitUI.set_menuSpritesOrigin();
       exitUI.set_menuTextsCenterOfUI();
       _init = true;

@@ -1,9 +1,8 @@
-#ifndef DEBUG_HPP
-#define DEBUG_HPP
+#ifndef INGAME_HPP
+#define INGAME_HPP
 
 namespace game {
-  namespace debug {
-    /* mimics in_game */
+  namespace ingame {
     void run();
     void init();
   }

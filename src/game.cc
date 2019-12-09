@@ -1,6 +1,6 @@
 #include "game.hpp"
 #include "title.hpp"
-#include "debug.hpp"
+#include "ingame.hpp"
 #include "map.hpp"
 #include "entity.hpp"
 #include "ui.hpp"
@@ -40,9 +40,9 @@ void game::run() {
         }
         break;
       }
-      case game::asset::GS::DEBUG:
+      case game::asset::GS::INGAME:
       {
-        debug::run();
+        ingame::run();
         break;
       }
     }

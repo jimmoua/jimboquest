@@ -17,10 +17,12 @@ namespace game {
      * this, multiple in the parameter by the ui_SF_* in order to set the size properly.
      * 
      *   someUI.sprite_menu[0].setSize(game::win::getRes_X, game::win::getRex_Y);
-     *   someUI.sprite_menu[1].setSize(someUI.sprite_menu[0].getSize().x*ui_SF_x, someUI.sprite_menu[0].getSize().y*ui_SF_y);
+     *   someUI.sprite_menu[1].setSize(someUI.sprite_menu[0].getSize().x-ui_SF_x, someUI.sprite_menu[0].getSize().y-ui_SF_y);
      */
-    static constexpr float ui_SF_x = 0.95;
-    static constexpr float ui_SF_y = 0.93;
+    //static constexpr float ui_SF_x = 0.95;
+    //static constexpr float ui_SF_y = 0.93;
+    static constexpr float ui_SF_x = 17.00;
+    static constexpr float ui_SF_y = 17.00;
 
     /* enum class of UI */
     enum class ENUM_UI {

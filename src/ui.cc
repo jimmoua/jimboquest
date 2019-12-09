@@ -1,6 +1,7 @@
 #include "ui.hpp"
 #include "entity.hpp"
 #include "game.hpp"
+#include <SFML/Graphics/Color.hpp>
 
 namespace {
   /* Need a mapping of UI */
@@ -23,33 +24,35 @@ void game::ui::init() {
 
   /* INIT UI */
 
-  /* TITLE SCREEN UI */
+  //////////////////////////////////////////////////////////// 
+  // TITLE SCREEN USER INTERFACE + TEXTS
+  //////////////////////////////////////////////////////////// 
   _ui[ENUM_UI::TITLESCREEN] = &titleScreen;
   _ui[ENUM_UI::IN_GAME] = &inGame;
   _ui[ENUM_UI::IN_GAME_PLAYER_STATUS] = &inGame_PlayerStatus;
 
   // BG where texts rests
   titleScreen.menu_sprite[0].setSize(sf::Vector2f(game::win::getRes_x()/3,game::win::getRes_y()/3));
-  titleScreen.menu_sprite[1].setSize(sf::Vector2f(titleScreen.menu_sprite[0].getSize().x*game::ui::ui_SF_x,titleScreen.menu_sprite[0].getSize().y*game::ui::ui_SF_y));
+  titleScreen.menu_sprite[1].setSize(sf::Vector2f(titleScreen.menu_sprite[0].getSize().x-game::ui::ui_SF_x,titleScreen.menu_sprite[0].getSize().y-game::ui::ui_SF_y));
   titleScreen.set_menuSpritesOrigin();
   titleScreen.menu_sprite[0].setPosition(mid_x, mid_y + game::win::getRes_y()/6);
   titleScreen.menu_sprite[1].setPosition(mid_x, mid_y + game::win::getRes_y()/6);
 
-  // Create text and define their properties
-  titleScreen.ui_texts.resize(4);
+  // Create text and assign string values
+  titleScreen.ui_texts.resize(3);
   titleScreen.ui_texts[0] = asset::createString("Start");
   titleScreen.ui_texts[1] = asset::createString("Load");
   titleScreen.ui_texts[2] = asset::createString("Exit");
-  titleScreen.ui_texts[3] = asset::createString("Debug");
   titleScreen.set_menuTextsOrigin();
 
-  /* CUSTOM */
-  titleScreen.ui_texts[0].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+45);
-  titleScreen.ui_texts[1].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+45*2);
-  titleScreen.ui_texts[2].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+45*3);
-  titleScreen.ui_texts[3].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+45*4);
+  // Set the positions of the texts
+  titleScreen.ui_texts[0].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+55);
+  titleScreen.ui_texts[1].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+55*2);
+  titleScreen.ui_texts[2].setPosition(mid_x,(titleScreen.menu_sprite[1].getGlobalBounds().top)+55*3);
 
-  /* In game UI texts */
+  //////////////////////////////////////////////////////////// 
+  // IN GAME USER INTERFACE + TEXTS
+  //////////////////////////////////////////////////////////// 
   inGame.ui_texts.resize(5);
   inGame.ui_texts[0] = asset::createString("STATUS");
   inGame.ui_texts[1] = asset::createString("INVENTORY");
@@ -61,10 +64,12 @@ void game::ui::init() {
 
   /* IN GAME UI menu */
   inGame.menu_sprite[0].setSize(sf::Vector2f(game::win::getRes_x()/2, game::win::getRes_y()/1.7));
-  inGame.menu_sprite[1].setSize(sf::Vector2f(inGame.menu_sprite[0].getSize().x*game::ui::ui_SF_x,inGame.menu_sprite[0].getSize().y*game::ui::ui_SF_y));
+  inGame.menu_sprite[1].setSize(sf::Vector2f(inGame.menu_sprite[0].getSize().x-game::ui::ui_SF_x,inGame.menu_sprite[0].getSize().y-game::ui::ui_SF_y));
   inGame.set_menuSpritesOrigin();
 
-  // In-game Player Status UI + Text
+  //////////////////////////////////////////////////////////// 
+  // PLAYER STATUS USER INTERFACE + TEXTS
+  //////////////////////////////////////////////////////////// 
   #define p inGame_PlayerStatus
   // Create 14 texts for the UI and then define their default values
   p.ui_texts.resize(14);
@@ -85,18 +90,20 @@ void game::ui::init() {
   p.ui_texts[12] = asset::createString("ttl mon");   // ttl monsters slain
   p.ui_texts[13] = asset::createString("ttl exp");   // ttl exp earned
 
-  // Create the status UI and a UI for the Erdrick's face.
+  // Create the status UI and a UI for Erdrick's face.
   p.anotherOne();
   p.anotherOne();
 
   // Set the size of the player status UI here
   inGame_PlayerStatus.menu_sprite[0].setSize(sf::Vector2f(game::win::getRes_x()/1.5, game::win::getRes_y()/1.5));
   sf::Vector2f stat = sf::Vector2f(inGame_PlayerStatus.menu_sprite[0].getSize());
-  inGame_PlayerStatus.menu_sprite[1].setSize(sf::Vector2f(stat.x*game::ui::ui_SF_x, stat.y*game::ui::ui_SF_y));
-  inGame_PlayerStatus.menu_sprite[2].setSize(sf::Vector2f(stat.x*game::ui::ui_SF_x/2, stat.y*game::ui::ui_SF_y/2));
-  inGame_PlayerStatus.menu_sprite[3].setSize(sf::Vector2f(stat.x*game::ui::ui_SF_x, stat.y*game::ui::ui_SF_y/2));
+  inGame_PlayerStatus.menu_sprite[1].setSize(sf::Vector2f(stat.x-game::ui::ui_SF_x, stat.y-game::ui::ui_SF_y));
+  inGame_PlayerStatus.menu_sprite[2].setSize(sf::Vector2f((stat.x-game::ui::ui_SF_x)/2, (stat.y-game::ui::ui_SF_y)/2));
+  inGame_PlayerStatus.menu_sprite[3].setSize(sf::Vector2f(stat.x-game::ui::ui_SF_x, (stat.y-game::ui::ui_SF_y)/2));
 
-  // menu_sprite[0] = border
+  //inGame_PlayerStatus.menu_sprite[2].setOutlineColor(sf::Color::Transparent);
+  //inGame_PlayerStatus.menu_sprite[3].setOutlineColor(sf::Color::Transparent);
+
   // menu_sprite[1] = main
   // menu_sprite[2] = Character name, hp, mp, gold
   // menu_sprite[3] = Character status and battle status

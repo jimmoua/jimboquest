@@ -15,9 +15,9 @@ namespace game {
     //                GAME STATES
     ////////////////////////////////////////////////// 
     enum class GS {
-      DEBUG,
       NONE, // for when exit
       TITLE,
+      INGAME
     };
 
     ////////////////////////////////////////////////// 
