@@ -5,6 +5,9 @@
 #include "battle.hpp"
 #include "ui.hpp"
 #include "game.hpp"
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
 
 namespace {
 
@@ -45,6 +48,16 @@ namespace {
  * This inits the battle everytime there is an encounter. Sets up and populates
  * the monster vectors */
 void game::initBattle() {
+
+  // enum data types for battle choice
+  enum class battle_choice {
+    NONE,FIGHT,ABILITY,FLEE
+  };
+
+  battle_choice selected_choice = battle_choice::NONE;
+  // Counter for battle choices
+  int choice_counter = static_cast<int>(battle_choice::FIGHT);;
+
 
   /* The RNG battles are going to be based off the player's level
    *   1-4    EASY
@@ -142,16 +155,64 @@ void game::initBattle() {
   // Moving the Y by increments of 50 seem to work OK. Unless I change the
   // resolution of the game again, I should not have to modify these values.
   text_fight.move(-290,150);
-  text_flee.move(-290,200);
-  text_ability.move(-290,250);
+  text_ability.move(-290,200);
+  text_flee.move(-290,250);
 
   // While there are monsters in the list, keep looping the battle. Monsters
   // will only be removed from the list when they die.
   while(!_battleData::_monsterList.empty()) {
+
+    // Poll the window
     while(game::win::getWin().pollEvent(game::win::getEv())) {
-      if(game::win::getEv().key.code == sf::Keyboard::Escape) {
-        return;
+      if(game::win::getEv().type == sf::Event::KeyPressed) {
+        if(game::win::getEv().key.code == sf::Keyboard::W) {
+          choice_counter--;
+          if(choice_counter < static_cast<int>(battle_choice::FIGHT))
+            choice_counter = static_cast<int>(battle_choice::FLEE);
+        }
+        else if(game::win::getEv().key.code == sf::Keyboard::S) {
+          choice_counter++;
+          if(choice_counter > static_cast<int>(battle_choice::FLEE))
+            choice_counter = static_cast<int>(battle_choice::FIGHT);
+        }
+        // When J is pressed, set the current counter as the selected.
+        else if(game::win::getEv().key.code == sf::Keyboard::J) {
+          switch(choice_counter) {
+            case static_cast<int>(battle_choice::FIGHT):
+              printf("Option at FIGHT\n");
+              break;
+            case static_cast<int>(battle_choice::ABILITY):
+              printf("Option at ABILITY\n");
+              break;
+            case static_cast<int>(battle_choice::FLEE):
+              return;
+              printf("Option at FLEE\n");
+              break;
+            default:
+              break;
+          }
+        }
       }
+    }
+
+    switch(choice_counter) {
+      case static_cast<int>(battle_choice::FIGHT):
+        text_fight.setFillColor(sf::Color::Yellow);
+        text_flee.setFillColor(sf::Color::White);
+        text_ability.setFillColor(sf::Color::White);
+        break;
+      case static_cast<int>(battle_choice::ABILITY):
+        text_fight.setFillColor(sf::Color::White);
+        text_flee.setFillColor(sf::Color::White);
+        text_ability.setFillColor(sf::Color::Yellow);
+        break;
+      case static_cast<int>(battle_choice::FLEE):
+        text_fight.setFillColor(sf::Color::White);
+        text_flee.setFillColor(sf::Color::Yellow);
+        text_ability.setFillColor(sf::Color::White);
+        break;
+      default:
+        break;
     }
     // First draw the battle windows
     game::win::getWin().draw(l_battleWindow[0]);
@@ -167,10 +228,12 @@ void game::initBattle() {
       game::win::getWin().draw(i);
     }
 
-    // Draw the battle texts
-    game::win::getWin().draw(text_fight);
-    game::win::getWin().draw(text_flee);
-    game::win::getWin().draw(text_ability);
+    if(selected_choice == battle_choice::NONE) {
+      // Draw the battle texts
+      game::win::getWin().draw(text_fight);
+      game::win::getWin().draw(text_flee);
+      game::win::getWin().draw(text_ability);
+    }
 
     game::win::getWin().display();
   }
