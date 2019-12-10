@@ -23,21 +23,22 @@ namespace game {
                const int&,            // Mana
                const int&,            // Str
                const int&,            // Dex
-               const int&);           // Int
+               const int&,            // Int
+               const int&);           // EXP
 
         sf::Sprite m_enSprite;
 
         // Monster Attributes
         std::string m_Name;
-        int m_Health = 0;
-        int m_Mana = 0;
+        int m_maxHealth = 100;
+        int m_maxMana = 100;
+        int m_Health = m_maxHealth;
+        int m_Mana = m_maxMana;
         int m_Str = 0;
         int m_Dex = 0;
         int m_Int = 0;
         int m_Gold = 0;
         int m_Level = 1;
-        int m_maxHealth = 100;
-        int m_maxMana = 100;
         int m_def = 10;
         int m_luck = 5;   // for crit + gold drop
         int m_agil = 10;  // for dodge chance

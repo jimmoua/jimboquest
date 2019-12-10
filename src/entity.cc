@@ -58,14 +58,18 @@ game::entity::Entity::Entity(const std::string& s,
                              const int& m,
                              const int& str,
                              const int& dex,
-                             const int& _int)
+                             const int& _int,
+                             const int& exp)
 {
   this->m_Name = s;
+  this->m_maxHealth = h;
   this->m_Health = h;
+  this->m_maxMana = m;
   this->m_Mana = m;
   this->m_Str = str;
   this->m_Dex = dex;
   this->m_Int = _int;
+  this->m_ttlExp = exp;
   this->m_enSprite.setTexture(game::asset::actorTexture());
 }
 
@@ -78,7 +82,7 @@ game::entity::Player::Player(const std::string& n,
                              const int& dex,
                              const int& _int) :
 
-                            Entity(n, h, m, str, dex, _int)
+                            Entity(n, h, m, str, dex, _int,0)
 {
   /* DEFINE THE SPRITE FOR THE PLAYABLE CHARACTER HERE */
   this->m_enSprite.setTexture(game::asset::actorTexture());
@@ -232,10 +236,7 @@ void game::entity::init() {
 /* Creates a slime data. This will be used to be pushed into the battle vector
  * if needs be. */
 game::entity::Entity game::entity::createSlime() {
-  game::entity::Entity slime;
-  slime.m_Health = 10;
-  slime.m_Gold = 10;
-  slime.m_Name = "Slime";
+  game::entity::Entity slime("Slime",10,0,5,2,0,5);
   return slime;
 }
 
