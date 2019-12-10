@@ -251,11 +251,18 @@ void game::initBattle() {
             }
           }
           else if(game::win::getEv().key.code == sf::Keyboard::J) {
-            // TODO: Actual calculations here for battle
-            battleData::monsterList.erase(monsterCursorData.first);
-            battleData::monsterSprites.erase(monsterCursorData.second);
-            monsterCursorData.first = battleData::monsterList.begin();
-            monsterCursorData.second = battleData::monsterSprites.begin();
+            // TODO: Add text to show player damage number
+            int damage = game::entity::getPl().m_Str / game::genRand(3,4);
+            monsterCursorData.first->m_Health -= damage;
+            std::clog << "Damage is: " << damage << "\n";
+            std::clog << monsterCursorData.first->m_Name << " health is: " << monsterCursorData.first->m_Health << "\n";
+            if(monsterCursorData.first->m_Health <= 0) {
+              battleData::monsterList.erase(monsterCursorData.first);
+              battleData::monsterSprites.erase(monsterCursorData.second);
+              monsterCursorData.first = battleData::monsterList.begin();
+              monsterCursorData.second = battleData::monsterSprites.begin();
+              game::entity::getPl().m_ttlExp+=monsterCursorData.first->m_ttlExp;
+            }
             selected_choice = battle_choice::NONE;
           }
         }
@@ -294,10 +301,15 @@ void game::initBattle() {
     // Draw cursors (if in correct state)
     if(selected_choice == battle_choice::FIGHT) {
       game::win::getWin().draw(monsterCursor);
-      sf::Text monsterName =  game::asset::createString(monsterCursorData.first->m_Name);
+      // Monster Name
+      sf::Text monsterName = game::asset::createString(monsterCursorData.first->m_Name);
+      sf::Text monsterHealth = game::asset::createString("HP: "+std::to_string(monsterCursorData.first->m_Health)+"/"+std::to_string(monsterCursorData.first->m_maxHealth));
       game::asset::setOriginCenter(monsterName);
-      monsterName.setPosition(l_battleWindow_Choices[1].getPosition());
+      game::asset::setOriginCenter(monsterHealth);
+      monsterName.setPosition(l_battleWindow_Choices[1].getPosition().x, l_battleWindow_Choices[1].getPosition().y-30);
+      monsterHealth.setPosition(l_battleWindow_Choices[1].getPosition().x, l_battleWindow_Choices[1].getPosition().y+30);
       game::win::getWin().draw(monsterName);
+      game::win::getWin().draw(monsterHealth);
     }
 
     if(selected_choice == battle_choice::NONE) {
@@ -309,5 +321,9 @@ void game::initBattle() {
 
     game::win::getWin().display();
   }
-  /* end of battle */
+  if(battleData::monsterList.empty()) {
+    // If the monster list is empty, that means the player has defeated all
+    // monsters. Update battles fought + ETC
+    game::entity::getPl().m_ttlBattles++;
+  }
 }
