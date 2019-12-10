@@ -6,6 +6,14 @@
 #include "ui.hpp"
 #include "game.hpp"
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Transform.hpp>
+#include <SFML/System/Clock.hpp>
+#include <SFML/System/Sleep.hpp>
+#include <SFML/System/Time.hpp>
 
 namespace {
 
@@ -176,56 +184,62 @@ void game::initBattle() {
   // While there are monsters in the list, keep looping the battle. Monsters
   // will only be removed from the list when they die.
   while(!battleData::monsterList.empty()) {
+    bool fight = false;
     monsterCursor.setPosition(monsterCursorData.second->getPosition().x, monsterCursorData.second->getGlobalBounds().top);
     monsterCursor.move(0,-30);
 
     // Poll the window
-    while(game::win::getWin().pollEvent(game::win::getEv())) {
-      if(game::win::getEv().type == sf::Event::KeyPressed) {
-        if(game::win::getEv().key.code == sf::Keyboard::W) {
-          choice_counter--;
-          if(choice_counter < static_cast<int>(battle_choice::FIGHT))
-            choice_counter = static_cast<int>(battle_choice::FLEE);
-        }
-        else if(game::win::getEv().key.code == sf::Keyboard::S) {
-          choice_counter++;
-          if(choice_counter > static_cast<int>(battle_choice::FLEE))
-            choice_counter = static_cast<int>(battle_choice::FIGHT);
-        }
-        // When J is pressed, set the current counter as the selected.
-        else if(game::win::getEv().key.code == sf::Keyboard::J && selected_choice == battle_choice::NONE) {
-          selected_choice = static_cast<battle_choice>(choice_counter);
-          game::win::getEv().key.code = sf::Keyboard::Unknown;
-        }
-        // Process selected battle choice
-        if(selected_choice == battle_choice::NONE) {
-          switch(choice_counter) {
-            case static_cast<int>(battle_choice::FIGHT):
-              text_fight.setFillColor(sf::Color::Yellow);
-              text_flee.setFillColor(sf::Color::White);
-              text_ability.setFillColor(sf::Color::White);
-              break;
-            case static_cast<int>(battle_choice::ABILITY):
-              text_fight.setFillColor(sf::Color::White);
-              text_flee.setFillColor(sf::Color::White);
-              text_ability.setFillColor(sf::Color::Yellow);
-              break;
-            case static_cast<int>(battle_choice::FLEE):
-              text_fight.setFillColor(sf::Color::White);
-              text_flee.setFillColor(sf::Color::Yellow);
-              text_ability.setFillColor(sf::Color::White);
-              break;
-            default:
-              break;
+    if(selected_choice == battle_choice::NONE) {
+      while(game::win::getWin().pollEvent(game::win::getEv())) {
+        if(game::win::getEv().type == sf::Event::KeyPressed) {
+          if(game::win::getEv().type == sf::Event::KeyPressed) {
+            if(game::win::getEv().key.code == sf::Keyboard::W) {
+              choice_counter--;
+              if(choice_counter < static_cast<int>(battle_choice::FIGHT))
+                choice_counter = static_cast<int>(battle_choice::FLEE);
+            }
+            else if(game::win::getEv().key.code == sf::Keyboard::S) {
+              choice_counter++;
+              if(choice_counter > static_cast<int>(battle_choice::FLEE))
+                choice_counter = static_cast<int>(battle_choice::FIGHT);
+            }
+            // When J is pressed, set the current counter as the selected.
+            else if(game::win::getEv().key.code == sf::Keyboard::J) {
+              selected_choice = static_cast<battle_choice>(choice_counter);
+              game::win::getEv().key.code = sf::Keyboard::Unknown;
+            }
+            // Process selected battle choice
+            switch(choice_counter) {
+              case static_cast<int>(battle_choice::FIGHT):
+                text_fight.setFillColor(sf::Color::Yellow);
+                text_flee.setFillColor(sf::Color::White);
+                text_ability.setFillColor(sf::Color::White);
+                break;
+              case static_cast<int>(battle_choice::ABILITY):
+                text_fight.setFillColor(sf::Color::White);
+                text_flee.setFillColor(sf::Color::White);
+                text_ability.setFillColor(sf::Color::Yellow);
+                break;
+              case static_cast<int>(battle_choice::FLEE):
+                text_fight.setFillColor(sf::Color::White);
+                text_flee.setFillColor(sf::Color::Yellow);
+                text_ability.setFillColor(sf::Color::White);
+                break;
+              default:
+                break;
+            }
           }
+          break;
         }
-        //text_fight.setFillColor(sf::Color::Yellow);
-        //text_flee.setFillColor(sf::Color::White);
-        //text_ability.setFillColor(sf::Color::White);
-        ////////////////////////////////////////////////// 
-        // CHOICE FIGHT
-        ////////////////////////////////////////////////// 
-        else if(selected_choice == battle_choice::FIGHT) {
+        else if(game::win::getEv().type == sf::Event::Closed) {
+          game::setGS(game::asset::GS::NONE);
+          return;
+        }
+      }
+    }
+    else if(selected_choice == battle_choice::FIGHT) {
+      while(game::win::getWin().pollEvent(game::win::getEv())) {
+        if(game::win::getEv().type == sf::Event::KeyPressed) {
           if(game::win::getEv().key.code == sf::Keyboard::Escape) {
             selected_choice = battle_choice::NONE;
             choice_counter = static_cast<int>(battle_choice::FIGHT);
@@ -251,38 +265,67 @@ void game::initBattle() {
             }
           }
           else if(game::win::getEv().key.code == sf::Keyboard::J) {
-            // TODO: Add text to show player damage number
-            int damage = game::entity::getPl().m_Str / game::genRand(3,4);
-            monsterCursorData.first->m_Health -= damage;
-            std::clog << "Damage is: " << damage << "\n";
-            std::clog << monsterCursorData.first->m_Name << " health is: " << monsterCursorData.first->m_Health << "\n";
-            if(monsterCursorData.first->m_Health <= 0) {
-              battleData::monsterList.erase(monsterCursorData.first);
-              battleData::monsterSprites.erase(monsterCursorData.second);
-              monsterCursorData.first = battleData::monsterList.begin();
-              monsterCursorData.second = battleData::monsterSprites.begin();
-              game::entity::getPl().m_ttlExp+=monsterCursorData.first->m_ttlExp;
-            }
-            selected_choice = battle_choice::NONE;
+            fight = true;
           }
+          break;
         }
-        ////////////////////////////////////////////////// 
-        // CHOICE ABILITIES
-        ////////////////////////////////////////////////// 
-        else if(selected_choice == battle_choice::ABILITY) {
-          // TODO: Show abilities Erdrick can use
+      }
+    }
+    else if(selected_choice == battle_choice::ABILITY) {
+      // TODO: Show abilities Erdrick can use
+      while(game::win::getWin().pollEvent(game::win::getEv())) {
+        if(game::win::getEv().type == sf::Event::KeyPressed) {
           if(game::win::getEv().key.code == sf::Keyboard::Escape) {
             selected_choice = battle_choice::NONE;
             choice_counter = static_cast<int>(battle_choice::ABILITY);
           }
+          break;
         }
-        else if(selected_choice == battle_choice::FLEE) {
-          std::clog << "Fleeing\n";
+        else if(game::win::getEv().type == sf::Event::Closed) {
+          game::setGS(game::asset::GS::NONE);
           return;
         }
       }
     }
+    else if(selected_choice == battle_choice::FLEE) {
+      std::clog << "Fleeing\n";
+      return;
+    }
 
+    if(fight) {
+      // TODO: Correctly display and word-wrap the strings that need to
+      // be word wrapped so they can be displayed properly.
+      //
+      // Clear the area for the text window and show some text about the
+      // current fight.
+      int damage = game::entity::getPl().m_Str / game::genRand(3,4);
+      sf::Text playerDamagesMonsterText = game::asset::createString("You deal "+std::to_string(damage)+" points to "+monsterCursorData.first->m_Name);
+      std::clog << "Length of the string is: " << playerDamagesMonsterText.getString().getSize() << std::endl;
+      playerDamagesMonsterText.setPosition(l_battleWindow_Choices[1].getGlobalBounds().left+l_battleWindow_Choices[1].getOutlineThickness()+margins,
+          l_battleWindow_Choices[1].getGlobalBounds().top+l_battleWindow_Choices[1].getOutlineThickness()+margins);
+      game::win::getWin().draw(l_battleWindow_Choices[1]);
+      game::win::getWin().draw(playerDamagesMonsterText);
+      game::win::display();
+      sf::sleep(sf::seconds(1));
+      monsterCursorData.first->m_Health -= damage;
+      std::clog << "Damage is: " << damage << "\n";
+      std::clog << monsterCursorData.first->m_Name << " health is: " << monsterCursorData.first->m_Health << "\n";
+      if(monsterCursorData.first->m_Health <= 0) {
+        game::win::getWin().draw(l_battleWindow_Choices[1]);
+        sf::Text defeatedString = game::asset::createString(monsterCursorData.first->m_Name+" is defeated!");
+        defeatedString.setPosition(l_battleWindow_Choices[1].getGlobalBounds().left+l_battleWindow_Choices[1].getOutlineThickness()+margins,
+                                   l_battleWindow_Choices[1].getGlobalBounds().top+l_battleWindow_Choices[1].getOutlineThickness()+margins);
+        game::win::getWin().draw(defeatedString);
+        game::win::getWin().display();
+        battleData::monsterList.erase(monsterCursorData.first);
+        battleData::monsterSprites.erase(monsterCursorData.second);
+        monsterCursorData.first = battleData::monsterList.begin();
+        monsterCursorData.second = battleData::monsterSprites.begin();
+        game::entity::getPl().m_ttlExp+=monsterCursorData.first->m_ttlExp;
+        sf::sleep(sf::seconds(1));
+      }
+      selected_choice = battle_choice::NONE;
+    }
 
     // First draw the battle windows
     game::win::getWin().draw(l_battleWindow[0]);
@@ -312,6 +355,20 @@ void game::initBattle() {
       game::win::getWin().draw(monsterHealth);
     }
 
+    if(battleData::monsterList.empty()) {
+      // If the monster list is empty, that means the player has defeated all
+      // monsters. Update battles fought + ETC
+      sf::Text victoryText = game::asset::createString("You have defeated all\nmonsters!");
+      victoryText.setPosition(l_battleWindow_Choices[1].getGlobalBounds().left+margins,
+                              l_battleWindow_Choices[1].getGlobalBounds().top+margins);
+      game::win::getWin().draw(l_battleWindow_Choices[1]);
+      game::win::getWin().draw(victoryText);
+      game::win::getWin().display();
+      sf::sleep(sf::seconds(2));
+      game::entity::getPl().m_ttlBattles++;
+      return;
+    }
+
     if(selected_choice == battle_choice::NONE) {
       // Draw the battle texts
       game::win::getWin().draw(text_fight);
@@ -320,10 +377,5 @@ void game::initBattle() {
     }
 
     game::win::getWin().display();
-  }
-  if(battleData::monsterList.empty()) {
-    // If the monster list is empty, that means the player has defeated all
-    // monsters. Update battles fought + ETC
-    game::entity::getPl().m_ttlBattles++;
   }
 }
