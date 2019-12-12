@@ -6,14 +6,6 @@
 #include "ui.hpp"
 #include "game.hpp"
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/Graphics/Transform.hpp>
-#include <SFML/System/Clock.hpp>
-#include <SFML/System/Sleep.hpp>
-#include <SFML/System/Time.hpp>
 
 namespace {
 
