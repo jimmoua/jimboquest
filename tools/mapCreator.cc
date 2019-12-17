@@ -10,13 +10,14 @@
 #include <map>
 #include <fstream>
 
+using cor = std::pair<int,int>;
 
 namespace {
   bool DEBUG = true;
   int layer = 1;
   sf::RenderWindow mapWindow;
   sf::RenderWindow spriteTiles;
-  constexpr float PS = 16;
+  constexpr int PS = 16;
   std::vector<std::vector<sf::RectangleShape>> mapGrids;
   std::vector<std::vector<sf::RectangleShape>> tileGrids;
   std::vector<std::vector<sf::Sprite>> spriteLayer1;
@@ -30,40 +31,55 @@ namespace tile {
   //////////////////////////////////////////////////////////////////////////////
   // DEFINE WHERE TILES ARE
   //////////////////////////////////////////////////////////////////////////////
-  std::pair<float,float> curr;
-  std::map<std::string,std::pair<float,float>> tiles_map;
+  std::pair<int,int> curr;
+  static std::map<std::string,std::pair<int,cor>> tiles_map;
   //////////////////////////////////////////////////////////////////////////////
   // DEFINE WHERE TILES ARE
   //////////////////////////////////////////////////////////////////////////////
   void init() {
-    tiles_map["none"] = std::pair<float,float>(0,0);
-    tiles_map["grass"] = std::pair<float,float>(1,0);
-    tiles_map["water"] = std::pair<float,float>(16,3);
-    tiles_map["redBrick"] = std::pair<float,float>(12,4);
-    tiles_map["greyBrick"] = std::pair<float,float>(9,5);
-    tiles_map["tree"] = std::pair<float,float>(12,4);
-    tiles_map["mountainRock"] = std::pair<float,float>(6,8);
+
+    tiles_map["none"]            = std::pair<int,cor>(0,cor(0,0));
+    tiles_map["portal"]          = std::pair<int,cor>(1,cor(6,0));
+    tiles_map["grass"]           = std::pair<int,cor>(2,cor(1,0));
+    tiles_map["water"]           = std::pair<int,cor>(3,cor(2,0));
+    tiles_map["tree"]            = std::pair<int,cor>(4,cor(3,0));
+    tiles_map["castle"]          = std::pair<int,cor>(5,cor(4,0));
+    tiles_map["town"]            = std::pair<int,cor>(6,cor(5,0));
+    tiles_map["mountain"]        = std::pair<int,cor>(7,cor(1,1));
+    tiles_map["castle_wall_top"] = std::pair<int,cor>(8,cor(0,1));
+    tiles_map["castle_wall_mid"] = std::pair<int,cor>(9,cor(0,2));
+    tiles_map["castle_wall_bot"] = std::pair<int,cor>(10,cor(0,3));
+    tiles_map["bridge"]          = std::pair<int,cor>(11,cor(5,1));
+    tiles_map["chest_opened"]    = std::pair<int,cor>(12,cor(6,4));
+    tiles_map["chest_closed"]    = std::pair<int,cor>(13,cor(5,4));
+    tiles_map["wood_floor"]      = std::pair<int,cor>(14,cor(4,1));
+    tiles_map["sign_gen"]        = std::pair<int,cor>(15,cor(0,4));
+    tiles_map["sign_wep"]        = std::pair<int,cor>(16,cor(1,4));
+    tiles_map["sign_arm"]        = std::pair<int,cor>(17,cor(2,4));
+    tiles_map["sign_inn"]        = std::pair<int,cor>(18,cor(3,4));
+    tiles_map["sign_nor"]        = std::pair<int,cor>(19,cor(4,4));
+    tiles_map["s_stairD_left"]   = std::pair<int,cor>(20,cor(4,2));
+    tiles_map["s_stairD_right"]  = std::pair<int,cor>(21,cor(5,2));
+    tiles_map["s_stairU_left"]   = std::pair<int,cor>(22,cor(4,3));
+    tiles_map["s_stairU_right"]  = std::pair<int,cor>(24,cor(5,3));
+    tiles_map["wood_door"]       = std::pair<int,cor>(25,cor(6,5));
+    tiles_map["bridge2"]         = std::pair<int,cor>(26,cor(3,2));
+
     for(auto& i : tiles_map) {
-      i.second.first*=PS;
-      i.second.second*=PS;
+      i.second.second.first*=PS;
+      i.second.second.second*=PS;
     }
   }
   int which(const sf::Sprite& sp) {
-    auto i = std::pair<float,float>(sp.getTextureRect().left,sp.getTextureRect().top);
-    if(i == tiles_map["none"]) return 0;
-    else if(i == tiles_map["grass"]) return 2;
-    else if(i == tiles_map["water"]) return 3;
-    else if(i == tiles_map["greyBrick"]) return 4;
-    else if(i == tiles_map["tree"]) return 6;
-    return 1;
+    auto i = std::pair<int,int>(sp.getTextureRect().left,sp.getTextureRect().top);
+    for(auto j : tiles_map) {
+      if(i == j.second.second) return j.second.first;
+    }
+    return 0;
   }
   std::pair<int,int> which(const int x) {
-    switch(x) {
-      case 0: return tiles_map["none"];
-      case 2: return tiles_map["grass"];
-      case 3: return tiles_map["water"];
-      case 4: return tiles_map["greyBrick"];
-      case 6: return tiles_map["tree"];
+    for(auto i : tiles_map) {
+      if(x == i.second.first) return i.second.second;
     }
     return std::pair<int,int>(0,0);
   }
@@ -73,7 +89,7 @@ int main(int argc, const char* argv[]) {
   // argv[1] == input png name
   // argv[2] == output text map file
   tile::init();
-  if(argc != 3) {
+  if(argc != 2) {
     std::cerr << "Invalid arguments\n";
     return 1;
   }
@@ -155,7 +171,7 @@ int main(int argc, const char* argv[]) {
     for(size_t i = 0; i < spriteLayer1.size(); i++) {
       for(size_t j = 0; j < spriteLayer1[i].size(); j++) {
         spriteLayer1[i][j].setTexture(mapTexture);
-        spriteLayer1[i][j].setTextureRect(sf::IntRect(tile::tiles_map["none"].first,tile::tiles_map["none"].second,PS,PS));
+        spriteLayer1[i][j].setTextureRect(sf::IntRect(tile::tiles_map["none"].second.first,tile::tiles_map["none"].second.second,PS,PS));
         spriteLayer1[i][j].setPosition(i*PS,j*PS);
       }
     }
@@ -163,7 +179,7 @@ int main(int argc, const char* argv[]) {
     for(size_t i = 0; i < spriteLayer2.size(); i++) {
       for(size_t j = 0; j < spriteLayer2[i].size(); j++) {
         spriteLayer2[i][j].setTexture(mapTexture);
-        spriteLayer2[i][j].setTextureRect(sf::IntRect(tile::tiles_map["none"].first,tile::tiles_map["none"].second,PS,PS));
+        spriteLayer2[i][j].setTextureRect(sf::IntRect(tile::tiles_map["none"].second.first,tile::tiles_map["none"].second.second,PS,PS));
         spriteLayer2[i][j].setPosition(i*PS,j*PS);
         spriteLayer2[i][j].setColor(sf::Color(255,255,255,128));
       }
@@ -172,7 +188,7 @@ int main(int argc, const char* argv[]) {
     for(size_t i = 0; i < spriteLayer3.size(); i++) {
       for(size_t j = 0; j < spriteLayer3[i].size(); j++) {
         spriteLayer3[i][j].setTexture(mapTexture);
-        spriteLayer3[i][j].setTextureRect(sf::IntRect(tile::tiles_map["none"].first,tile::tiles_map["none"].second,PS,PS));
+        spriteLayer3[i][j].setTextureRect(sf::IntRect(tile::tiles_map["none"].second.first,tile::tiles_map["none"].second.second,PS,PS));
         spriteLayer3[i][j].setPosition(i*PS,j*PS);
         spriteLayer2[i][j].setColor(sf::Color(255,255,255,96));
       }
@@ -181,7 +197,7 @@ int main(int argc, const char* argv[]) {
     for(size_t i = 0; i < spriteLayer4.size(); i++) {
       for(size_t j = 0; j < spriteLayer4[i].size(); j++) {
         spriteLayer4[i][j].setTexture(mapTexture);
-        spriteLayer4[i][j].setTextureRect(sf::IntRect(tile::tiles_map["none"].first,tile::tiles_map["none"].second,PS,PS));
+        spriteLayer4[i][j].setTextureRect(sf::IntRect(tile::tiles_map["none"].second.first,tile::tiles_map["none"].second.second,PS,PS));
         spriteLayer4[i][j].setPosition(i*PS,j*PS);
         spriteLayer4[i][j].setColor(sf::Color(100,0,170,128));
       }
@@ -192,7 +208,13 @@ int main(int argc, const char* argv[]) {
   mapImage.createMaskFromColor(sf::Color(255,121,155));
   if(!mapTexture.loadFromImage(mapImage)) return 3;
   sf::Sprite mapSprite(mapTexture);
-  spriteTiles.create(sf::VideoMode(mapTexture.getSize().x, mapTexture.getSize().y), "Map Creator", sf::Style::Close);
+  spriteTiles.create(sf::VideoMode(mapTexture.getSize().x*4, mapTexture.getSize().y*4), "Map Creator", sf::Style::Close);
+  sf::View spriteView = spriteTiles.getView();
+  spriteView.zoom(.5);
+  spriteView.setCenter(mapSprite.getPosition());
+  spriteTiles.setView(spriteView);
+  spriteTiles.setFramerateLimit(60);
+
 
   ////////////////////////////////////////////////// 
   // Create gridlines for the map so I can place
@@ -221,13 +243,15 @@ int main(int argc, const char* argv[]) {
   // Allow the max view size to be 48 by 48
   mapWindow.create(sf::VideoMode(PS*48,PS*48), "mapWindow - Layer 1", sf::Style::Close);
 
-  spriteTiles.setFramerateLimit(60);
+  mapWindow.setFramerateLimit(60);
 
   ////////////////////////////////////////////////// 
   // Variables for controlling mapWindow
   ////////////////////////////////////////////////// 
   sf::View mapView = mapWindow.getView();
   mapView.zoom(.5);
+  mapView.setCenter(spriteLayer1[0][0].getPosition());
+  mapWindow.setView(mapView);
 
   tile::init();
 
@@ -240,15 +264,10 @@ int main(int argc, const char* argv[]) {
   // FOR TILE GRIDS
   //////////////////////////////////////////////////////////// 
   auto check = [&](sf::RectangleShape& tg) -> bool {
-    const auto tgPos = tg.getPosition();
-    const auto right = tg.getSize().x+tgPos.x;
-    const auto height = tg.getSize().y+tgPos.y;
-    const auto mousePos = sf::Mouse::getPosition(spriteTiles);
-    if( (mousePos.x > tgPos.x && mousePos.x < right) && 
-        (mousePos.y > tgPos.y && mousePos.y < height) )
-    {
-      return true;
-    }
+    auto mouse_pos = sf::Mouse::getPosition(spriteTiles);
+    auto translated_pos = spriteTiles.mapPixelToCoords(mouse_pos,spriteTiles.getView());
+    if(tg.getGlobalBounds().contains(translated_pos))
+        return true;
     return false;
   };
 
@@ -271,6 +290,7 @@ int main(int argc, const char* argv[]) {
     //////////////////////////////////////////////////////////// 
     while(spriteTiles.pollEvent(e) && spriteTiles.hasFocus()) {
       if(e.type == sf::Event::Closed) {
+        mapWindow.close();
         spriteTiles.close();
       }
       else if(e.type == sf::Event::KeyPressed) {
@@ -281,7 +301,7 @@ int main(int argc, const char* argv[]) {
             for(auto& j : i) {
               if(check(j)) {
                 j.setOutlineColor(sf::Color::Green);
-                tile::curr = std::pair<float,float>(j.getPosition().x,j.getPosition().y);
+                tile::curr = std::pair<int,int>(j.getPosition().x,j.getPosition().y);
                 printf("Tile: ");
                 std::cout << tile::curr.first/PS << " " << tile::curr.second/PS << std::endl;
               }
@@ -298,6 +318,7 @@ int main(int argc, const char* argv[]) {
     while(mapWindow.pollEvent(e) && mapWindow.hasFocus()) {
       if(e.type == sf::Event::Closed) {
         mapWindow.close();
+        spriteTiles.close();
       }
       if(e.type == sf::Event::KeyPressed) {
         if(e.key.code == sf::Keyboard::Num1) {
@@ -360,7 +381,7 @@ int main(int argc, const char* argv[]) {
       }
     }
 
-    static constexpr float ms{4};
+    static constexpr int ms{4};
     if(mapWindow.hasFocus()) {
       if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
         mapView.move(0,-ms);
@@ -375,6 +396,21 @@ int main(int argc, const char* argv[]) {
         mapView.move(ms,0);
       }
       mapWindow.setView(mapView);
+    }
+    else if(spriteTiles.hasFocus()) {
+      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+        spriteView.move(0,-ms);
+      }
+      else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+        spriteView.move(0,ms);
+      }
+      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+        spriteView.move(-ms,0);
+      }
+      else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        spriteView.move(ms,0);
+      }
+      spriteTiles.setView(spriteView);
     }
 
     //////////////////////////////////////////////////////////// 
@@ -398,7 +434,7 @@ int main(int argc, const char* argv[]) {
     {
       for(auto& j : i)
       {
-        if(std::pair<float,float>(j.getTextureRect().left*PS,j.getTextureRect().top*PS) != tile::tiles_map["none"])
+        if(std::pair<int,int>(j.getTextureRect().left*PS,j.getTextureRect().top*PS) != tile::tiles_map["none"].second)
             mapWindow.draw(j);
       }
     }
@@ -406,7 +442,7 @@ int main(int argc, const char* argv[]) {
     {
       for(auto& j : i)
       {
-        if(std::pair<float,float>(j.getTextureRect().left*PS,j.getTextureRect().top*PS) != tile::tiles_map["none"])
+        if(std::pair<int,int>(j.getTextureRect().left*PS,j.getTextureRect().top*PS) != tile::tiles_map["none"].second)
             mapWindow.draw(j);
       }
     }
@@ -414,7 +450,15 @@ int main(int argc, const char* argv[]) {
     {
       for(auto& j : i)
       {
-        if(std::pair<float,float>(j.getTextureRect().left*PS,j.getTextureRect().top*PS) != tile::tiles_map["none"])
+        if(std::pair<int,int>(j.getTextureRect().left*PS,j.getTextureRect().top*PS) != tile::tiles_map["none"].second)
+            mapWindow.draw(j);
+      }
+    }
+    for(auto& i : spriteLayer4)
+    {
+      for(auto& j : i)
+      {
+        if(std::pair<int,int>(j.getTextureRect().left*PS,j.getTextureRect().top*PS) != tile::tiles_map["none"].second)
             mapWindow.draw(j);
       }
     }
@@ -467,13 +511,10 @@ int main(int argc, const char* argv[]) {
   //////////////////////////////////////////////////////////// 
   for(auto& i : spriteLayer4) {
     for(auto& j : i) {
-      if(tile::which(j) == 1) {
-        out << tile::which(j) << " ";
-      }
+      out << tile::which(j) << " ";
     }
     out << "\n";
   }
-  
   out.close();
   return 0;
 }
