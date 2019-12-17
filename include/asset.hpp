@@ -24,10 +24,13 @@ namespace game {
     //                 MAP ENUMS
     ////////////////////////////////////////////////// 
     enum class MAP {
-      NONE,
-      TEST_MAP00,
-      TEST_MAP01,
-      TEST_MAP02,
+      // DO NOT CHANGE ORDER -> needed for type casting
+      // when reading in from file
+      NONE,           // 0
+      TEST_MAP00,     // 1
+      TEST_MAP01,     // 2
+      TEST_MAP02,     // 3
+      TEST_MAP_ALPHA  // 4
     };
 
     ////////////////////////////////////////////////// 
@@ -105,7 +108,7 @@ namespace game {
     // Sets whatever sf::Shape origin to its center
     ////////////////////////////////////////////////// 
     template<typename SFML_T>
-      void setOriginCenter(SFML_T& t) {
+      inline void setOriginCenter(SFML_T& t) {
         t.setOrigin(t.getGlobalBounds().left + t.getGlobalBounds().width/2,
                     t.getGlobalBounds().top + t.getGlobalBounds().height/2);
       }

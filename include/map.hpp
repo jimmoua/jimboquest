@@ -236,16 +236,16 @@ namespace game {
 
 
         sf::Vector2i _mapSize;
-        std::vector< std::vector<size_t> >     _map_lay01;   // Layer 1
+        std::vector< std::vector<int> >     _map_lay01;   // Layer 1
         std::vector< std::vector<sf::Sprite> > _map_lay01_S; // L1 sprites
 
-        std::vector< std::vector<size_t> >     _map_lay02;   // Layer 2
+        std::vector< std::vector<int> >     _map_lay02;   // Layer 2
         std::vector< std::vector<sf::Sprite> > _map_lay02_S; // L2 sprites
 
-        std::vector< std::vector<size_t> >     _map_lay03;   // Layer 3
+        std::vector< std::vector<int> >     _map_lay03;   // Layer 3
         std::vector< std::vector<sf::Sprite> > _map_lay03_S; // L3 sprites
 
-        std::vector< std::vector<size_t> >     _map_EvLay;   // Event layer
+        std::vector< std::vector<int> >     _map_EvLay;   // Event layer
         std::vector< std::vector<sf::Sprite> > _mapEvV;      // Event sprites
         /* This vector ↓ contains information about the event */
         std::vector< std::vector<game::map_ns::mapEvStruct> > evV;

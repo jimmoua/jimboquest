@@ -66,6 +66,8 @@ void game::asset::init() {
   _mapLoc[MAP::TEST_MAP00] = "data/map/testMap00.txt";
   _mapLoc[MAP::TEST_MAP01] = "data/map/testMap01.txt";
   _mapLoc[MAP::TEST_MAP02] = "data/map/testMap02.txt";
+  _mapLoc[MAP::TEST_MAP02] = "data/map/testMap02.txt";
+  _mapLoc[MAP::TEST_MAP_ALPHA] = "data/map/testMapAlpha.txt";
 
   ////////////////////////////////////////////////// 
   // GAME TEXTURES
