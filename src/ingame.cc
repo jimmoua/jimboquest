@@ -94,8 +94,6 @@ void game::ingame::run() {
      * second layer will not matter because we can't see it anyways
      * (collision layer) */
     map_ns::displayMap_L1();
-    /* Drawing */
-    win::getWin().draw(game::entity::getPl().m_enSprite);
     
     /* Handling movement will deal with collisions layer */
     entity::getPl().handleMove();
