@@ -4,7 +4,5 @@
 tags
 CMakeFiles/*
 cmake_install.cmake
-makefile
-Makefile
 *.exe
 *.log
